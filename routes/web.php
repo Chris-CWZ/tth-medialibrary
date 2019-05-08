@@ -25,17 +25,13 @@ Route::prefix('admin')->group(function(){
   Route::post('login','Admin\AuthController@login')->name('admin.login');
 
   Route::middleware('admin.auth')->group(function(){
+    Route::name('admin.')->group(function(){
+      Route::resource('users', 'Admin\UsersController', ['only' => ['index', 'edit', 'update', 'destroy']]);
+      Route::resource('events', 'Admin\AdminsController', ['only' => ['create', 'index', 'edit', 'update', 'destroy']]);
+    });
 
     Route::get('/', 'Admin\DashboardController@dashboard');
-    //dashboard
     Route::get('dashboard', 'Admin\DashboardController@dashboard')->name('dashboard');
-
-    //create, delete, and view all Admins team
-    Route::resource('teams', 'Admin\TeamsController', ['only' => ['index', 'create', 'store', 'destroy']]);
-
-    //delete and view all Users ( client )
-    Route::resource('clients','Admin\ClientsController', ['only' => ['index','destroy']]);
-
 		Route::get('logout', 'Admin\AuthController@logout')->name('admin.logout');
 
 		//Settings
