@@ -14,20 +14,20 @@
 
 //Admin Routes
 Route::prefix('admin')->group(function(){
-
-  //register
   Route::middleware('register.access')->group(function(){
     Route::get('register', "Admin\AuthController@viewRegister")->name('admin.register.show');
     Route::post('register', "Admin\AuthController@register")->name('admin.register');
   });
-  //login
-  Route::get('login','Admin\AuthController@viewLogin')->name('admin.login.show');
-  Route::post('login','Admin\AuthController@login')->name('admin.login');
+  
+  Route::middleware('admin.login')->group(function(){
+    Route::get('login','Admin\AuthController@viewLogin')->name('admin.login.show');
+    Route::post('login','Admin\AuthController@login')->name('admin.login');
+  });
 
   Route::middleware('admin.auth')->group(function(){
     Route::name('admin.')->group(function(){
       Route::resource('users', 'Admin\UsersController', ['only' => ['index', 'edit', 'update', 'destroy']]);
-      Route::resource('events', 'Admin\AdminsController', ['only' => ['create', 'index', 'edit', 'update', 'destroy']]);
+      Route::resource('events', 'Admin\EventsController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
     });
 
     Route::get('/', 'Admin\DashboardController@dashboard');
@@ -40,7 +40,6 @@ Route::prefix('admin')->group(function(){
     Route::put('settings/password', "Admin\AccountSettingsController@updatePassword")->name("admin.password.change");
   });
 });
-
 
 Route::get('/', 'Client\HomeController@home')->name('root');
 Route::get('/home', 'Client\HomeController@home')->name('home');

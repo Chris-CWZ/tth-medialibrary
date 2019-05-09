@@ -40,10 +40,9 @@ require('../plugins/jquery.dataTables.min');
 require('../plugins/fullcalendar.min');
 
 // template
-require('../light-bootstrap-dashboard');
+require('../paper-dashboard');
 
 // custom scripts
-
 require('../scripts/bootstrap-form-validation-setup');
 
 require('../scripts/bootstrap-table-setup');
