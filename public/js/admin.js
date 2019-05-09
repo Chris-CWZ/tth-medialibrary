@@ -78871,17 +78871,21 @@ __webpack_require__(186);
 __webpack_require__(187);
 
 // custom scripts
-
 __webpack_require__(188);
 
 __webpack_require__(189);
 
 __webpack_require__(190);
 
-__webpack_require__(202);
+__webpack_require__(191);
 
 // Vue Setup
 window.Vue = __webpack_require__(36);
+
+var files = __webpack_require__(192);
+files.keys().map(function (key) {
+  Vue.component(key.split('/').pop().split('.')[0], files(key).default);
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -105439,12 +105443,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /*!
 
  =========================================================
- * Light Bootstrap Dashboard - v2.0.1
+ * Paper Dashboard 2 PRO - v2.0.1
  =========================================================
 
- * Product Page: http://www.creative-tim.com/product/light-bootstrap-dashboard
- * Copyright 2017 Creative Tim (http://www.creative-tim.com)
- * License (https://www.creative-tim.com/license)
+ * Product Page: https://www.creative-tim.com/product/paper-dashboard-2-pro
+ * Copyright 2018 Creative Tim (http://www.creative-tim.com)
+
+ * Designed by www.invisionapp.com Coded by www.creative-tim.com
 
  =========================================================
 
@@ -105452,301 +105457,298 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
  */
 
-var searchVisible = 0;
-var transparent = true;
+transparent = true;
+transparentDemo = true;
+fixedTop = false;
 
-var transparentDemo = true;
-var fixedTop = false;
+navbar_initialized = false;
+backgroundOrange = false;
+sidebar_mini_active = false;
+toggle_initialized = false;
 
-var navbar_initialized = false;
-var mobile_menu_visible = 0,
-    mobile_menu_initialized = false,
-    toggle_initialized = false,
-    bootstrap_nav_initialized = false,
-    $sidebar,
-    isWindows;
+seq = 0, delays = 80, durations = 500;
+seq2 = 0, delays2 = 80, durations2 = 500;
+
+// Returns a function, that, as long as it continues to be invoked, will not
+// be triggered. The function will be called after it stops being called for
+// N milliseconds. If `immediate` is passed, trigger the function on the
+// leading edge, instead of the trailing.
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function () {
+    var context = this,
+        args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    }, wait);
+    if (immediate && !timeout) func.apply(context, args);
+  };
+};
+
+(function () {
+  isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
+
+  if (isWindows) {
+    // if we are on windows OS we activate the perfectScrollbar function
+    $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
+
+    $('html').addClass('perfect-scrollbar-on');
+  } else {
+    $('html').addClass('perfect-scrollbar-off');
+  }
+})();
 
 $(document).ready(function () {
-    window_width = $(window).width();
+  //  Activate the Tooltips
+  $('[data-toggle="tooltip"], [rel="tooltip"]').tooltip();
 
-    // check if there is an image set for the sidebar's background
-    lbd.checkSidebarImage();
-
-    // Init navigation toggle for small screens
-    if (window_width <= 991) {
-        lbd.initRightMenu();
-    }
-
-    lbd.initMinimizeSidebar();
-
-    // Init Collapse Areas
-    lbd.initCollapseArea();
-
-    //  Activate the tooltips
-    $('[rel="tooltip"]').tooltip();
-
-    // Init Tags Input
-    // if($(".tagsinput").length != 0){
-    //     $(".tagsinput").tagsInput();
-    // }
-
-    //  Activate regular switches
-    if ($("[data-toggle='switch']").length != 0) {
-        $("[data-toggle='switch']").bootstrapSwitch();
-    }
-
-    $('.form-control').on("focus", function () {
-        $(this).parent('.input-group').addClass("input-group-focus");
-    }).on("blur", function () {
-        $(this).parent(".input-group").removeClass("input-group-focus");
+  // Activate Popovers and set color for popovers
+  $('[data-toggle="popover"]').each(function () {
+    color_class = $(this).data('color');
+    $(this).popover({
+      template: '<div class="popover popover-' + color_class + '" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
     });
+  });
 
-    // Fixes sub-nav not working as expected on IOS
-    $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) {
-        e.stopPropagation();
+  var tagClass = $('.tagsinput').data('color');
+
+  if ($(".tagsinput").length != 0) {
+    $('.tagsinput').tagsinput();
+  }
+
+  $('.bootstrap-tagsinput').addClass('' + tagClass + '-badge');
+
+  //    Activate bootstrap-select
+  if ($(".selectpicker").length != 0) {
+    $(".selectpicker").selectpicker({
+      iconBase: "nc-icon",
+      tickIcon: "nc-check-2"
     });
+  }
+
+  //  Append modals to <body>
+  if ($(".modal").length != 0) {
+    $('.modal').appendTo('body');
+  }
+
+  if ($('.full-screen-map').length == 0 && $('.bd-docs').length == 0) {
+    // On click navbar-collapse the menu will be white not transparent
+    $('.collapse').on('show.bs.collapse', function () {
+      $(this).closest('.navbar').removeClass('navbar-transparent').addClass('bg-white');
+    }).on('hide.bs.collapse', function () {
+      $(this).closest('.navbar').addClass('navbar-transparent').removeClass('bg-white');
+    });
+  }
+
+  paperDashboard.initMinimizeSidebar();
+
+  $navbar = $('.navbar[color-on-scroll]');
+  scroll_distance = $navbar.attr('color-on-scroll') || 500;
+
+  // Check if we have the class "navbar-color-on-scroll" then add the function to remove the class "navbar-transparent" so it will transform to a plain color.
+  if ($('.navbar[color-on-scroll]').length != 0) {
+    paperDashboard.checkScrollForTransparentNavbar();
+    $(window).on('scroll', paperDashboard.checkScrollForTransparentNavbar);
+  }
+
+  $('.form-control').on("focus", function () {
+    $(this).parent('.input-group').addClass("input-group-focus");
+  }).on("blur", function () {
+    $(this).parent(".input-group").removeClass("input-group-focus");
+  });
+
+  // Activate bootstrapSwitch
+  $('.bootstrap-switch').each(function () {
+    $this = $(this);
+    data_on_label = $this.data('on-label') || '';
+    data_off_label = $this.data('off-label') || '';
+
+    $this.bootstrapSwitch({
+      onText: data_on_label,
+      offText: data_off_label
+    });
+  });
 });
 
-// activate collapse right menu when the windows is resized
+$(document).on('click', '.navbar-toggle', function () {
+  $toggle = $(this);
+
+  if (paperDashboard.misc.navbar_menu_visible == 1) {
+    $('html').removeClass('nav-open');
+    paperDashboard.misc.navbar_menu_visible = 0;
+    setTimeout(function () {
+      $toggle.removeClass('toggled');
+      $('#bodyClick').remove();
+    }, 550);
+  } else {
+    setTimeout(function () {
+      $toggle.addClass('toggled');
+    }, 580);
+
+    div = '<div id="bodyClick"></div>';
+    $(div).appendTo('body').click(function () {
+      $('html').removeClass('nav-open');
+      paperDashboard.misc.navbar_menu_visible = 0;
+      setTimeout(function () {
+        $toggle.removeClass('toggled');
+        $('#bodyClick').remove();
+      }, 550);
+    });
+
+    $('html').addClass('nav-open');
+    paperDashboard.misc.navbar_menu_visible = 1;
+  }
+});
+
 $(window).resize(function () {
-    if ($(window).width() <= 991) {
-        lbd.initRightMenu();
+  // reset the seq for charts drawing animations
+  seq = seq2 = 0;
+
+  if ($('.full-screen-map').length == 0 && $('.bd-docs').length == 0) {
+    $navbar = $('.navbar');
+    isExpanded = $('.navbar').find('[data-toggle="collapse"]').attr("aria-expanded");
+    if ($navbar.hasClass('bg-white') && $(window).width() > 991) {
+      $navbar.removeClass('bg-white').addClass('navbar-transparent');
+    } else if ($navbar.hasClass('navbar-transparent') && $(window).width() < 991 && isExpanded != "false") {
+      $navbar.addClass('bg-white').removeClass('navbar-transparent');
     }
+  }
 });
 
-lbd = {
-    misc: {
-        navbar_menu_visible: 0
-    },
-    checkSidebarImage: function checkSidebarImage() {
-        $sidebar = $('.sidebar');
-        image_src = $sidebar.data('image');
+paperDashboard = {
+  misc: {
+    navbar_menu_visible: 0
+  },
 
-        if (image_src !== undefined) {
-            sidebar_container = '<div class="sidebar-background" style="background-image: url(' + image_src + ') "/>';
-            $sidebar.append(sidebar_container);
-        } else if (mobile_menu_initialized == true) {
-            // reset all the additions that we made for the sidebar wrapper only if the screen is bigger than 991px
-            $sidebar_wrapper.find('.navbar-form').remove();
-            $sidebar_wrapper.find('.nav-mobile-menu').remove();
-
-            mobile_menu_initialized = false;
-        }
-    },
-
-    initRightMenu: function initRightMenu() {
-        $sidebar_wrapper = $('.sidebar-wrapper');
-
-        //console.log('aici se face meniu in dreapta');
-
-        if (!mobile_menu_initialized) {
-
-            $navbar = $('nav').find('.navbar-collapse').first().clone(true);
-
-            nav_content = '';
-            mobile_menu_content = '';
-
-            //add the content from the regular header to the mobile menu
-            //pas = 1;
-            $navbar.children('ul').each(function () {
-
-                content_buff = $(this).html();
-                nav_content = nav_content + content_buff;
-                //console.log('pas:' + pas);
-
-                //pas = pas+1;
-            });
-
-            nav_content = '<ul class="nav nav-mobile-menu">' + nav_content + '</ul>';
-
-            $sidebar_nav = $sidebar_wrapper.find(' > .nav');
-
-            // insert the navbar form before the sidebar list
-            $nav_content = $(nav_content);
-            $nav_content.insertBefore($sidebar_nav);
-
-            $(".sidebar-wrapper .dropdown .dropdown-menu > li > a").click(function (event) {
-                event.stopPropagation();
-            });
-
-            mobile_menu_initialized = true;
-        } else {
-            console.log('window with:' + $(window).width());
-            if ($(window).width() > 991) {
-                // reset all the additions that we made for the sidebar wrapper only if the screen is bigger than 991px
-                $sidebar_wrapper.find('.navbar-form').remove();
-                $sidebar_wrapper.find('.nav-mobile-menu').remove();
-
-                mobile_menu_initialized = false;
-            }
-        }
-
-        if (!toggle_initialized) {
-            $toggle = $('.navbar-toggler');
-
-            $toggle.click(function () {
-
-                if (mobile_menu_visible == 1) {
-                    $('html').removeClass('nav-open');
-
-                    $('.close-layer').remove();
-                    setTimeout(function () {
-                        $toggle.removeClass('toggled');
-                    }, 400);
-
-                    mobile_menu_visible = 0;
-                } else {
-                    setTimeout(function () {
-                        $toggle.addClass('toggled');
-                    }, 430);
-
-                    main_panel_height = $('.main-panel')[0].scrollHeight;
-                    $layer = $('<div class="close-layer"></div>');
-                    $layer.css('height', main_panel_height + 'px');
-                    $layer.appendTo(".main-panel");
-
-                    setTimeout(function () {
-                        $layer.addClass('visible');
-                    }, 100);
-
-                    $layer.click(function () {
-                        $('html').removeClass('nav-open');
-                        mobile_menu_visible = 0;
-
-                        $layer.removeClass('visible');
-
-                        setTimeout(function () {
-                            $layer.remove();
-                            $toggle.removeClass('toggled');
-                        }, 400);
-                    });
-
-                    $('html').addClass('nav-open');
-                    mobile_menu_visible = 1;
-                }
-            });
-
-            toggle_initialized = true;
-        }
-    },
-
-    initMinimizeSidebar: function initMinimizeSidebar() {
-
-        // when we are on a Desktop Screen and the collapse is triggered we check if the sidebar mini is active or not. If it is active then we don't let the collapse to show the elements because the elements from the collapse are showing on the hover state over the icons in sidebar mini, not on the click.
-        $('.sidebar .collapse').on('in.bs.collapse', function () {
-            if ($(window).width() > 991) {
-                if (lbd.misc.sidebar_mini_active == true) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        });
-
-        $('#minimizeSidebar').click(function () {
-            var $btn = $(this);
-
-            if (lbd.misc.sidebar_mini_active == true) {
-                $('body').removeClass('sidebar-mini');
-                lbd.misc.sidebar_mini_active = false;
-
-                if (isWindows) {
-                    $('.sidebar .sidebar-wrapper').perfectScrollbar();
-                }
-            } else {
-
-                $('.sidebar .collapse').collapse('hide').on('hidden.bs.collapse', function () {
-                    $(this).css('height', 'auto');
-                });
-
-                if (isWindows) {
-                    $('.sidebar .sidebar-wrapper').perfectScrollbar('destroy');
-                }
-
-                setTimeout(function () {
-                    $('body').addClass('sidebar-mini');
-
-                    $('.sidebar .collapse').css('height', 'auto');
-                    lbd.misc.sidebar_mini_active = true;
-                }, 300);
-            }
-
-            // we simulate the window Resize so the charts will get updated in realtime.
-            var simulateWindowResize = setInterval(function () {
-                window.dispatchEvent(new Event('resize'));
-            }, 180);
-
-            // we stop the simulation of Window Resize after the animations are completed
-            setTimeout(function () {
-                clearInterval(simulateWindowResize);
-            }, 1000);
-        });
-    },
-
-    initCollapseArea: function initCollapseArea() {
-        $('[data-toggle]').each(function () {
-            var thisdiv = $(this).hasClass('card-collapse');
-            $(thisdiv).addClass('collapse-preview');
-        });
-
-        $('[data-toggle="collapse-hover"]').hover(function () {
-            var thisdiv = $(this).attr("data-target");
-            if (!$(this).hasClass('state-open')) {
-                $(this).addClass('state-hover');
-                $(thisdiv).css({
-                    'height': '30px',
-                    'display': 'block',
-                    'overflow': 'hidden'
-                });
-            }
-        }, function () {
-            var thisdiv = $(this).attr("data-target");
-            $(this).removeClass('state-hover');
-
-            if (!$(this).hasClass('state-open')) {
-                $(thisdiv).css({
-                    'height': '0px'
-                });
-            }
-        }).click(function (event) {
-            event.preventDefault();
-
-            var thisdiv = $(this).attr("data-target");
-            var height = $(thisdiv).children('.card-body').height();
-
-            if ($(this).hasClass('state-open')) {
-                $(thisdiv).css({
-                    'height': '0px'
-
-                });
-                $(this).removeClass('state-open');
-            } else {
-                $(thisdiv).css({
-                    'height': height + 30
-                });
-                $(this).addClass('state-open');
-            }
-        });
+  checkScrollForTransparentNavbar: debounce(function () {
+    if ($(document).scrollTop() > scroll_distance) {
+      if (transparent) {
+        transparent = false;
+        $('.navbar[color-on-scroll]').removeClass('navbar-transparent');
+      }
+    } else {
+      if (!transparent) {
+        transparent = true;
+        $('.navbar[color-on-scroll]').addClass('navbar-transparent');
+      }
     }
+  }, 17),
 
-    // Returns a function, that, as long as it continues to be invoked, will not
-    // be triggered. The function will be called after it stops being called for
-    // N milliseconds. If `immediate` is passed, trigger the function on the
-    // leading edge, instead of the trailing.
+  checkSidebarImage: function checkSidebarImage() {
+    $sidebar = $('.sidebar');
+    image_src = $sidebar.data('image');
 
-};function debounce(func, wait, immediate) {
-    var timeout;
-    return function () {
-        var context = this,
-            args = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(function () {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-        }, wait);
-        if (immediate && !timeout) func.apply(context, args);
-    };
+    if (image_src !== undefined) {
+      sidebar_container = '<div class="sidebar-background" style="background-image: url(' + image_src + ') "/>';
+      $sidebar.append(sidebar_container);
+    }
+  },
+
+  initMinimizeSidebar: function initMinimizeSidebar() {
+    $('#minimizeSidebar').click(function () {
+      var $btn = $(this);
+
+      if (paperDashboard.misc.sidebar_mini_active == true) {
+        $('body').removeClass('sidebar-mini');
+        paperDashboard.misc.sidebar_mini_active = false;
+      } else {
+        $('body').addClass('sidebar-mini');
+        paperDashboard.misc.sidebar_mini_active = true;
+      }
+
+      // we simulate the window Resize so the charts will get updated in realtime.
+      var simulateWindowResize = setInterval(function () {
+        window.dispatchEvent(new Event('resize'));
+      }, 180);
+
+      // we stop the simulation of Window Resize after the animations are completed
+      setTimeout(function () {
+        clearInterval(simulateWindowResize);
+      }, 1000);
+    });
+  },
+
+  startAnimationForLineChart: function startAnimationForLineChart(chart) {
+
+    chart.on('draw', function (data) {
+      if (data.type === 'line' || data.type === 'area') {
+        data.element.animate({
+          d: {
+            begin: 600,
+            dur: 700,
+            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+            to: data.path.clone().stringify(),
+            easing: Chartist.Svg.Easing.easeOutQuint
+          }
+        });
+      } else if (data.type === 'point') {
+        seq++;
+        data.element.animate({
+          opacity: {
+            begin: seq * delays,
+            dur: durations,
+            from: 0,
+            to: 1,
+            easing: 'ease'
+          }
+        });
+      }
+    });
+
+    seq = 0;
+  },
+  startAnimationForBarChart: function startAnimationForBarChart(chart) {
+
+    chart.on('draw', function (data) {
+      if (data.type === 'bar') {
+        seq2++;
+        data.element.animate({
+          opacity: {
+            begin: seq2 * delays2,
+            dur: durations2,
+            from: 0,
+            to: 1,
+            easing: 'ease'
+          }
+        });
+      }
+    });
+
+    seq2 = 0;
+  },
+  showSidebarMessage: function showSidebarMessage(message) {
+    try {
+      $.notify({
+        icon: "nc-icon nc-bell-55",
+        message: message
+      }, {
+        type: 'info',
+        timer: 4000,
+        placement: {
+          from: 'top',
+          align: 'right'
+        }
+      });
+    } catch (e) {
+      console.log('Notify library is missing, please make sure you have the notifications library added.');
+    }
+  }
 };
+
+function hexToRGB(hex, alpha) {
+  var r = parseInt(hex.slice(1, 3), 16),
+      g = parseInt(hex.slice(3, 5), 16),
+      b = parseInt(hex.slice(5, 7), 16);
+
+  if (alpha) {
+    return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+  } else {
+    return "rgb(" + r + ", " + g + ", " + b + ")";
+  }
+}
 
 /***/ }),
 /* 188 */
@@ -105923,18 +105925,7 @@ $(document).ready(function () {
 });
 
 /***/ }),
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */,
-/* 202 */
+/* 191 */
 /***/ (function(module, exports) {
 
 var _pictureUploader = function _pictureUploader(e) {
@@ -105962,6 +105953,257 @@ var _pictureUploader = function _pictureUploader(e) {
 $().ready(function () {
 	$('.on__file__change').on('change', _pictureUploader);
 });
+
+/***/ }),
+/* 192 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./components/ExampleComponent.vue": 193
+};
+function webpackContext(req) {
+	return __webpack_require__(webpackContextResolve(req));
+};
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) // check for number or string
+		throw new Error("Cannot find module '" + req + "'.");
+	return id;
+};
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = 192;
+
+/***/ }),
+/* 193 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(194)
+/* script */
+var __vue_script__ = __webpack_require__(195)
+/* template */
+var __vue_template__ = __webpack_require__(196)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/ExampleComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7168fb6a", Component.options)
+  } else {
+    hotAPI.reload("data-v-7168fb6a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 194 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 195 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        console.log('Component mounted.');
+    }
+});
+
+/***/ }),
+/* 196 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-8" }, [
+          _c("div", { staticClass: "card card-default" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("Example Component")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _vm._v(
+                "\n                    I'm an example component.\n                "
+              )
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7168fb6a", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

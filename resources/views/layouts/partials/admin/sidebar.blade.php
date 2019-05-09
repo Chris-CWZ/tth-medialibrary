@@ -28,10 +28,10 @@
           <p>Dashboard</p>
         </a>
       </li>
-			<li class="nav-item {{ is_active('teams') }}">
-				<a class="nav-link" href="{{ route('teams.index') }}">
+			<li class="nav-item {{ is_active('events') }}">
+				<a class="nav-link" href="{{ route('admin.events.index') }}">
 					<i class="fa fa-users text-info"></i>
-					<p>Teams</p>
+					<p>Events</p>
 				</a>
 			</li>
     </ul>
