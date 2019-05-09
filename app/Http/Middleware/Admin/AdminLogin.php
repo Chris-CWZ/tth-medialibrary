@@ -15,7 +15,7 @@ class AdminLogin
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next){
-		if (User::where('owner_type', 'admin')->count() > 0) {
+		if (User::where('role', '1')->count() > 0) {
 			return $next($request);
 		}
  
