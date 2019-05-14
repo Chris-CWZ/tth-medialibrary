@@ -31,7 +31,7 @@ Route::prefix('admin')->group(function(){
     });
 
     Route::get('/', 'Admin\DashboardController@dashboard');
-    Route::get('dashboard', 'Admin\DashboardController@dashboard')->name('dashboard');
+    Route::get('dashboard', 'Admin\DashboardController@dashboard')->name('admin.dashboard');
 		Route::get('logout', 'Admin\AuthController@logout')->name('admin.logout');
 
 		//Settings

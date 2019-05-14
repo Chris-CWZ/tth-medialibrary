@@ -1,10 +1,10 @@
 <div class="sidebar" data-color="blue" data-image="{{ asset('images/sidebar_bg.jpg') }}">
 
   <div class="logo">
-		<a href="{{ route('dashboard') }}" class="simple-text logo-mini">
+		<a href="{{ route('admin.dashboard') }}" class="simple-text logo-mini">
       TH
     </a>
-    <a href="{{ route('dashboard') }}" class="simple-text logo-normal">
+    <a href="{{ route('admin.dashboard') }}" class="simple-text logo-normal">
       The Techy Hub
     </a>
   </div>
@@ -22,8 +22,8 @@
     </div>
 
     <ul class="nav">
-      <li class="nav-item {{ is_active('dashboard') }}">
-        <a class="nav-link" href="{{ route('dashboard') }}">
+      <li class="nav-item {{ is_active('admin.dashboard') }}">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
           <i class="fa fa-pie-chart text-info"></i>
           <p>Dashboard</p>
         </a>
