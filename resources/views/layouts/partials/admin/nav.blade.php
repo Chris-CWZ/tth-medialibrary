@@ -1,36 +1,42 @@
-<nav class="navbar navbar-expand-lg ">
+<nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent mt-0" id="nav-item-color" style="border-bottom: 1px solid #ddd;">
   <div class="container-fluid">
     <div class="navbar-wrapper">
-      <div class="navbar-minimize">
-        <button id="minimizeSidebar" class="btn btn-brand btn-fill btn-round btn-icon d-none d-lg-block">
-          <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
-          <i class="fa fa-navicon visible-on-sidebar-mini"></i>
+      <div class="navbar-toggle">
+        <button type="button" class="navbar-toggler">
+          <span class="navbar-toggler-bar bar1"></span>
+          <span class="navbar-toggler-bar bar2"></span>
+          <span class="navbar-toggler-bar bar3"></span>
         </button>
       </div>
-      <a class="navbar-brand" style="font-size: 25px;">@yield('title')</a>
     </div>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-bar burger-lines"></span>
-      <span class="navbar-toggler-bar burger-lines"></span>
-      <span class="navbar-toggler-bar burger-lines"></span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+      <span class="navbar-toggler-bar navbar-kebab"></span>
+      <span class="navbar-toggler-bar navbar-kebab"></span>
     </button>
-    <div class="collapse navbar-collapse justify-content-end">
+    <div class="collapse navbar-collapse justify-content-end" id="navigation">
       <ul class="navbar-nav">
-        <li class="nav-item dropdown">
+        <li class="nav-item">
+          <a class="nav-link btn-magnify" href="{{ route('admin.dashboard') }}">
+            <i class="nc-icon nc-layout-11"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Dashboard</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item btn-rotate dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="nc-icon nc-bullet-list-67"></i>
+            <i class="nc-icon nc-settings-gear-65"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Some Actions</span>
+            </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="{{route('admin.account.show')}}">
-              <i class="nc-icon nc-settings-90"></i> Settings
-            </a>
-            <div class="divider"></div>
-            <a href="{{ route('admin.logout') }}" class="dropdown-item text-danger">
-							<i class="nc-icon nc-button-power"></i> Log out
-            </a>
+            <a class="dropdown-item" href="{{ route('admin.account.show') }}">Edit Profile</a>
+            <a class="dropdown-item" href="{{ route('admin.logout') }}">Log Out</a>
           </div>
         </li>
       </ul>
     </div>
-	</div>
+  </div>
 </nav>

@@ -26,7 +26,7 @@ class AuthController extends Controller{
 	  $user->save();
 	  Auth::login($user);
 
-	  return redirect()->route('dashboard');
+	  return redirect()->route('admin.dashboard');
 	}
 
 	public function viewLogin(){
@@ -40,7 +40,7 @@ class AuthController extends Controller{
 	  ]);
 
 	  if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 1])) {
-	    return redirect()->route('dashboard');
+	    return redirect()->route('admin.dashboard');
 	  }else{
 	    return redirect()->back()->withErrors(['message' => 'Email or password is incorrect']);
 	  }
