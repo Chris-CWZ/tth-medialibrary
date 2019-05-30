@@ -62,5 +62,7 @@ class Kernel extends HttpKernel
         'admin.auth' => \App\Http\Middleware\Admin\AdminAuth::class,
         'admin.login' => \App\Http\Middleware\Admin\AdminLogin::class,
         'register.access' => \App\Http\Middleware\Admin\RegisterAccess::class,
+        'passport.client.auth' => \App\Http\Middleware\PassportClientAuth::class,
+        'user.authentication' => \App\Http\Middleware\UserAuthentication::class,
     ];
 }

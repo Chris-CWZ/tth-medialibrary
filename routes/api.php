@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->group(function(){
-    Route::get('/events', 'Admin\EventsController@index');
+// Route::middleware('auth:api')->group(function(){
+	// });
+	
+	Route::middleware('passport.client.auth')->group(function () {		
+		Route::get('events', 'Admin\EventsController@index');
+
+		Route::middleware('user.authentication')->group(function () {
+			Route::post('authentication', 'Api\AuthenticationsController@authentication');
+	});
 });
