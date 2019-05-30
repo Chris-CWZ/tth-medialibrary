@@ -6,9 +6,9 @@ use App\Event;
 use App\Http\Controllers\Controller;
 use App\Services\EventsService;
 use Illuminate\Http\Request;
+use DB;
 
-class EventsController extends Controller
-{
+class EventsController extends Controller{
 	protected $path = 'admin.events.';
 	protected $eventsService;
 

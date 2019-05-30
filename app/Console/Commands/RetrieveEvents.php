@@ -5,8 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Event;
 use GuzzleHttp\Client;
-use GuzzleHttp\Message\Request;
-use GuzzleHttp\Message\Response;
+use GuzzleHttp\Exception\GuzzleException;
 use Carbon\Carbon;
 
 class RetrieveEvents extends Command
@@ -43,8 +42,7 @@ class RetrieveEvents extends Command
 	 *
 	 * @return mixed
 	 */
-	public function handle()
-	{
+	public function handle(){
 		$client = new Client();
 		$response = $client->get('http://trp-wpapi.tth.asia/wp-json/wp/v2/event');
 		$responseBody = json_decode($response->getBody());
