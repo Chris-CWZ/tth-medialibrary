@@ -24,24 +24,27 @@ class UserAuthentication {
       $headers = [
         'Content-Type' => 'application/json',
         'Accept' => 'application/json',
+        'password-client-id' => $request->header('password-client-id'),
+        'password-client-secret' => $request->header('password-client-secret'),
         'client-id' => $request->header('client-id'),
         'client-secret' => $request->header('client-secret')
       ];
+
       $formParams = [
-        'email' => $request->email,
+        'userId' => $request->userId,
       ];
 
       $client = new Client([
         'headers' => $headers
       ]);
-      
+
       try {
         $response = $client->post($url,[
           'verify' => false,
           'form_params' => $formParams,
         ]);
-    
-        return $this->$next($request);
+        
+        return $response;
       } catch (GuzzleException $exception){
         return validationError();
       }

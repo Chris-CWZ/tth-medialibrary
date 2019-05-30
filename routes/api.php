@@ -17,9 +17,9 @@ use Illuminate\Http\Request;
 	// });
 	
 	Route::middleware('passport.client.auth')->group(function () {		
-		Route::get('/events', 'Admin\EventsController@index');
-		
+		Route::get('events', 'Admin\EventsController@index');
+
 		Route::middleware('user.authentication')->group(function () {
-			Route::get('authentication', 'Api\AuthenticationsController@authentication');
+			Route::post('authentication', 'Api\AuthenticationsController@authentication');
 	});
 });

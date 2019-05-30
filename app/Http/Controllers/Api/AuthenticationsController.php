@@ -14,7 +14,7 @@ class AuthenticationsController extends Controller{
     $this->authenticationsService = $authenticationsService;
 	}
 
-	public function authenticate() {
-		$this->authenticationService->authenticate();
+	public function authentication() {
+		$this->authenticationService->authentication();
 	}
 }
