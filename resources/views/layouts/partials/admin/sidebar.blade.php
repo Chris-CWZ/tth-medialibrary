@@ -33,6 +33,12 @@
 					<i class="fa fa-users text-info"></i>
 					<p>Events</p>
 				</a>
+      </li>
+      <li class="nav-item {{ is_active('calenders') }}">
+				<a class="nav-link" href="{{ route('admin.calendar') }}">
+					<i class="fa fa-users text-info"></i>
+					<p>Calender</p>
+				</a>
 			</li>
     </ul>
   </div>

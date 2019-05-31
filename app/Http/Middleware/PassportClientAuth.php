@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Validator;
 use DB;
-use App\OauthClient;
 
 class PassportClientAuth{
   /**
