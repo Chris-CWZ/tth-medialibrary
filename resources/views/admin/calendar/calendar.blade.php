@@ -16,9 +16,7 @@
       },
       eventRender: function(eventObj, $el) {
       $el.popover({
-        //title: eventObj.title,
-        content: eventObj.discription,
-        //end: eventObj.end,
+        content: 'Click to go to edit page',
         trigger: 'hover',
         placement: 'top',
         container: 'body'
@@ -31,9 +29,9 @@
       selectable: true,
       events: @json($events),
       eventTextColor: 'white',
-      eventBackgroundColor: '#F0424B',
+      eventBackgroundColor: '#757373',
       eventLimit: 4,
-      displayEventEnd: false,
+      displayEventEnd: true,
       displayEventTime: true,
       timeFormat: 'h(:mm)a'
     })
