@@ -28,6 +28,7 @@ Route::prefix('admin')->group(function(){
     Route::name('admin.')->group(function(){
       Route::resource('users', 'Admin\UsersController', ['only' => ['index', 'edit', 'update', 'destroy']]);
       Route::resource('events', 'Admin\EventsController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
+      Route::get('/calendar', 'Admin\OperationsController@calendar')->name('calendar');    
     });
 
     Route::get('/', 'Admin\DashboardController@dashboard');

@@ -1,6 +1,5 @@
 @extends('layouts.admin.master')
 
-
 @section('content')
 	<div class="card bootstrap-table">
     <div class="card-body table-full-width pl-3 pr-3">

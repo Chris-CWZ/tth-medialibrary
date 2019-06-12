@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 	
 	Route::middleware('passport.client.auth')->group(function () {		
 		Route::get('events', 'Admin\EventsController@index');
+		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
 
 		Route::middleware('user.authentication')->group(function () {
 			Route::post('authentication', 'Api\AuthenticationsController@authentication');
