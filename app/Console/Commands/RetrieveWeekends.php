@@ -19,7 +19,7 @@ class RetrieveWeekends extends Command
      *
      * @var string
      */
-    protected $description = 'Retrieving all weekends';
+    protected $description = 'Retrieving weekends';
 
     /**
      * Create a new command instance.

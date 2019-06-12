@@ -39,7 +39,7 @@ function formErrorValidation($messages, $status_code = 422){
   return errorResponse($messagesList, $status_code);
 }
 
-function errorResponse($message = "Unkown Error", $status_code = 500){
+function errorResponse($message = "Unknown Error", $status_code = 500){
   return respond($message, $status_code);
 }
 
