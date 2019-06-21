@@ -32,7 +32,6 @@ class RetrieveEvents extends Command
 	 */
 	public function __construct()
 	{
-		// $this->eventsService = $eventsService;
 		parent::__construct();
 	}
 
