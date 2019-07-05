@@ -19,8 +19,10 @@ use Illuminate\Http\Request;
 	Route::middleware('passport.client.auth')->group(function () {		
 		Route::get('events', 'Admin\EventsController@index');
 		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
-
+		Route::get('cart', 'Api\Cart\CartController@index');
+		
 		Route::middleware('user.authentication')->group(function () {
+			Route::post('purchases', 'Api\ProductsController@purchases');
 			Route::post('authentication', 'Api\AuthenticationsController@authentication');
 	});
 });
