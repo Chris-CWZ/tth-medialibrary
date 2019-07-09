@@ -5,7 +5,7 @@ namespace App\Services;
 use Session;
 use Illuminate\Http\Request;
 
-class AuthenticationsService extends TransformerService{
+class AuthService extends TransformerService{
 	
 	public function authentication(Request $request){
 		return 'hello';

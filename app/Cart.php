@@ -10,11 +10,15 @@ class Cart extends Model{
     'user_id'
   ];
 
-	public function items(){
-		return $this->morphMany('App\Item', 'owner');
-	}
+	// public function items(){
+	// 	return $this->morphMany('App\Item', 'owner');
+	// }
 
 	public function owner(){
 		return $this->belongsTo('App\User', 'user_id');
+	}
+
+	public function items(){
+		return $this->hasMany('App\CartItem', 'cartItem_id');
 	}
 }

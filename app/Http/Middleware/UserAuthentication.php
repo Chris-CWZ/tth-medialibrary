@@ -36,7 +36,7 @@ class UserAuthentication {
 
       $client = new Client([
         'headers' => $headers
-      ]);
+      ]); 
 
       try {
         $response = $client->post($url,[
@@ -44,7 +44,11 @@ class UserAuthentication {
           'form_params' => $formParams,
         ]);
         
-        return $response;
+        if($response == 200){
+          return $next($request);
+        }else{
+          return validationError();
+        };
       } catch (GuzzleException $exception){
         return validationError();
       }

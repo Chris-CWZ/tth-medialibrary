@@ -20,7 +20,15 @@ class CartController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(Request $request){
-		return $this->cartService->cart('json');
+	// public function index(Request $request){
+	// 	return $this->cartService->cart('json');
+	// }
+
+	public function addToCart(Request $request){
+		return $this->cartService->addToCart($request);
+	}
+
+	public function getCartProducts(Request $request){
+		return $this->cartService->getCartProducts($request);
 	}
 }
