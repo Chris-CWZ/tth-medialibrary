@@ -16,17 +16,15 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->group(function(){
 	// });
 	
-// 	Route::middleware('passport.client.auth')->group(function () {		
-// 		Route::get('events', 'Admin\EventsController@index');
-// 		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
+	Route::middleware('passport.client.auth')->group(function () {		
+		Route::get('events', 'Admin\EventsController@index');
+		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
 
-// 		Route::middleware('user.authentication')->group(function () {
-			
-// 			Route::get('cart', 'Api\Cart\CartController@index');
-// 			Route::post('purchases', 'Api\ProductsController@purchases');
-// 			Route::post('authentication', 'Api\AuthenticationsController@authentication');
-// 	});
-// });
+		// Route::middleware('user.authentication')->group(function () {
+			Route::post('purchases', 'Api\PurchasesController@purchases');
+			Route::post('authentication', 'Api\AuthenticationsController@authentication');
+		// });
+	});
 
 Route::post('add-product', 'Api\Cart\CartController@addToCart');
 Route::get('cart', 'Api\Cart\CartController@getCartProducts');
