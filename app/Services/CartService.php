@@ -3,21 +3,18 @@
 namespace App\Services;
 
 use App\Cart;
-use App\CartItem;
+use App\CartProduct;
 use App\Product;
 use App\Services\TransformerService;
-use App\Services\AuthService;
-use App\Services\CartItemsService;
+use App\Services\CartProductService;
 use Illuminate\Http\Request;
 
 class CartService extends TransformerService{
 
-	protected $cartItemsService;
-	protected $authService;
+	protected $cartProductService;
 
-	public function __construct(CartItemsService $cartItemsService, AuthService $authService){
-		$this->cartItemsService = $cartItemsService;
-		$this->authService = $authService;
+	public function __construct(CartProductService $cartProductService){
+		$this->cartProductService = $cartProductService;
 	}
 
 	/**
@@ -26,35 +23,43 @@ class CartService extends TransformerService{
 	*	Request input: user_id, product_id, quantity
 	*
 	**/
-	public function addToUserCart($request){
-		// Check if user has an existing cart
+	public function addToCart($request){
 		$cart = $this->getCartId($request);
 
 		if ($cart == null) {
 			$cart = $this->createCart($request);
+			$response = $this->cartProductService->isProductExist($cart, $request);
+		} else {
+			$response = $this->cartProductService->isProductExist($cart, $request);
 		}
 
-		// Create cart item
-		// $cartItem = CartItem::create([
-		// 	'cart_id' => $cart->id,
-		// 	'product_id' => $request->input('product_id'),
-		// 	'quantity' => $request->input('quantity')
-		// ]);
-
-		return $cartItem;
+		return $response;
 	}
 
 	public function getCartId($request){
-		$cart = Cart::where('user_id', $request->input('user_id'))->first();
-		return $cart;
+		if ($request->has('user_id')) {
+			$cart = Cart::where('user_id', $request->input('user_id'))->first();
+			return $cart;
+		} else {
+			$cart = Cart::where('session_id', $request->input('session_id'))->first();
+			return $cart;
+		}
 	}
 
 	public function createCart($request){
-		$cart = Cart::create([
-			'user_id' => $request->input('user_id')
-		]);
-
-		return $cart;
+		if ($request->has('user_id')) {
+			$cart = Cart::create([
+				'user_id' => $request->input('user_id')
+			]);
+	
+			return $cart;
+		} else {
+			$cart = Cart::create([
+				'session_id' => $request->input('session_id')
+			]);
+	
+			return $cart;
+		}
 	}
 
 	/**
