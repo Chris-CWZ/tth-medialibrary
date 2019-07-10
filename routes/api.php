@@ -27,9 +27,9 @@ use Illuminate\Http\Request;
 	});
 
 //User
-Route::post('user/add-product', 'Api\Cart\CartController@addToUserCart');
+Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
 
 //Guest
-Route::post('add-product', 'Api\Cart\CartController@addToGuestCart');
+Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
 
 Route::get('cart', 'Api\Cart\CartController@getCartProducts');
