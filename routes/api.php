@@ -29,7 +29,7 @@ use Illuminate\Http\Request;
 // });
 
 //User
-Route::post('add-product', 'Api\Cart\CartController@addToUserCart');
+Route::post('user/add-product', 'Api\Cart\CartController@addToUserCart');
 
 //Guest
 Route::post('add-product', 'Api\Cart\CartController@addToGuestCart');
