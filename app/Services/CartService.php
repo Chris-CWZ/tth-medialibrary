@@ -35,11 +35,11 @@ class CartService extends TransformerService{
 		}
 
 		// Create cart item
-		$cartItem = CartItem::create([
-			'cart_id' => $cart->id,
-			'product_id' => $request->input('product_id'),
-			'quantity' => $request->input('quantity')
-		]);
+		// $cartItem = CartItem::create([
+		// 	'cart_id' => $cart->id,
+		// 	'product_id' => $request->input('product_id'),
+		// 	'quantity' => $request->input('quantity')
+		// ]);
 
 		return $cartItem;
 	}
@@ -204,7 +204,8 @@ class CartService extends TransformerService{
 		return [
 			'id' => $cart->id,
 			'user_id' => $cart->user_id,
-			'items' => $this->cartItemsService->transformItems($cart)
+			'session_id' => $cart->session_id,
+			'products' => $cart->product
 		];
 	}
 }
