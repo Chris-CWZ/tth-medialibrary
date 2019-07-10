@@ -24,8 +24,12 @@ class CartController extends Controller{
 	// 	return $this->cartService->cart('json');
 	// }
 
-	public function addToCart(Request $request){
-		return $this->cartService->addToCart($request);
+	public function addToUserCart(Request $request){
+		return $this->cartService->addToUserCart($request);
+	}
+
+	public function addToGuestCart(Request $request){
+		return $this->cartService->addToGuestCart($request);
 	}
 
 	public function getCartProducts(Request $request){
