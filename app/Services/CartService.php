@@ -26,7 +26,7 @@ class CartService extends TransformerService{
 	*	Request input: user_id, product_id, quantity
 	*
 	**/
-	public function addToCart($request){
+	public function addToUserCart($request){
 		// Check if user has an existing cart
 		$cart = $this->getCartId($request);
 
