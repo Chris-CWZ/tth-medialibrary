@@ -29,11 +29,11 @@ class CartService extends TransformerService{
 		if ($cart == null) {
 			$cart = $this->createCart($request);
 			$response = $this->cartProductService->isProductExist($cart, $request);
+			return $response;
 		} else {
 			$response = $this->cartProductService->isProductExist($cart, $request);
+			return $response;
 		}
-
-		return $response;
 	}
 
 	public function getCartId($request){
@@ -64,8 +64,8 @@ class CartService extends TransformerService{
 
 	/**
 	*
-	*	Retrieve product details in cart
-	*	Request input: user_id
+	*	Retrieve products' details in cart
+	*	Request input: user_id or session_id
 	*
 	**/
 	public function getCartProducts($request){
@@ -74,136 +74,13 @@ class CartService extends TransformerService{
 
 		if ($cart == null) {
 			$cart = $this->createCart($request);
-		}
-
-		// Get all cart items using cart Id
-		$cartId = $cart->id;
-		$cartItems = CartItem::where('cart_id', $cartId)->get();
-
-		// Getting product details using product Id
-		if ($cartItems->isEmpty()) {
-			return "Cart is empty";
+			$cartProductsArray = $this->cartProductService->getCartProducts($cart, $request);
+			return $cartProductsArray;
 		} else {
-			foreach($cartItems as $key=>$cartItem){
-				$product[] = Product::where('id', $cartItem['product_id'])->get();
-				$productDetails['name'] = $product[$key][0]['name'];
-				$productDetails['price'] = $product[$key][0]['price'];
-				$productDetails['category'] = $product[$key][0]['category'];
-				$productDetails['colour'] = $product[$key][0]['colour'];
-				$productDetails['size'] = $product[$key][0]['size'];
-				$productDetails['quantity'] = $cartItem['quantity'];
-				$cartProducts[] = $productDetails;
-			}
-
-			return $cartProducts;
+			$cartProductsArray = $this->cartProductService->getCartProducts($cart, $request);
+			return $cartProductsArray;
 		}
 	}
-
-	/**
-	*
-	*	Get Or Create Users Cart
-	*
-	**/
-	// public function cart($type = 'normal'){
-	// 	$dbID = $this->getDBIdentity();
-	// 	$cart = $this->getOrCreateCart($dbID);
-
-	// 	$sessionID = $this->getSessionIdentity();
-	// 	$sessionCart = $this->getCart($sessionID);
-
-	// 	if ($sessionCart && $cart) {
-	// 		$cart = $this->mergeCarts($cart, $sessionCart);
-	// 	}elseif ($sessionCart) {
-	// 		$cart = $sessionCart;
-	// 	}elseif (!$cart) {
-	// 		$cart = $this->getOrCreateCart($sessionID);
-	// 	}
-
-	// 	if ($type == 'json') {
-	// 		return respond($this->transform($cart));
-	// 	}
-	// 	return $cart;
-	// }
-
-
-	/**
-	*
-	*	get or create a cart based on the given id [session or db]
-	*
-	**/
-	// private function getOrCreateCart($id){
-	// 	$cart = Cart::where('user_id', $id)->first();
-
-	// 	if (!$cart && $id != null) {
-	// 		$cart = Cart::create([
-	// 			'user_id' => $id
-	// 		]);
-	// 	}
-
-	// 	return $cart;
-	// }
-
-
-	/**
-	*
-	*	get a cart based on the given id [session or db]
-	*
-	**/
-	// private function getCart($id){
-	// 	return Cart::where('user_id', $id)->first();
-	// }
-
-	
-	/**
-	*
-	*	Merge Users Session Cart with database cart
-	*
-	**/
-	// private function mergeCarts($cart, $sessionCart){
-	// 	Item::where('owner_id', $sessionCart->id)->update([
-	// 		'owner_id' => $cart->id
-	// 	]);
-	// 	$sessionCart->delete();
-	// 	$this->eraseSessionIdentity();
-
-	// 	return $cart;
-	// }
-
-
-	/**
-	*
-	*	get the logged in user id
-	*
-	**/
-	// private function getDBIdentity(){
-
-		
-	// 	// return current_user() ? current_user()->id : null;
-	// }
-
-
-	/**
-	*
-	*	get the session id created for the non-logged in user
-	*
-	**/
-	// private function getSessionIdentity(){
-	// 	$identity = session('identity');
-
-	// 	if (!session()->has('identity')) {
-	// 		$identity = md5("Session" . time() . "Session");
-	// 		session(['identity' => $identity]);
-	// 	}
-
-	// 	return $identity;
-	// }
-
-	// private function eraseSessionIdentity(){
-	// 	if (session()->has('identity')) {
-	// 		session()->forget('identity');
-	// 	}
-	// }
-
 
 	public function transform($cart){
 		return [
