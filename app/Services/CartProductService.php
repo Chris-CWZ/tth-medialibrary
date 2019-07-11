@@ -3,11 +3,17 @@
 namespace App\Services;
 
 use App\CartProduct;
-use App\Product;
 use Illuminate\Http\Request;
 use App\Services\TransformerService;
+use App\Services\ProductService;
 
 class CartProductService extends TransformerService{
+
+	protected $productService;
+
+	public function __construct(ProductService $productService){
+		$this->productService = $productService;
+	}
 
 	/**
 	*
@@ -49,13 +55,13 @@ class CartProductService extends TransformerService{
 		if ($cartProducts->isEmpty()) {
 			return success("Cart is empty");
 		} else {
-			foreach($cartProducts as $key=>$cartProduct){
-				$product[] = Product::where('id', $cartProduct['product_id'])->get();
-				$productDetails['name'] = $product[$key][0]['name'];
-				$productDetails['price'] = $product[$key][0]['price'];
-				$productDetails['category'] = $product[$key][0]['category'];
-				$productDetails['colour'] = $product[$key][0]['colour'];
-				$productDetails['size'] = $product[$key][0]['size'];
+			foreach($cartProducts as $cartProduct){
+				$product = $this->productService->retrieveProduct($cartProduct);
+				$productDetails['name'] = $product['name'];
+				$productDetails['price'] = $product['price'];
+				$productDetails['category'] = $product['category'];
+				$productDetails['colour'] = $product['colour'];
+				$productDetails['size'] = $product['size'];
 				$productDetails['quantity'] = $cartProduct['quantity'];
 				$cartProductsArray[] = $productDetails;
 			}
@@ -70,7 +76,7 @@ class CartProductService extends TransformerService{
 	*
 	**/
 	public function updateCartId($userCart, $sessionCart){
-		CartProduct::where('cart_id', $sessionCart->id)->update(['cart_id' => $userCart->id]);
+		CartProduct::where('cart_id', $sessionCart['id'])->update(['cart_id' => $userCart['id']]);
 	}
 
 	/**
