@@ -15,11 +15,6 @@ class CartProductController extends Controller{
 		$this->cartProductService = $cartProductService;
 	}
 
-  public function getCartProducts(Request $request){
-    return "test";
-    // return $this->cartProductService->getCartProducts($request);
-  }
-
   // /**
   //  * Store a newly created resource in storage.
   //  *
