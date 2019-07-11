@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Product;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Services\ProductService;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
     protected $productService;
 
 	public function __construct(ProductService $productService){
@@ -20,6 +20,14 @@ class ProductController extends Controller
 	*
 	**/
     public function index(Request $request){
-        
+        return $this->productService->retrieveProductsList($request);
+    }
+
+    public function colours(Request $request){
+        return $this->productService->colours($request);
+    }
+
+    public function sizes(Request $request){
+        return $this->productService->sizes($request);
     }
 }

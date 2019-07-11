@@ -77,7 +77,7 @@ class CartService extends TransformerService{
 		if ($request->has('user_id') && $request->has('session_id')) {
 			$userCart = $this->mergeCarts($request);
 			$cartProductsArray = $this->cartProductService->getCartProducts($userCart);
-			return $cartProductsArray;
+			return respond($cartProductsArray);
 		} else if ($request->has('user_id') && !($request->has('session_id'))) {
 			$cart = $this->getCart("user", $request->input('user_id'));
 
@@ -86,7 +86,7 @@ class CartService extends TransformerService{
 				return success("Cart is empty.");
 			} else {
 				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
-				return $cartProductsArray;
+				return respond($cartProductsArray);
 			}
 		} else if ($request->has('session_id') && !($request->has('user_id'))){
 			$cart = $this->getCart("session", $request->input('session_id'));
@@ -96,7 +96,7 @@ class CartService extends TransformerService{
 				return success("Cart is empty.");
 			} else {
 				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
-				return $cartProductsArray;
+				return respond($cartProductsArray);
 			}
 		}
 	}

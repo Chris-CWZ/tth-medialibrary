@@ -26,10 +26,9 @@ use Illuminate\Http\Request;
 		});
 	});
 
-//User
 Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
-
-//Guest
 Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
-
 Route::get('cart', 'Api\Cart\CartController@getCartProducts');
+Route::get('shop', 'Api\Product\ProductController@index');
+Route::get('product/colours', 'Api\Product\ProductController@colours');
+Route::get('product/sizes', 'Api\Product\ProductController@sizes');
