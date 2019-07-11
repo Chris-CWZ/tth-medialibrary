@@ -17,5 +17,5 @@ abstract class TransformerService {
     return $data;
   }
 
-  public abstract function transform($item);
+  public abstract function transform($cartProduct);
 }
