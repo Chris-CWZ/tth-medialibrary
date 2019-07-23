@@ -16,7 +16,7 @@ class UserAuthentication {
      * @return mixed
      */
     public function handle($request, Closure $next){
-      $baseUrl = 'https://user-db.test';
+      $baseUrl = 'https://29.tth.asia';
       $url = $baseUrl . "/api/customer/authentication";
 
       $headers = [
@@ -35,7 +35,7 @@ class UserAuthentication {
       $client = new Client([
         'headers' => $headers
       ]); 
-
+      
       try {
         $response = $client->post($url,[
           'verify' => false,
@@ -47,6 +47,7 @@ class UserAuthentication {
           return validationError();
         };
       } catch (GuzzleException $exception){
+        dd($exception);
         return validationError();
       }
     }

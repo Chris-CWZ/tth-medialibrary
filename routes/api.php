@@ -19,27 +19,15 @@ use Illuminate\Http\Request;
 	Route::middleware('passport.client.auth')->group(function () {		
 		Route::get('events', 'Admin\EventsController@index');
 		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
+		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
 
 		Route::middleware('user.authentication')->group(function () {
 			Route::post('purchases', 'Api\PurchasesController@purchases');
 			// Route::post('authentication', 'Api\AuthenticationsController@authentication');
+			Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
 		});
 	});
-
-Route::middleware('auth:api')->group(function(){
-});
-
-Route::middleware('passport.client.auth')->group(function () {		
-	Route::get('events', 'Admin\EventsController@index');
-	Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
-
-	Route::middleware('user.authentication')->group(function () {
-		Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
-	});
-});
-
-// Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
-Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
+	
 Route::get('cart', 'Api\Cart\CartController@getCartProducts');
 Route::get('shop', 'Api\Product\ProductController@index');
 Route::get('product/colours', 'Api\Product\ProductController@colours');
