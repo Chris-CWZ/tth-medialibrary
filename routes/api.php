@@ -25,10 +25,10 @@ use Illuminate\Http\Request;
 			Route::post('purchases', 'Api\PurchasesController@purchases');
 			// Route::post('authentication', 'Api\AuthenticationsController@authentication');
 			Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
+			Route::get('cart', 'Api\Cart\CartController@getCartProducts');
+			Route::get('shop', 'Api\Product\ProductController@index');
+			Route::get('product/colours', 'Api\Product\ProductController@colours');
+			Route::get('product/sizes', 'Api\Product\ProductController@sizes');
 		});
 	});
 	
-Route::get('cart', 'Api\Cart\CartController@getCartProducts');
-Route::get('shop', 'Api\Product\ProductController@index');
-Route::get('product/colours', 'Api\Product\ProductController@colours');
-Route::get('product/sizes', 'Api\Product\ProductController@sizes');
