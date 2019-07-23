@@ -17,12 +17,12 @@ class ProductService {
         $sort = $request->sort ? $request->sort : 'created_at';
         $order = $request->order ? $request->order : 'desc';
 
-        $query = $products = Product::where('vendor', 'trp')->orderBy($sort, $order)->limit(10);
+        $query = $products = Product::where('vendor', 'trp')->orderBy($sort, $order);
 
         if ($request->has('filter')) {
-            $products = $query->whereBetween($request->filter, [$request['min'], $request['max']])->get();
+            $products = $query->whereBetween($request->filter, [$request['min'], $request['max']])->paginate(10);
         } else{
-            $products = $query->get();
+            $products = $query->paginate(10);
         }
 
         return respond($products);
