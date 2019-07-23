@@ -20,12 +20,12 @@ class CartService extends TransformerService{
 	/**
 	*
 	*	Add item to cart for existing users
-	*	Request input: user_id/session_id, product_id, quantity
+	*	Request input: userId/session_id, product_id, quantity
 	*
 	**/
 	public function addToCart($request){
-		if ($request->has('user_id')) {
-			$cart = $this->getCart("user", $request->input('user_id'));
+		if ($request->has('userId')) {
+			$cart = $this->getCart("user", $request->input('userId'));
 		} else {
 			$cart = $this->getCart("session", $request->input('session_id'));
 		}
@@ -51,9 +51,9 @@ class CartService extends TransformerService{
 	}
 
 	public function createCart($request){
-		if ($request->has('user_id')) {
+		if ($request->has('userId')) {
 			$cart = Cart::create([
-				'user_id' => $request->input('user_id')
+				'user_id' => $request->input('userId')
 			]);
 	
 			return $cart;
