@@ -20,10 +20,10 @@ use Illuminate\Http\Request;
 		Route::get('events', 'Admin\EventsController@index');
 		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
 
-		// Route::middleware('user.authentication')->group(function () {
+		Route::middleware('user.authentication')->group(function () {
 			Route::post('purchases', 'Api\PurchasesController@purchases');
-			Route::post('authentication', 'Api\AuthenticationsController@authentication');
-		// });
+			// Route::post('authentication', 'Api\AuthenticationsController@authentication');
+		});
 	});
 
 Route::post('add-product', 'Api\Cart\CartController@addToCart');
