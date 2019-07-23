@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 // Route::middleware('auth:api')->group(function(){
-	// });
+// 	});
 	
 // 	Route::middleware('passport.client.auth')->group(function () {		
 // 		Route::get('events', 'Admin\EventsController@index');
@@ -28,7 +28,19 @@ use Illuminate\Http\Request;
 // 	});
 // });
 
-Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
+Route::middleware('auth:api')->group(function(){
+});
+
+Route::middleware('passport.client.auth')->group(function () {		
+	Route::get('events', 'Admin\EventsController@index');
+	Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
+
+	Route::middleware('user.authentication')->group(function () {
+		Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
+	});
+});
+
+// Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
 Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
 Route::get('cart', 'Api\Cart\CartController@getCartProducts');
 Route::get('shop', 'Api\Product\ProductController@index');
