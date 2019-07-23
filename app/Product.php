@@ -12,7 +12,7 @@ class Product extends Model
         'name', 'price', 'category', 'colour', 'size', 'product_code', 'product_details', 'brand', 'care', 'vendor', 'stock'
     ];
 
-    public function cartItem(){
-        return $this->hasMany('App\CartItem', 'cart_id');
+    public function carts(){
+        return $this->belongsToMany('App\Cart', 'cart_product');
     }
 }

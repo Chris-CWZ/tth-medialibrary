@@ -3,208 +3,167 @@
 namespace App\Services;
 
 use App\Cart;
-use App\CartItem;
+use App\CartProduct;
 use App\Product;
 use App\Services\TransformerService;
-use App\Services\AuthService;
-use App\Services\CartItemsService;
+use App\Services\CartProductService;
 use Illuminate\Http\Request;
 
 class CartService extends TransformerService{
 
-	protected $cartItemsService;
-	protected $authService;
+	protected $cartProductService;
 
-	public function __construct(CartItemsService $cartItemsService, AuthService $authService){
-		$this->cartItemsService = $cartItemsService;
-		$this->authService = $authService;
+	public function __construct(CartProductService $cartProductService){
+		$this->cartProductService = $cartProductService;
 	}
 
 	/**
 	*
 	*	Add item to cart for existing users
-	*	Request input: user_id, product_id, quantity
+	*	Request input: userId/session_id, product_id, quantity
 	*
 	**/
 	public function addToCart($request){
-		// Check if user has an existing cart
-		$cart = $this->getCartId($request);
+		if ($request->has('userId')) {
+			$cart = $this->getCart("user", $request->input('userId'));
+		} else {
+			$cart = $this->getCart("session", $request->input('session_id'));
+		}
 
 		if ($cart == null) {
 			$cart = $this->createCart($request);
+			$response = $this->cartProductService->isProductExist($cart, $request);
+			return $response;
+		} else {
+			$response = $this->cartProductService->isProductExist($cart, $request);
+			return $response;
 		}
-
-		// Create cart item
-		$cartItem = CartItem::create([
-			'cart_id' => $cart->id,
-			'product_id' => $request->input('product_id'),
-			'quantity' => $request->input('quantity')
-		]);
-
-		return $cartItem;
 	}
 
-	public function getCartId($request){
-		$cart = Cart::where('user_id', $request->input('user_id'))->first();
-		return $cart;
+	public function getCart($idType, $id){
+		if ($idType == "user") {
+			$cart = Cart::where('user_id', $id)->first();
+			return $cart;
+		} else {
+			$cart = Cart::where('session_id', $id)->first();
+			return $cart;
+		}
 	}
 
 	public function createCart($request){
-		$cart = Cart::create([
-			'user_id' => $request->input('user_id')
-		]);
-
-		return $cart;
+		if ($request->has('userId')) {
+			$cart = Cart::create([
+				'user_id' => $request->input('userId')
+			]);
+	
+			return $cart;
+		} else {
+			$cart = Cart::create([
+				'session_id' => $request->input('session_id')
+			]);
+	
+			return $cart;
+		}
 	}
 
 	/**
 	*
-	*	Retrieve product details in cart
-	*	Request input: user_id
+	*	Retrieve products' details in cart
+	*	Request input: user_id or session_id
 	*
 	**/
 	public function getCartProducts($request){
-		// Check if user has existing cart
-		$cart = $this->getCartId($request);
+		// If user has both user and session id, then combine both carts
+		if ($request->has('user_id') && $request->has('session_id')) {
+			$userCart = $this->mergeCarts($request);
+			$cartProductsArray = $this->cartProductService->getCartProducts($userCart);
+			return respond($cartProductsArray);
+		} else if ($request->has('user_id') && !($request->has('session_id'))) {
+			$cart = $this->getCart("user", $request->input('user_id'));
 
-		if ($cart == null) {
-			$cart = $this->createCart($request);
-		}
-
-		// Get all cart items using cart Id
-		$cartId = $cart->id;
-		$cartItems = CartItem::where('cart_id', $cartId)->get();
-
-		// Getting product details using product Id
-		if ($cartItems->isEmpty()) {
-			return "Cart is empty";
-		} else {
-			foreach($cartItems as $key=>$cartItem){
-				$product[] = Product::where('id', $cartItem['product_id'])->get();
-				$productDetails['name'] = $product[$key][0]['name'];
-				$productDetails['price'] = $product[$key][0]['price'];
-				$productDetails['category'] = $product[$key][0]['category'];
-				$productDetails['colour'] = $product[$key][0]['colour'];
-				$productDetails['size'] = $product[$key][0]['size'];
-				$productDetails['quantity'] = $cartItem['quantity'];
-				$cartProducts[] = $productDetails;
+			if ($cart == null) {
+				$cart = $this->createCart($request);
+				return success("Cart is empty.");
+			} else {
+				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
+				return respond($cartProductsArray);
 			}
+		} else if ($request->has('session_id') && !($request->has('user_id'))){
+			$cart = $this->getCart("session", $request->input('session_id'));
 
-			return $cartProducts;
+			if ($cart == null) {
+				$cart = $this->createCart($request);
+				return success("Cart is empty.");
+			} else {
+				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
+				return respond($cartProductsArray);
+			}
 		}
 	}
 
 	/**
 	*
-	*	Get Or Create Users Cart
+	*	Combine guest cart with user's existing cart
 	*
 	**/
-	// public function cart($type = 'normal'){
-	// 	$dbID = $this->getDBIdentity();
-	// 	$cart = $this->getOrCreateCart($dbID);
+	public function mergeCarts($request){
+		// Get cart id of session id
+		$sessionCart = $this->getCart("session", $request->input('session_id'));
 
-	// 	$sessionID = $this->getSessionIdentity();
-	// 	$sessionCart = $this->getCart($sessionID);
+		// Get cart id of user id
+		$userCart = $this->getCart("user", $request->input('user_id'));
 
-	// 	if ($sessionCart && $cart) {
-	// 		$cart = $this->mergeCarts($cart, $sessionCart);
-	// 	}elseif ($sessionCart) {
-	// 		$cart = $sessionCart;
-	// 	}elseif (!$cart) {
-	// 		$cart = $this->getOrCreateCart($sessionID);
-	// 	}
+		// If there is no cart associated with user id
+		if ($userCart == null) {
+			$userCart = $this->createCart($request);
+		}
 
-	// 	if ($type == 'json') {
-	// 		return respond($this->transform($cart));
-	// 	}
-	// 	return $cart;
-	// }
+		// Change cart id of all session cart products
+		$this->cartProductService->updateCartId($userCart, $sessionCart);
 
+		// Delete cart of session id
+		$this->delete($sessionCart);
+
+		// Get all new cart products of user's cart
+		$newCartProducts = $this->cartProductService->retrieveCartProducts($userCart);
+
+		// Delete cart products that share the same product id and increment
+		foreach($newCartProducts as $newCartProduct) {
+			// Checking is the entry still exist (might be deleted from previous loop)
+			$cartProduct = $this->cartProductService->retrieveSingleProduct($newCartProduct);
+
+			if ($cartProduct == null) {
+				continue;
+			} else {
+				// Get duplicate entry
+				$duplicatedCartProduct = $this->cartProductService->getDuplicateCardProduct($newCartProduct);
+				
+				// Increase quantity of original entry
+				$this->cartProductService->increaseQuantity($newCartProduct, $duplicatedCartProduct);
+
+				// Delete duplicated cart product entry
+				$this->cartProductService->delete($duplicatedCartProduct);
+			}
+		}
+
+		return $userCart;
+	}
 
 	/**
 	*
-	*	get or create a cart based on the given id [session or db]
+	*	Delete cart
 	*
 	**/
-	// private function getOrCreateCart($id){
-	// 	$cart = Cart::where('user_id', $id)->first();
-
-	// 	if (!$cart && $id != null) {
-	// 		$cart = Cart::create([
-	// 			'user_id' => $id
-	// 		]);
-	// 	}
-
-	// 	return $cart;
-	// }
-
-
-	/**
-	*
-	*	get a cart based on the given id [session or db]
-	*
-	**/
-	// private function getCart($id){
-	// 	return Cart::where('user_id', $id)->first();
-	// }
-
-	
-	/**
-	*
-	*	Merge Users Session Cart with database cart
-	*
-	**/
-	// private function mergeCarts($cart, $sessionCart){
-	// 	Item::where('owner_id', $sessionCart->id)->update([
-	// 		'owner_id' => $cart->id
-	// 	]);
-	// 	$sessionCart->delete();
-	// 	$this->eraseSessionIdentity();
-
-	// 	return $cart;
-	// }
-
-
-	/**
-	*
-	*	get the logged in user id
-	*
-	**/
-	// private function getDBIdentity(){
-
-		
-	// 	// return current_user() ? current_user()->id : null;
-	// }
-
-
-	/**
-	*
-	*	get the session id created for the non-logged in user
-	*
-	**/
-	// private function getSessionIdentity(){
-	// 	$identity = session('identity');
-
-	// 	if (!session()->has('identity')) {
-	// 		$identity = md5("Session" . time() . "Session");
-	// 		session(['identity' => $identity]);
-	// 	}
-
-	// 	return $identity;
-	// }
-
-	// private function eraseSessionIdentity(){
-	// 	if (session()->has('identity')) {
-	// 		session()->forget('identity');
-	// 	}
-	// }
-
+	public function delete($cart){
+		Cart::where('id', $cart['id'])->delete();
+	}
 
 	public function transform($cart){
 		return [
 			'id' => $cart->id,
 			'user_id' => $cart->user_id,
-			'items' => $this->cartItemsService->transformItems($cart)
+			'session_id' => $cart->session_id,
+			'products' => $cart->product
 		];
 	}
 }
