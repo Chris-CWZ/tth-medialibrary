@@ -4,10 +4,8 @@ namespace App\Http\Middleware;
 
 use App\User;
 use Closure;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Support\Facades\Auth;
 
 class UserAuthentication {
     /**
@@ -18,7 +16,7 @@ class UserAuthentication {
      * @return mixed
      */
     public function handle($request, Closure $next){
-      $baseUrl = 'https://user-db.dev';
+      $baseUrl = 'https://29.tth.asia';
       $url = $baseUrl . "/api/customer/authentication";
 
       $headers = [
@@ -37,19 +35,19 @@ class UserAuthentication {
       $client = new Client([
         'headers' => $headers
       ]); 
-
+      
       try {
         $response = $client->post($url,[
           'verify' => false,
           'form_params' => $formParams,
         ]);
-        
         if($response == 200){
           return $next($request);
         }else{
           return validationError();
         };
       } catch (GuzzleException $exception){
+        dd($exception);
         return validationError();
       }
     }
