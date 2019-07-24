@@ -70,7 +70,8 @@ class CartService extends TransformerService{
 	/**
 	*
 	*	Retrieve products' details in cart
-	*	Request input: userId or sessionId or both
+	*	Request input for guest/cart: sessionId
+	*	Request input for user/cart: userId or userId and sessionId
 	*
 	**/
 	public function getCartProducts($request){
