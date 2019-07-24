@@ -27,4 +27,4 @@ use Illuminate\Http\Request;
 		Route::get('product/colours', 'Api\Product\ProductController@colours');
 		Route::get('product/sizes', 'Api\Product\ProductController@sizes');
 	});
-	
+});

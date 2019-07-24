@@ -22,19 +22,19 @@ class CartProductService extends TransformerService{
 	*
 	**/
 	public function isProductExist($cart, $request){
-		$productId = $request->input('product_id');
+		$productCode = $request->input('productCode');
 		$quantity = $request->input('quantity');
 
-		$duplicateCartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $productId)->first();
+		$duplicateCartProduct = CartProduct::where('cart_id', $cart->id)->where('product_code', $productCode)->first();
 		
 		if ($duplicateCartProduct == null) {
 			CartProduct::create([
 				'cart_id' => $cart->id,
-				'product_id' => $productId,
+				'product_code' => $productCode,
 				'quantity' => $quantity
 			]);
 		} else {
-			CartProduct::where('cart_id', $cart->id)->where('product_id', $productId)->increment('quantity', $quantity);
+			CartProduct::where('cart_id', $cart->id)->where('product_code', $productCode)->increment('quantity', $quantity);
 		}
 
 		return success("Item added");
@@ -102,11 +102,11 @@ class CartProductService extends TransformerService{
 	/**
 	*
 	*	Retrieve duplicated cart product entry
-	*	(Those with the same cart_id & product_id)
+	*	(Those with the same cart_id & product_code)
 	*
 	**/
-	public function getDuplicateCardProduct($cartProduct){
-		$duplicatedCartProduct = CartProduct::where('cart_id', $cartProduct['cart_id'])->where('product_id', $cartProduct['product_id'])->where('id', '!=', $cartProduct->id)->first();
+	public function getDuplicateCartProduct($cartProduct){
+		$duplicatedCartProduct = CartProduct::where('cart_id', $cartProduct['cart_id'])->where('product_code', $cartProduct['product_code'])->where('id', '!=', $cartProduct->id)->first();
 		return $duplicatedCartProduct;
 	}
 
@@ -125,7 +125,7 @@ class CartProductService extends TransformerService{
 	*
 	**/
 	public function delete($cartProduct){
-		CartProduct::where('id', $cartProduct['id'])->delete();
+		CartProduct::where('id', $cartProduct->id)->delete();
 	}
 
 	public function transform($cartProduct){

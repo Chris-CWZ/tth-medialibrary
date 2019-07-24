@@ -34,7 +34,7 @@ class ProductService {
 	*
 	**/
     public function retrieveProduct($cartProduct){
-        $product = Product::where('id', $cartProduct['product_id'])->first();
+        $product = Product::where('product_code', $cartProduct['product_code'])->first();
         return $product;
     }
 
@@ -45,7 +45,7 @@ class ProductService {
 	*
 	**/
     public function colours($request){
-        $colours = Product::select('colour')->where('product_code', $request['product_code'])->distinct()->get();
+        $colours = Product::select('colour')->where('name', $request['name'])->distinct()->get();
         
         foreach($colours as $colour) {
             $coloursArray[] = $colour['colour'];
@@ -61,7 +61,7 @@ class ProductService {
 	*
 	**/
     public function sizes($request){
-        $sizes = Product::select('size')->where('product_code', $request['product_code'])->distinct()->get();
+        $sizes = Product::select('size')->where('name', $request['name'])->distinct()->get();
         
         foreach($sizes as $size) {
             $sizesArray[] = $size['size'];
