@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-<<<<<<< HEAD
 Route::middleware('auth:api')->group(function(){
 });
 
@@ -32,24 +31,3 @@ Route::middleware('passport.client.auth')->group(function () {
 		Route::post('user/cart', 'Api\Cart\CartController@getCartProducts');
 	});
 });
-=======
-// Route::middleware('auth:api')->group(function(){
-// 	});
-	
-	Route::middleware('passport.client.auth')->group(function () {		
-		Route::get('events', 'Admin\EventsController@index');
-		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
-		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
-
-		Route::middleware('user.authentication')->group(function () {
-			Route::post('purchases', 'Api\PurchasesController@purchases');
-			// Route::post('authentication', 'Api\AuthenticationsController@authentication');
-			Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
-			Route::get('cart', 'Api\Cart\CartController@getCartProducts');
-			Route::get('shop', 'Api\Product\ProductController@index');
-			Route::get('product/colours', 'Api\Product\ProductController@colours');
-			Route::get('product/sizes', 'Api\Product\ProductController@sizes');
-		});
-	});
-	
->>>>>>> 3c87cfce44e99516c5364dcab639b16a524b9c7e
