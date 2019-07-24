@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\ProductService;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller {
     protected $productService;
@@ -16,18 +17,46 @@ class ProductController extends Controller {
     /**
 	*
 	*	Retrieve products
-	*	Request input: user_id/session_id, product_id, quantity
+	*	Optional request input: sort, order, filter, min, max
 	*
 	**/
     public function index(Request $request){
-        return $this->productService->retrieveProductsList($request);
+        $validator = Validator::make($request->all(), [
+            'sort' => 'required_with:order|string',
+            'order' => 'required_with:sort|string',
+            'filter' => 'string',
+            'min' => 'required_with:filter|numeric',
+            'max' => 'required_with:filter|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return validationError();
+        } else {
+            return $this->productService->retrieveProductsList($request);
+        }
     }
 
     public function colours(Request $request){
-        return $this->productService->colours($request);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return validationError();
+        } else {
+            return $this->productService->colours($request);
+        }
     }
 
     public function sizes(Request $request){
-        return $this->productService->sizes($request);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return validationError();
+        } else {
+            return $this->productService->sizes($request);
+        }
     }
 }

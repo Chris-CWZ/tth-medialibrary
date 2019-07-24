@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Cart;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller{
 
@@ -20,15 +21,44 @@ class CartController extends Controller{
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	// public function index(Request $request){
-	// 	return $this->cartService->cart('json');
-	// }
 
 	public function addToCart(Request $request){
-		return $this->cartService->addToCart($request);
+		if ($request->path() == "api/user/add-product") {
+			$validator = Validator::make($request->all(), [
+				'userId' => 'required|integer',
+				'productCode' => 'required',
+				'quantity' => 'required|integer',
+			]);
+		} else {
+			$validator = Validator::make($request->all(), [
+				'sessionId' => 'required',
+				'productCode' => 'required',
+				'quantity' => 'required|integer',
+			]);
+		}
+
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->cartService->addToCart($request);
+		}
 	}
 
 	public function getCartProducts(Request $request){
-		return $this->cartService->getCartProducts($request);
+		if ($request->path() == "api/user/cart") {
+			$validator = Validator::make($request->all(), [
+				'userId' => 'required'
+			]);
+		} else {
+			$validator = Validator::make($request->all(), [
+				'sessionId' => 'required'
+			]);
+		}
+		
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->cartService->getCartProducts($request);
+		}
 	}
 }
