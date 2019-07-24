@@ -13,21 +13,18 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->group(function(){
-});
-
-Route::middleware('passport.client.auth')->group(function () {		
-	Route::get('events', 'Admin\EventsController@index');
-	Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
-	Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
-	Route::post('guest/cart', 'Api\Cart\CartController@getCartProducts');
-	Route::get('shop', 'Api\Product\ProductController@index');
-	Route::get('product/colours', 'Api\Product\ProductController@colours');
-	Route::get('product/sizes', 'Api\Product\ProductController@sizes');
-
-	Route::middleware('user.authentication')->group(function () {
-		// Route::post('authentication', 'Api\AuthenticationsController@authentication');
+// Route::middleware('auth:api')->group(function(){
+// 	});
+	
+	Route::middleware('passport.client.auth')->group(function () {		
+		Route::get('events', 'Admin\EventsController@index');
+		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
+		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
+		Route::post('purchases', 'Api\PurchasesController@purchases');
 		Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
-		Route::post('user/cart', 'Api\Cart\CartController@getCartProducts');
+		Route::get('cart', 'Api\Cart\CartController@getCartProducts');
+		Route::get('shop', 'Api\Product\ProductController@index');
+		Route::get('product/colours', 'Api\Product\ProductController@colours');
+		Route::get('product/sizes', 'Api\Product\ProductController@sizes');
 	});
 });
