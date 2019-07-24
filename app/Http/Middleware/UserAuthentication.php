@@ -17,7 +17,7 @@ class UserAuthentication {
      */
     public function handle($request, Closure $next){
       $baseUrl = 'https://29.tth.asia';
-      $url = $baseUrl . "/api/customer/authentication";
+      $url = $baseUrl . "/api/authentication";
 
       $headers = [
         'Content-Type' => 'application/json',
@@ -34,21 +34,22 @@ class UserAuthentication {
 
       $client = new Client([
         'headers' => $headers
-      ]); 
-      
+      ]);
+
       try {
         $response = $client->post($url,[
           'verify' => false,
           'form_params' => $formParams,
         ]);
-        if($response == 200){
+        
+        if($response->getStatusCode() == 200){
           return $next($request);
         }else{
           return validationError();
         };
+
       } catch (GuzzleException $exception){
-        dd($exception);
-        return validationError();
+        return validationResponse('Guzzle Request Failed');
       }
     }
   }
