@@ -20,14 +20,15 @@ class CartService extends TransformerService{
 	/**
 	*
 	*	Add item to cart for existing users
-	*	Request input: userId/session_id, product_id, quantity
+	*	Request input for user/add-product: userId, productCode, quantity
+	*	Request input for guest/add-product: sessionId, productCode, quantity
 	*
 	**/
 	public function addToCart($request){
 		if ($request->has('userId')) {
 			$cart = $this->getCart("user", $request->input('userId'));
 		} else {
-			$cart = $this->getCart("session", $request->input('session_id'));
+			$cart = $this->getCart("session", $request->input('sessionId'));
 		}
 
 		if ($cart == null) {
@@ -59,7 +60,7 @@ class CartService extends TransformerService{
 			return $cart;
 		} else {
 			$cart = Cart::create([
-				'session_id' => $request->input('session_id')
+				'session_id' => $request->input('sessionId')
 			]);
 	
 			return $cart;
@@ -69,17 +70,17 @@ class CartService extends TransformerService{
 	/**
 	*
 	*	Retrieve products' details in cart
-	*	Request input: user_id or session_id
+	*	Request input: userId or sessionId or both
 	*
 	**/
 	public function getCartProducts($request){
 		// If user has both user and session id, then combine both carts
-		if ($request->has('user_id') && $request->has('session_id')) {
+		if ($request->has('userId') && $request->has('sessionId')) {
 			$userCart = $this->mergeCarts($request);
 			$cartProductsArray = $this->cartProductService->getCartProducts($userCart);
 			return respond($cartProductsArray);
-		} else if ($request->has('user_id') && !($request->has('session_id'))) {
-			$cart = $this->getCart("user", $request->input('user_id'));
+		} else if ($request->has('userId') && !($request->has('sessionId'))) {
+			$cart = $this->getCart("user", $request->input('userId'));
 
 			if ($cart == null) {
 				$cart = $this->createCart($request);
@@ -88,8 +89,8 @@ class CartService extends TransformerService{
 				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
 				return respond($cartProductsArray);
 			}
-		} else if ($request->has('session_id') && !($request->has('user_id'))){
-			$cart = $this->getCart("session", $request->input('session_id'));
+		} else if ($request->has('sessionId') && !($request->has('userId'))){
+			$cart = $this->getCart("session", $request->input('sessionId'));
 
 			if ($cart == null) {
 				$cart = $this->createCart($request);
@@ -108,10 +109,10 @@ class CartService extends TransformerService{
 	**/
 	public function mergeCarts($request){
 		// Get cart id of session id
-		$sessionCart = $this->getCart("session", $request->input('session_id'));
+		$sessionCart = $this->getCart("session", $request->input('sessionId'));
 
 		// Get cart id of user id
-		$userCart = $this->getCart("user", $request->input('user_id'));
+		$userCart = $this->getCart("user", $request->input('userId'));
 
 		// If there is no cart associated with user id
 		if ($userCart == null) {
@@ -127,7 +128,7 @@ class CartService extends TransformerService{
 		// Get all new cart products of user's cart
 		$newCartProducts = $this->cartProductService->retrieveCartProducts($userCart);
 
-		// Delete cart products that share the same product id and increment
+		// Delete cart products that share the same product code and increment
 		foreach($newCartProducts as $newCartProduct) {
 			// Checking is the entry still exist (might be deleted from previous loop)
 			$cartProduct = $this->cartProductService->retrieveSingleProduct($newCartProduct);
@@ -136,13 +137,15 @@ class CartService extends TransformerService{
 				continue;
 			} else {
 				// Get duplicate entry
-				$duplicatedCartProduct = $this->cartProductService->getDuplicateCardProduct($newCartProduct);
+				$duplicatedCartProduct = $this->cartProductService->getDuplicateCartProduct($newCartProduct);
 				
-				// Increase quantity of original entry
-				$this->cartProductService->increaseQuantity($newCartProduct, $duplicatedCartProduct);
+				if ($duplicatedCartProduct != null) {
+					// Increase quantity of original entry
+					$this->cartProductService->increaseQuantity($newCartProduct, $duplicatedCartProduct);
 
-				// Delete duplicated cart product entry
-				$this->cartProductService->delete($duplicatedCartProduct);
+					// Delete duplicated cart product entry
+					$this->cartProductService->delete($duplicatedCartProduct);
+				}
 			}
 		}
 
