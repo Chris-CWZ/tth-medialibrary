@@ -45,20 +45,6 @@ class CartController extends Controller{
 	}
 
 	public function getCartProducts(Request $request){
-		if ($request->path() == "api/user/cart") {
-			$validator = Validator::make($request->all(), [
-				'userId' => 'required'
-			]);
-		} else {
-			$validator = Validator::make($request->all(), [
-				'sessionId' => 'required'
-			]);
-		}
-		
-		if ($validator->fails()) {
-			return validationError();
-		} else {
-			return $this->cartService->getCartProducts($request);
-		}
+		return $this->cartService->getCartProducts($request);
 	}
 }
