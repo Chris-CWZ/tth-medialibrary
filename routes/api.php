@@ -26,5 +26,5 @@ use Illuminate\Http\Request;
 		Route::get('shop', 'Api\Products\ProductsController@index');
 		Route::get('product/colours', 'Api\Products\ProductsController@colours');
 		Route::get('product/sizes', 'Api\Products\ProductsController@sizes');
-		Route::post('products/bookmark', 'Api\Products\ProductsController@bookmark');
+		Route::post('product/bookmark', 'Api\Products\ProductsController@bookmark');
 	});

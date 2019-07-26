@@ -18,7 +18,7 @@ class ProductService {
 		$sort = $request->sort ? $request->sort : 'created_at';
 		$order = $request->order ? $request->order : 'desc';
 
-		$query = $products = Product::where('vendor', 'trp')->orderBy($sort, $order);
+		$query = Product::where('vendor', 'trp')->orderBy($sort, $order);
 
 		if ($request->has('filter')) {
 			$products = $query->whereBetween($request->filter, [$request['min'], $request['max']])->paginate(10);
