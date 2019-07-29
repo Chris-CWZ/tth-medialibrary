@@ -124,6 +124,12 @@ class CartProductService extends TransformerService{
 		CartProduct::where('id', $cartProduct->id)->delete();
 	}
 
+	public function removeFromCart($request, $cart){
+		CartProduct::where('cart_id', $cart->id)->where('product_code', $request->productCode)->delete();
+
+		return success("Item deleted");
+	}
+
 	public function transform($cartProduct){
 		return [
 			'id' => $cartProduct->id,
