@@ -23,7 +23,8 @@ class AuthController extends Controller{
 
 	  $user = User::create($request->all());
 	  $user->role = 1;
-	  $user->save();
+		$user->save();
+		
 	  Auth::login($user);
 
 	  return redirect()->route('admin.dashboard');

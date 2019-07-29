@@ -5,14 +5,14 @@ namespace App\Services;
 use App\CartProduct;
 use Illuminate\Http\Request;
 use App\Services\TransformerService;
-use App\Services\ProductService;
+use App\Services\ProductsService;
 
 class CartProductService extends TransformerService{
 
-	protected $productService;
+	protected $productsService;
 
-	public function __construct(ProductService $productService){
-		$this->productService = $productService;
+	public function __construct(ProductsService $productsService){
+		$this->productsService = $productsService;
 	}
 
 	/**
@@ -56,7 +56,7 @@ class CartProductService extends TransformerService{
 			return success("Cart is empty");
 		} else {
 			foreach($cartProducts as $cartProduct){
-				$product = $this->productService->retrieveProduct($cartProduct);
+				$product = $this->productsService->retrieveProduct($cartProduct);
 				$productDetails['quantity'] = $cartProduct['quantity'];
 				$productDetails['product'] = $product;
 				$cartProductsArray[] = $productDetails;

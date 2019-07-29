@@ -16,9 +16,13 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->group(function(){
 // 	});
 	
-	Route::middleware('passport.client.auth')->group(function () {		
+	Route::middleware('passport.client.auth')->group(function () {
+		
+		// Events
 		Route::get('events', 'Admin\EventsController@index');
 		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
+
+		// Products
 		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
 		Route::post('purchases', 'Api\PurchasesController@purchases');
 		Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
@@ -26,5 +30,8 @@ use Illuminate\Http\Request;
 		Route::get('shop', 'Api\Products\ProductsController@index');
 		Route::get('product/colours', 'Api\Products\ProductsController@colours');
 		Route::get('product/sizes', 'Api\Products\ProductsController@sizes');
-		Route::post('product/bookmark', 'Api\Products\ProductsController@bookmark');
+		
+		//Bookmarks
+		Route::post('bookmarks-products', 'Api\Bookmarks\BookmarksController@getBookmarkedProducts');
+		Route::post('product/bookmark', 'Api\Bookmarks\BookmarksController@productBookmark');
 	});

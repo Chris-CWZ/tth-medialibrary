@@ -53,7 +53,7 @@ class RetrieveEvents extends Command
 			$endTime = $event->acf->event_end_time ? Carbon::createFromFormat('g:i a', $event->acf->event_end_time)->format('H:i:s') : null;
 			$dateStartTime = strtotime($date . ' ' . $startTime);
 			$dateEndTime = strtotime($date . ' ' . $endTime);
-
+			
 			if(!$existingEvent){
 				$newEvent = new Event;
 				$newEvent->post_id = $event->id;
