@@ -28,3 +28,5 @@ use Illuminate\Http\Request;
 		Route::get('product/sizes', 'Api\Products\ProductsController@sizes');
 		Route::post('product/bookmark', 'Api\Products\ProductsController@bookmark');
 	});
+
+	Route::post('payment/process', 'PaymentsController@process');
