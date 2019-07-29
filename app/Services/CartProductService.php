@@ -57,12 +57,8 @@ class CartProductService extends TransformerService{
 		} else {
 			foreach($cartProducts as $cartProduct){
 				$product = $this->productService->retrieveProduct($cartProduct);
-				$productDetails['name'] = $product['name'];
-				$productDetails['price'] = $product['price'];
-				$productDetails['category'] = $product['category'];
-				$productDetails['colour'] = $product['colour'];
-				$productDetails['size'] = $product['size'];
 				$productDetails['quantity'] = $cartProduct['quantity'];
+				$productDetails['product'] = $product;
 				$cartProductsArray[] = $productDetails;
 			}
 
