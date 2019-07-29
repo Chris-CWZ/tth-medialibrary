@@ -44,6 +44,10 @@ class CartController extends Controller{
 		}
 	}
 
+	public function removeFromCart(Request $request){	
+		return $this->cartService->removeFromCart($request);
+	}
+
 	public function getCartProducts(Request $request){
 		return $this->cartService->getCartProducts($request);
 	}

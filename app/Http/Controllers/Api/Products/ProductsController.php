@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api\Products;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Services\ProductService;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use App\Services\ProductsService;
 
 class ProductsController extends Controller {
-	protected $productService;
+	protected $productsService;
 
-	public function __construct(ProductService $productService){
-		$this->productService = $productService;
+	public function __construct(ProductsService $productsService){
+		$this->productsService = $productsService;
 	}
 	
 	/**
@@ -32,7 +32,7 @@ class ProductsController extends Controller {
 		if ($validator->fails()) {
 			return validationError();
 		} else {
-			return $this->productService->retrieveProductsList($request);
+			return $this->productsService->retrieveProductsList($request);
 		}
 	}
 
@@ -44,7 +44,7 @@ class ProductsController extends Controller {
 		if ($validator->fails()) {
 			return validationError();
 		} else {
-			return $this->productService->colours($request);
+			return $this->productsService->colours($request);
 		}
 	}
 
@@ -56,20 +56,7 @@ class ProductsController extends Controller {
 		if ($validator->fails()) {
 			return validationError();
 		} else {
-			return $this->productService->sizes($request);
-		}
-	}
-
-	public function bookmark(Request $request){
-		$validator = Validator::make($request->all(), [
-			'productCode' => 'required|integer',
-			'userId' => 'required|integer'
-		]);
-
-		if ($validator->fails()) {
-			return validationError();
-		} else {
-			return $this->productService->bookmark($request);
+			return $this->productsService->sizes($request);
 		}
 	}
 }

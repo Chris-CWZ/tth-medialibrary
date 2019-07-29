@@ -40,6 +40,18 @@ class CartService extends TransformerService{
 			return $response;
 		}
 	}
+	
+	public function removeFromCart($request){
+		if ($request->has('userId')) {
+			$cart = $this->getCart("user", $request->input('userId'));
+		} else {
+			$cart = $this->getCart("session", $request->input('sessionId'));
+		}
+
+		$response = $this->cartProductService->removeFromCart($request, $cart);
+		
+		return $response;
+	}
 
 	public function getCart($idType, $id){
 		if ($idType == "user") {

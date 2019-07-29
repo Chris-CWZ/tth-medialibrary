@@ -37,7 +37,7 @@
       <li class="nav-item {{ is_active('calenders') }}">
 				<a class="nav-link" href="{{ route('admin.calendar') }}">
 					<i class="fa fa-users text-info"></i>
-					<p>Calender</p>
+					<p>Calendar</p>
 				</a>
 			</li>
     </ul>

@@ -16,7 +16,7 @@ class EventsService extends TransformerService{
     $limit = $request->limit ? $request->limit : 10;
     $offset = $request->offset ? $request->offset : 0;
     $query = $request->search ? $request->search : '';
-
+		
     $events = Event::where('name', 'like', "%{$query}%")->orderBy($sort, $order);
     $listCount = $events->count();
 
