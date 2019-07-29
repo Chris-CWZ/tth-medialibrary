@@ -10,9 +10,10 @@ class PaymentsController extends Controller
     public function process(Request $request)
     {
         $nonce = $request->input('nonce');
+        $amount = $request->input('amount');
 
         $status = Braintree_Transaction::sale([
-        'amount' => '10.00',
+        'amount' => $amount,
         'paymentMethodNonce' => $nonce,
         'options' => [
             'submitForSettlement' => True
