@@ -49,6 +49,7 @@ class CartController extends Controller{
 	}
 
 	public function getCartProducts(Request $request){
+		dd($request);
 		return $this->cartService->getCartProducts($request);
 	}
 }
