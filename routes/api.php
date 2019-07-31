@@ -30,3 +30,5 @@ use Illuminate\Http\Request;
 	});
 
 	Route::post('payment/process', 'PaymentsController@process');
+
+	Route::post('order/create', 'Api\Orders\OrdersController@createOrder');

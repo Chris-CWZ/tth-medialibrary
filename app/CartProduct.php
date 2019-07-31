@@ -19,7 +19,7 @@ class CartProduct extends Pivot{
 		return $this->belongsTo('App\Cart', 'cart_id');
 	}
 
-	public function product(){
-		return $this->belongsTo('App\Product', 'product_code');
+	public function products(){
+		return $this->belongsTo('App\Product', 'product_code', 'product_code');
 	}
 }
