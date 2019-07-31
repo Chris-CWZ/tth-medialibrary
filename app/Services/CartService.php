@@ -33,10 +33,10 @@ class CartService extends TransformerService{
 
 		if ($cart == null) {
 			$cart = $this->createCart($request);
-			$response = $this->cartProductService->isProductExist($cart, $request);
+			$response = $this->cartProductService->addProduct($cart, $request);
 			return $response;
 		} else {
-			$response = $this->cartProductService->isProductExist($cart, $request);
+			$response = $this->cartProductService->addProduct($cart, $request);
 			return $response;
 		}
 	}

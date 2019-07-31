@@ -23,7 +23,7 @@ class CartController extends Controller{
 	 */
 
 	public function addToCart(Request $request){
-		if ($request->path() == "api/user/add-product") {
+		if ($request->path() == "api/user/product/add") {
 			$validator = Validator::make($request->all(), [
 				'userId' => 'required|integer',
 				'productCode' => 'required',
@@ -49,7 +49,6 @@ class CartController extends Controller{
 	}
 
 	public function getCartProducts(Request $request){
-		dd($request);
 		return $this->cartService->getCartProducts($request);
 	}
 }

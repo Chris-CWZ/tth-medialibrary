@@ -23,11 +23,11 @@ use Illuminate\Http\Request;
 		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
 
 		// Products
-		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
-		Route::post('guest/remove-product', 'Api\Cart\CartController@removeFromCart');
+		Route::post('guest/product/add', 'Api\Cart\CartController@addToCart');
+		Route::post('guest/product/remove', 'Api\Cart\CartController@removeFromCart');
 		Route::post('purchases', 'Api\PurchasesController@purchases');
-		Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
-		Route::post('user/remove-product', 'Api\Cart\CartController@removeFromCart');
+		Route::post('user/product/add', 'Api\Cart\CartController@addToCart');
+		Route::post('user/product/remove', 'Api\Cart\CartController@removeFromCart');
 		Route::get('cart', 'Api\Cart\CartController@getCartProducts');
 		Route::get('shop', 'Api\Products\ProductsController@index');
 		Route::get('product/colours', 'Api\Products\ProductsController@colours');

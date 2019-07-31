@@ -21,7 +21,7 @@ class CartProductService extends TransformerService{
 	*	Request input: user_id, product_id, quantity
 	*
 	**/
-	public function isProductExist($cart, $request){
+	public function addProduct($cart, $request){
 		$productCode = $request->input('productCode');
 		$quantity = $request->input('quantity');
 
