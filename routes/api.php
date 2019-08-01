@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 
 	Route::middleware('passport.client.auth')->group(function () {
 
-		// Events
+        // Events
 		Route::post('events/date', 'Api\Events\EventsController@getEvent');
         Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
         Route::post('bookmarks-events', 'Api\Bookmarks\BookmarksController@getBookmarkedEvents');

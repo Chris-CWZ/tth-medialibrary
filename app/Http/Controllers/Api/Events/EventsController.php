@@ -11,6 +11,12 @@ use Carbon\Carbon;
 class EventsController extends Controller{
     public function getEvent(Request $request){
         $events = Event::where('date', $request->date)->get();
-        return $events;
+        $userId = $request ->userId;
+            foreach ($events as $event) {
+                $isBookmarked = EventUser::where('userID', $userId)->get();
+                return $events->withBookmarked($isBookmarked);
+                # code...
+            }
+            return $events;
     }
 }
