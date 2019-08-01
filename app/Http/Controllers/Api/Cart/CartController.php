@@ -25,7 +25,7 @@ class CartController extends Controller{
 	public function addToCart(Request $request){
 		$validator = Validator::make($request->all(), [
 			'userId' => 'required_without:sessionId|integer',
-			'sessionId' => 'required_without:userId|integer',
+			'sessionId' => 'required_without:userId',
 			'productCode' => 'required',
 			'quantity' => 'required|integer',
 		]);
