@@ -27,10 +27,12 @@ class ProductsService {
 		}
 
 		foreach ($products as $product) {
-			$bookmarked = ProductUser::where('product_id', $product->id)->where('user_id', $request->userId)->get();
+			$bookmarked = ProductUser::where('product_id', $product->id)->where('user_id', $request->userId)->first();
 			
 			if($bookmarked){
 				$product['bookmarked'] = true;
+			}else{
+				$product['bookmarked'] = false;
 			}
 		}
 
