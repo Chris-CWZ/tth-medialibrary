@@ -17,12 +17,12 @@ use Illuminate\Http\Request;
 // 	});
 
 	Route::middleware('passport.client.auth')->group(function () {
-
-        // Events
-        Route::post('events/date', 'Api\Events\EventsController@getEventByDate');
-        Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
-        Route::post('bookmarks-events', 'Api\Bookmarks\BookmarksController@getBookmarkedEvents');
-        Route::post('event/bookmark', 'Api\Bookmarks\BookmarksController@eventBookmark');
+    
+		// Events
+		Route::post('events/date', 'Api\Events\EventsController@getEventByDate');
+		Route::post('event/bookmark', 'Api\Bookmarks\BookmarksController@eventBookmark');
+		Route::post('bookmarks-events', 'Api\Bookmarks\BookmarksController@getBookmarkedEvents');
+		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
 
 		// Products
 		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
