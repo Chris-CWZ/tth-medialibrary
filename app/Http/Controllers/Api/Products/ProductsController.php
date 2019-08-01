@@ -20,7 +20,7 @@ class ProductsController extends Controller {
 	*	Optional request input: sort, order, filter, min, max
 	*
 	**/
-	public function index(Request $request){
+	public function retrieveProductsList(Request $request){
 		$validator = Validator::make($request->all(), [
 			'sort' => 'required_with:order|string',
 			'order' => 'required_with:sort|string',

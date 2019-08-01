@@ -38,7 +38,17 @@ class CartController extends Controller{
 	}
 
 	public function removeFromCart(Request $request){
-		return $this->cartService->removeFromCart($request);
+		$validator = Validator::make($request->all(), [
+			'userId' => 'required_without:sessionId|integer',
+			'sessionId' => 'required_without:userId',
+			'productCode' => 'required',
+		]);
+
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->cartService->removeFromCart($request);
+		}
 	}
 
 	public function getCartProducts(Request $request){
