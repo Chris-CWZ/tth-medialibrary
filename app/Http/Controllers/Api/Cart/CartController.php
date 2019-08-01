@@ -23,12 +23,12 @@ class CartController extends Controller{
 	 */
 
 	public function addToCart(Request $request){
-		$validator = Validator::make($request->all(), [
-			'userId' => 'required_without:sessionId|integer',
-			'sessionId' => 'required_without:userId|integer',
-			'productCode' => 'required',
-			'quantity' => 'required|integer',
-		]);
+        $validator = Validator::make($request->all(), [
+            'userId' => 'required_without:sessionId|integer',
+            'sessionId' => 'required_without:userId|integer',
+            'productCode' => 'required',
+            'quantity' => 'required|integer',
+        ]);
 
 		if ($validator->fails()) {
 			return validationError();
@@ -37,7 +37,7 @@ class CartController extends Controller{
 		}
 	}
 
-	public function removeFromCart(Request $request){	
+	public function removeFromCart(Request $request){
 		return $this->cartService->removeFromCart($request);
 	}
 

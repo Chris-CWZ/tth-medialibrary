@@ -40,19 +40,21 @@ class CartService extends TransformerService{
 			return $response;
 		}
 	}
-	
+
 	public function removeFromCart($request){
 		if ($request->has('userId')) {
 			$cart = $this->getCart("user", $request->input('userId'));
 		} else {
 			$cart = $this->getCart("session", $request->input('sessionId'));
-		}
+        }
 
-		if ($request->has('quantity')) {
-			$response = $this->cartProductService->reduceQuantity($request, $cart);		
-		}else{
-			$response = $this->cartProductService->removeFromCart($request, $cart);
-		}
+        if ($request->has('quantity')) {
+            $response = $this->cartProductService->reduceQuantity($request, $cart);
+        }else{
+            $response = $this->cartProductService->removeFromCart($request, $cart);
+        }
+
+		$response = $this->cartProductService->removeFromCart($request, $cart);
 
 		return $response;
 	}
@@ -72,13 +74,13 @@ class CartService extends TransformerService{
 			$cart = Cart::create([
 				'user_id' => $request->input('userId')
 			]);
-	
+
 			return $cart;
 		} else {
 			$cart = Cart::create([
 				'session_id' => $request->input('sessionId')
 			]);
-	
+
 			return $cart;
 		}
 	}
@@ -155,7 +157,7 @@ class CartService extends TransformerService{
 			} else {
 				// Get duplicate entry
 				$duplicatedCartProduct = $this->cartProductService->getDuplicateCartProduct($newCartProduct);
-				
+
 				if ($duplicatedCartProduct != null) {
 					// Increase quantity of original entry
 					$this->cartProductService->mergeQuantity($newCartProduct, $duplicatedCartProduct);
