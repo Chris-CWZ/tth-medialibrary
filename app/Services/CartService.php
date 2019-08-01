@@ -56,8 +56,6 @@ class CartService extends TransformerService{
 			$response = $this->cartProductService->removeFromCart($request, $cart);
 		}
 
-		$response = $this->cartProductService->removeFromCart($request, $cart);
-
 		return $response;
 	}
 
