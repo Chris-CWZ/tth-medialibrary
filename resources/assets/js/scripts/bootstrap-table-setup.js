@@ -10,7 +10,6 @@ $().ready(function(){
       location.href = url + '/' + row.id + '/edit';
     },
     'click .remove': function(e, value, row, index) {
-
 			swal({
         title: "Are you sure?",
         text: "This action can not be recovered!",

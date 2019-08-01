@@ -54,7 +54,7 @@ class EventsService extends TransformerService{
 	}
 
 	public function transform($event){
-        return [
+		return [
 			'id' => $event->id,
 			'post_id' => $event->post_id,
 			'name' => $event->name,
