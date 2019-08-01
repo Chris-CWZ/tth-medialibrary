@@ -26,16 +26,25 @@ use Illuminate\Http\Request;
 
 		// Products
 		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
+<<<<<<< HEAD
+=======
 		Route::post('guest/remove-product', 'Api\Cart\CartController@removeFromCart');
 		Route::post('purchases', 'Api\PurchasesController@purchases');
+>>>>>>> 05721135f6bb15fe0c542ca20ddd7eae66637340
 		Route::post('user/add-product', 'Api\Cart\CartController@addToCart');
 		Route::post('user/remove-product', 'Api\Cart\CartController@removeFromCart');
 		Route::get('cart', 'Api\Cart\CartController@getCartProducts');
 		Route::get('shop', 'Api\Products\ProductsController@index');
 		Route::get('product/colours', 'Api\Products\ProductsController@colours');
 		Route::get('product/sizes', 'Api\Products\ProductsController@sizes');
+<<<<<<< HEAD
+		Route::post('products/bookmark', 'Api\Products\ProductsController@bookmark');
+		Route::post('payment/process', 'PaymentsController@process');
+		Route::post('order/create', 'Api\Orders\OrdersController@createOrder');
+=======
 		Route::post('bookmarks-products', 'Api\Bookmarks\BookmarksController@getBookmarkedProducts');
 		Route::post('product/bookmark', 'Api\Bookmarks\BookmarksController@productBookmark');
+>>>>>>> 05721135f6bb15fe0c542ca20ddd7eae66637340
 	});
 
-	Route::post('payment/process', 'PaymentsController@process');
+	Route::post('user/orders', 'Api\Orders\OrdersController@getOrders');

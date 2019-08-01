@@ -34,10 +34,19 @@
 					<p>Events</p>
 				</a>
       </li>
-      <li class="nav-item {{ is_active('calenders') }}">
+      <li class="nav-item {{ is_active('calendars') }}">
 				<a class="nav-link" href="{{ route('admin.calendar') }}">
 					<i class="fa fa-users text-info"></i>
 					<p>Calendar</p>
+<<<<<<< HEAD
+				</a>
+			</li>
+      <li class="nav-item {{ is_active('orders') }}">
+				<a class="nav-link" href="{{ route('admin.orders.index') }}">
+					<i class="fa fa-users text-info"></i>
+					<p>Orders</p>
+=======
+>>>>>>> 05721135f6bb15fe0c542ca20ddd7eae66637340
 				</a>
 			</li>
     </ul>
