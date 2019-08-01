@@ -14,7 +14,7 @@ class OrdersController extends Controller {
 		$this->ordersService = $ordersService;
     }
     
-	public function createOrder(Request $request) {
+	public function createOrder(Request $request){
 		$validator = Validator::make($request->all(), [
             'userId' => 'required_without:sessionId|integer',
             'sessionId' => 'required_without:userId|string',
@@ -27,5 +27,17 @@ class OrdersController extends Controller {
 		} else {
             return $this->ordersService->createOrder($request);
 		}
-	}
+    }
+    
+    public function getOrders(Request $request){
+        $validator = Validator::make($request->all(), [
+            'userId' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return validationError();
+        } else {
+            return $this->ordersService->getUserOrders($request);
+        }
+    }
 }

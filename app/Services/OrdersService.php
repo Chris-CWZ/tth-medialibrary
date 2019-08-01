@@ -4,20 +4,52 @@ namespace App\Services;
 
 use App\Order;
 use App\OrderProduct;
-use App\CartProduct;
 use App\Services\TransformerService;
 use App\Services\CartService;
 use App\Services\CartProductService;
+use App\Services\ProductService;
+use Session;
 use Illuminate\Http\Request;
 
-class OrdersService extends TransformerService{
 
+class OrdersService extends TransformerService{
+    protected $path = 'admin.orders.';
     protected $cartService;
     protected $cartProductService;
 
-	public function __construct(CartService $cartService, CartProductService $cartProductService){
+	public function __construct(CartService $cartService, CartProductService $cartProductService, ProductService $productService){
         $this->cartService = $cartService;
         $this->cartProductService = $cartProductService;
+        $this->productService = $productService;
+	}
+
+    public function index($request){
+		$sort = $request->sort ? $request->sort : 'created_at';
+		$order = $request->order ? $request->order : 'desc';
+        $limit = $request->limit ? $request->limit : 10;
+        
+        //ASK THIS
+		$offset = $request->offset ? $request->offset : 0;
+		$query = $request->search ? $request->search : '';
+
+		$order = Order::where('transaction_id', 'like', "%{$query}%")->orderBy($sort, $order);
+		$listCount = $order->count();
+
+		$order = $order->limit($limit)->offset($offset)->get();
+
+		return respond(['rows' => $order, 'total' => $listCount]);
+    }
+    
+    public function update($request, $order){
+        $order->user_id = $request->user_id;
+        $order->session_id = $request->session_id;
+        $order->transaction_id = $request->transaction_id;
+        $order->amount = $request->amount;
+        $order->status = $request->status;
+		$order->save();
+
+		Session::flash('success', 'The order was successfully saved!');
+        return redirect()->route($this->path . 'index');
 	}
 
 	/**
@@ -65,6 +97,33 @@ class OrdersService extends TransformerService{
         }
 
         return success("Order created");
+    }
+
+    /**
+	*
+	*	Get all user's orders
+	*	Request input: userId
+	*
+    **/
+    public function getUserOrders($request){
+        $orders = Order::where('user_id', $request->userId)->get();
+
+        // Note: depends on the app if they only want orders or product orders as well
+        foreach($orders as $order) {
+            $orderProducts = OrderProduct::where('order_id', $order->id)->get();
+
+            foreach($orderProducts as $orderProduct) {
+                $products[] = $this->productService->retrieveProduct($orderProduct);
+            }
+
+            $order['items'] = $products;
+            $ordersList[] = $order;
+
+            // Clearing the products array after appending it to order array
+            $products = array();
+        }
+
+        return $ordersList;
     }
 
 	public function transform($order){
