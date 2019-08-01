@@ -20,9 +20,9 @@ use Illuminate\Http\Request;
 
 		// Events
 		Route::post('events/date', 'Api\Events\EventsController@getEvent');
-        Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
-        Route::post('bookmarks-events', 'Api\Bookmarks\BookmarksController@getBookmarkedEvents');
 		Route::post('event/bookmark', 'Api\Bookmarks\BookmarksController@eventBookmark');
+		Route::post('bookmarks-events', 'Api\Bookmarks\BookmarksController@getBookmarkedEvents');
+		Route::post('operating-hours', 'Admin\OperationsController@operatingHours');
 
 		// Products
 		Route::post('guest/add-product', 'Api\Cart\CartController@addToCart');
