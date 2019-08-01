@@ -14,7 +14,7 @@ class EventsController extends Controller{
 		$events = Event::where('date', $request->date)->get();
 		
 		foreach ($events as $event) {
-			$bookmarked = EventUser::where('event_id', $event->id)->get();
+			$bookmarked = EventUser::where('event_id', $event->id)->where('user_id', $request->userId)->get();
 			
 			if($bookmarked){
 				$event['bookmarked'] = true;
