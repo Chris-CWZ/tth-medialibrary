@@ -23,7 +23,7 @@ class PassportClientAuth{
     if($client_id == $env_client_id && $client_secret == $env_client_secret){
       return $next($request);
     }else{
-      return validationError();
+        return validationError('client_id or client_secret is missing');
     }
   }
 }
