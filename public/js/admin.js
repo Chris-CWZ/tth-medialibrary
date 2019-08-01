@@ -78847,6 +78847,8 @@ __webpack_require__(172);
 
 __webpack_require__(174);
 
+// require('paper-dashboard/plugins/plugin-sweetalert2');
+
 __webpack_require__(175);
 
 __webpack_require__(176);
@@ -87570,6 +87572,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     // Copy arguments to the local args variable
     var args = arguments;
     var modal = getModal();
+
     if (modal !== null) {
       if (hasClass(modal, 'visible')) {
         resetPrevState();
@@ -105796,7 +105799,6 @@ $().ready(function () {
       location.href = url + '/' + row.id + '/edit';
     },
     'click .remove': function clickRemove(e, value, row, index) {
-
       swal({
         title: "Are you sure?",
         text: "This action can not be recovered!",
