@@ -7,8 +7,8 @@ use Session;
 use Illuminate\Http\Request;
 
 class EventsService extends TransformerService{
-	
-  protected $path = 'admin.events.';  
+
+  protected $path = 'admin.events.';
 
 	public function all(Request $request){
 		$sort = $request->sort ? $request->sort : 'created_at';
@@ -16,7 +16,7 @@ class EventsService extends TransformerService{
     $limit = $request->limit ? $request->limit : 10;
     $offset = $request->offset ? $request->offset : 0;
     $query = $request->search ? $request->search : '';
-		
+
     $events = Event::where('name', 'like', "%{$query}%")->orderBy($sort, $order);
     $listCount = $events->count();
 
@@ -32,20 +32,20 @@ class EventsService extends TransformerService{
       return view($this->path . 'index');
     }
 	}
-	
+
 	public function show($event){
     $event = $this->transform($event);
-    return view($this->path . 'show', ['event' => $event]);		
+    return view($this->path . 'show', ['event' => $event]);
 	}
 
 	public function update($request, $event){
-		$event->name = $request->name;		
-		$event->date = $request->date;		
-		$event->start_time = $request->start_time;		
-		$event->end_time = $request->end_time;		
-		$event->location = $request->location;		
-		$event->description = $request->description;		
-		$event->fee = $request->fee;		
+		$event->name = $request->name;
+		$event->date = $request->date;
+		$event->start_time = $request->start_time;
+		$event->end_time = $request->end_time;
+		$event->location = $request->location;
+		$event->description = $request->description;
+		$event->fee = $request->fee;
 		$event->fee_amount = $request->fee_amount;
 		$event->save();
 
@@ -54,7 +54,7 @@ class EventsService extends TransformerService{
 	}
 
 	public function transform($event){
-		return [
+        return [
 			'id' => $event->id,
 			'post_id' => $event->post_id,
 			'name' => $event->name,

@@ -3,10 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class EventUser extends Model
+class EventUser extends Pivot
 {
-    public function events() {
+    public function event() {
         return $this->belongsTo('App\Event');
     }
 }

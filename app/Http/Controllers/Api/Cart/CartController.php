@@ -23,12 +23,19 @@ class CartController extends Controller{
 	 */
 
 	public function addToCart(Request $request){
-		$validator = Validator::make($request->all(), [
-			'userId' => 'required_without:sessionId|integer',
-			'sessionId' => 'required_without:userId|integer',
-			'productCode' => 'required',
-			'quantity' => 'required|integer',
-		]);
+		if ($request->path() == "api/user/add-product") {
+			$validator = Validator::make($request->all(), [
+				'userId' => 'required|integer',
+				'productCode' => 'required',
+				'quantity' => 'required|integer',
+			]);
+		} else {
+			$validator = Validator::make($request->all(), [
+				'sessionId' => 'required',
+				'productCode' => 'required',
+				'quantity' => 'required|integer',
+			]);
+		}
 
 		if ($validator->fails()) {
 			return validationError();

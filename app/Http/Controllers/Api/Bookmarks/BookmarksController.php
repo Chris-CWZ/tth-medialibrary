@@ -10,7 +10,7 @@ use Validator;
 
 
 class BookmarksController extends Controller{
-	
+
 
 	public function __construct(BookmarksService $bookmarksService){
 		$this->bookmarksService = $bookmarksService;
@@ -38,6 +38,31 @@ class BookmarksController extends Controller{
 			return validationError();
 		} else {
 			return $this->bookmarksService->productBookmark($request);
+		}
+    }
+
+    public function eventBookmark(Request $request){
+		$validator = Validator::make($request->all(), [
+			'id' => 'required|integer',
+			'userId' => 'required|integer'
+		]);
+
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->bookmarksService->eventBookmark($request);
+		}
+    }
+
+    public function getBookmarkedEvents(Request $request){
+		$validator = Validator::make($request->all(), [
+			'userId' => 'required|integer'
+		]);
+
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->bookmarksService->getBookmarkedEvents($request);
 		}
 	}
 }

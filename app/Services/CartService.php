@@ -33,10 +33,10 @@ class CartService extends TransformerService{
 
 		if ($cart == null) {
 			$cart = $this->createCart($request);
-			$response = $this->cartProductService->addProduct($cart, $request);
+			$response = $this->cartProductService->isProductExist($cart, $request);
 			return $response;
 		} else {
-			$response = $this->cartProductService->addProduct($cart, $request);
+			$response = $this->cartProductService->isProductExist($cart, $request);
 			return $response;
 		}
 	}
@@ -48,12 +48,8 @@ class CartService extends TransformerService{
 			$cart = $this->getCart("session", $request->input('sessionId'));
 		}
 
-		if ($request->has('quantity')) {
-			$response = $this->cartProductService->reduceQuantity($request, $cart);		
-		}else{
-			$response = $this->cartProductService->removeFromCart($request, $cart);
-		}
-
+		$response = $this->cartProductService->removeFromCart($request, $cart);
+		
 		return $response;
 	}
 
@@ -158,7 +154,7 @@ class CartService extends TransformerService{
 				
 				if ($duplicatedCartProduct != null) {
 					// Increase quantity of original entry
-					$this->cartProductService->mergeQuantity($newCartProduct, $duplicatedCartProduct);
+					$this->cartProductService->increaseQuantity($newCartProduct, $duplicatedCartProduct);
 
 					// Delete duplicated cart product entry
 					$this->cartProductService->delete($duplicatedCartProduct);
