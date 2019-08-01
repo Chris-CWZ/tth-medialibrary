@@ -7,7 +7,7 @@ use App\OrderProduct;
 use App\Services\TransformerService;
 use App\Services\CartService;
 use App\Services\CartProductService;
-use App\Services\ProductService;
+use App\Services\ProductsService;
 use Session;
 use Illuminate\Http\Request;
 
@@ -16,11 +16,12 @@ class OrdersService extends TransformerService{
     protected $path = 'admin.orders.';
     protected $cartService;
     protected $cartProductService;
+    protected $productsService;
 
-	public function __construct(CartService $cartService, CartProductService $cartProductService, ProductService $productService){
+	public function __construct(CartService $cartService, CartProductService $cartProductService, ProductsService $productsService){
         $this->cartService = $cartService;
         $this->cartProductService = $cartProductService;
-        $this->productService = $productService;
+        $this->productsService = $productsService;
 	}
 
     public function index($request){
@@ -113,7 +114,7 @@ class OrdersService extends TransformerService{
             $orderProducts = OrderProduct::where('order_id', $order->id)->get();
 
             foreach($orderProducts as $orderProduct) {
-                $products[] = $this->productService->retrieveProduct($orderProduct);
+                $products[] = $this->productsService->retrieveProduct($orderProduct);
             }
 
             $order['items'] = $products;
