@@ -5,14 +5,14 @@ namespace App\Services;
 use App\CartProduct;
 use Illuminate\Http\Request;
 use App\Services\TransformerService;
-use App\Services\ProductService;
+use App\Services\ProductsService;
 
 class CartProductService extends TransformerService{
 
-	protected $productService;
+	protected $productsService;
 
-	public function __construct(ProductService $productService){
-		$this->productService = $productService;
+	public function __construct(ProductsService $productsService){
+		$this->productsService = $productsService;
 	}
 
 	/**
@@ -21,12 +21,11 @@ class CartProductService extends TransformerService{
 	*	Request input: user_id, product_id, quantity
 	*
 	**/
-	public function isProductExist($cart, $request){
+	public function addProduct($cart, $request){
 		$productCode = $request->input('productCode');
 		$quantity = $request->input('quantity');
-
 		$duplicateCartProduct = CartProduct::where('cart_id', $cart->id)->where('product_code', $productCode)->first();
-		
+
 		if ($duplicateCartProduct == null) {
 			CartProduct::create([
 				'cart_id' => $cart->id,
@@ -37,7 +36,7 @@ class CartProductService extends TransformerService{
 			CartProduct::where('cart_id', $cart->id)->where('product_code', $productCode)->increment('quantity', $quantity);
 		}
 
-		return success("Item added");
+		return success("Item added to cart");
 	}
 
 	/**
@@ -56,7 +55,7 @@ class CartProductService extends TransformerService{
 			return success("Cart is empty");
 		} else {
 			foreach($cartProducts as $cartProduct){
-				$product = $this->productService->retrieveProduct($cartProduct);
+				$product = $this->productsService->retrieveProduct($cartProduct);
 				$productDetails['quantity'] = $cartProduct['quantity'];
 				$productDetails['product'] = $product;
 				$cartProductsArray[] = $productDetails;
@@ -68,7 +67,7 @@ class CartProductService extends TransformerService{
 
 	/**
 	*
-	*	Update cart ID	
+	*	Update cart ID
 	*
 	**/
 	public function updateCartId($userCart, $sessionCart){
@@ -111,10 +110,22 @@ class CartProductService extends TransformerService{
 	*	Increase quantity of a cart product id
 	*
 	**/
-	public function increaseQuantity($originalCartProduct, $duplicatedCartProduct){
+	public function mergeQuantity($originalCartProduct, $duplicatedCartProduct){
 		CartProduct::where('id', $originalCartProduct->id)->increment('quantity', (int)$duplicatedCartProduct['quantity']);
 	}
 
+
+	public function reduceQuantity($request, $cart){
+		$cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_code', $request->productCode)->first();
+
+		if($cartProduct->quantity != 1){
+			$cartProduct::decrement('quantity', $request->quantity);
+
+			return success("1 item has been removed from cart");
+		}else{
+			return $this->removeFromCart($request, $cart);
+		}
+	}
 	/**
 	*
 	*	Delete entry using cart product id
@@ -122,6 +133,12 @@ class CartProductService extends TransformerService{
 	**/
 	public function delete($cartProduct){
 		CartProduct::where('id', $cartProduct->id)->delete();
+	}
+
+	public function removeFromCart($request, $cart){
+		CartProduct::where('cart_id', $cart->id)->where('product_code', $request->productCode)->delete();
+
+		return success("Item removed from cart!");
 	}
 
 	public function transform($cartProduct){

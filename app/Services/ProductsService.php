@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\ProductUser;
 
-class ProductService {
+class ProductsService {
 	/**
 	*
 	*	Retrieve products
@@ -18,7 +18,7 @@ class ProductService {
 		$sort = $request->sort ? $request->sort : 'created_at';
 		$order = $request->order ? $request->order : 'desc';
 
-		$query = $products = Product::where('vendor', 'trp')->orderBy($sort, $order);
+		$query = Product::where('vendor', 'trp')->orderBy($sort, $order);
 
 		if ($request->has('filter')) {
 			$products = $query->whereBetween($request->filter, [$request['min'], $request['max']])->paginate(10);
@@ -71,21 +71,19 @@ class ProductService {
 		return respond($sizesArray);
 	}
 
-	public function bookmark(Request $request){
-		$product = Product::where('product_code', $request->productCode)->first();
-		$existingProductUser = ProductUser::where('product', $product->id)->where('user', $request->userId)->first();
-
-		if(!$existingProductUser){
-			$productUser = new ProductUser;
-			$productUser->product = $product->id;
-			$productUser->user = $request->userId;
-			$productUser->save();
-
-			return success('Bookmark added for product');
-		}else{
-			$existingProductUser->delete();
-
-			return success('Bookmark removed for product');
-		}
-	}
+	public function transform($product){
+    return [
+      'id' => $product->id,
+      'name' => $product->name,
+      'price' => $product->price,
+      'category' => $product->category,
+      'colour' => $product->colour,
+      'size' => $product->size,
+      'product_code' => $product->product_code,
+      'product_details' => $product->product_details,
+      'brand' => $product->brand,
+      'vendor' => $product->vendor,
+			'stock' => $product->stock,
+    ];
+  }
 }

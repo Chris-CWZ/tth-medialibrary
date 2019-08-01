@@ -9,12 +9,12 @@ use Session;
 use Illuminate\Http\Request;
 
 class OperationsService extends TransformerService{
-	
-  protected $path = 'admin.calendar.';  
-  
+
+  protected $path = 'admin.calendar.';
+
   public function calendar() {
 		$allEvents = Event::get();
-		
+
 		if(count($allEvents) > 0){
 			foreach($allEvents as $event){
 				$events[]=[
@@ -29,7 +29,7 @@ class OperationsService extends TransformerService{
 		}
 		return view($this->path . 'calendar', ['events' => $events]);
   }
-  
+
   public function operatingHours() {
 		$nextDate = Carbon::tomorrow('Asia/Kuala_Lumpur')->toDateString();
 		$nextDay = Carbon::tomorrow('Asia/Kuala_Lumpur')->format('l');
@@ -58,8 +58,12 @@ class OperationsService extends TransformerService{
 				return respond('Open on Monday');
 			}
 		}else{
-			return $this->nextWorkingDay($nextDate);			
+			return $this->nextWorkingDay($nextDate);
 		}
+    }
+    public function weekendopentimes(){
+    // When this new function is called if its a saturday/sunday then return the exact opening hours for event.
+		// secondary conditional for weekend mornings ie. open today at  16:00  - 18:00 ect.
 	}
 
 	public function nextWorkingDay($nextDate) {
@@ -80,7 +84,7 @@ class OperationsService extends TransformerService{
 			}
 		}
 	}
-	
+
 	public function transform($event){
 		return [
 		];

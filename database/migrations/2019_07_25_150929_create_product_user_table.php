@@ -15,8 +15,8 @@ class CreateProductUserTable extends Migration
     {
         Schema::create('product_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product');
-            $table->integer('user');
+            $table->integer('product_id');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
