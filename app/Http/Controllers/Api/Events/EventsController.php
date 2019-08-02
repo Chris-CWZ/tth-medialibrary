@@ -13,7 +13,7 @@ class EventsController extends Controller{
         public function getEventByDate(Request $request){
             $events = Event::where('date', $request->date)->get();
             foreach ($events as $event) {
-                $CheckBookmark = EventUser::where('event_id', $event->id)->get();
+                $CheckBookmark = EventUser::where('event_id', $event->id)->first();
                 if($CheckBookmark){
                     $event['Bookmarked'] = True;
                 }
