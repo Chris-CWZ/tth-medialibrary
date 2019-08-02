@@ -42,3 +42,5 @@ use Illuminate\Http\Request;
 		Route::post('order/create', 'Api\Orders\OrdersController@createOrder');
 		Route::post('user/orders', 'Api\Orders\OrdersController@getOrders');
 	});
+
+	Route::get('credentials', 'Api\Auth\AuthController@credentials');
