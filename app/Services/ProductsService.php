@@ -14,7 +14,7 @@ class ProductsService {
 	*
 	**/
 	public function getProduct($request){
-		$product = Product::where('name', $request->name)->where('colour', $request->colour)->where('size', $request->size)->first();
+		$product = Product::where('name', $request->name)->where('colour', $request->colour)->where('size', $request->size)->where('vendor', 'trp')->first();
 		return $product;
 	}
 
@@ -67,7 +67,7 @@ class ProductsService {
 	*
 	**/
 	public function colours($request){
-		$colours = Product::select('colour')->where('name', $request['name'])->distinct()->get();
+		$colours = Product::select('colour')->where('name', $request['name'])->where('vendor', 'trp')->distinct()->get();
 		
 		foreach($colours as $colour) {
 			$coloursArray[] = $colour['colour'];
@@ -83,7 +83,7 @@ class ProductsService {
 	*
 	**/
 	public function sizes($request){
-		$sizes = Product::select('size')->where('name', $request['name'])->distinct()->get();
+		$sizes = Product::select('size')->where('name', $request['name'])->where('vendor', 'trp')->distinct()->get();
 		
 		foreach($sizes as $size) {
 			$sizesArray[] = $size['size'];
