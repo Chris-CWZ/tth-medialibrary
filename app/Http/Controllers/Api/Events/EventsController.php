@@ -17,7 +17,7 @@ class EventsController extends Controller{
 	 */
 	public function getEventByDate(Request $request){
 		$validator = Validator::make($request->all(), [
-            'userId' => 'required|integer',
+            'userId' => 'integer',
             'date' => 'date_format:Y-m-d'
 		]);
 		
