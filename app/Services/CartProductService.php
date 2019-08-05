@@ -31,7 +31,7 @@ class CartProductService extends TransformerService{
 				'quantity' => $request->quantity
 			]);
 		} else {
-			CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->increment('quantity', $request->$quantity);
+			CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->increment('quantity', $request->quantity);
 		}
 
 		return success("Item added to cart");
