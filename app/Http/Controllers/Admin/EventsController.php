@@ -62,8 +62,9 @@ class EventsController extends Controller{
 	 * @param  \App\Event  $event
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Event $event)
-	{
-		//
+	public function destroy(Event $event){
+		$event->delete();
+
+    return success();
 	}
 }

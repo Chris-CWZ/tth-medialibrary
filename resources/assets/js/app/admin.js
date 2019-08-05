@@ -19,6 +19,8 @@ require('../plugins/bootstrap-datetimepicker');
 
 require('../plugins/sweetalert2.min');
 
+// require('paper-dashboard/plugins/plugin-sweetalert2');
+
 require('../plugins/bootstrap-tagsinput');
 
 require('../plugins/nouislider');
