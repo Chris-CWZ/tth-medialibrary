@@ -46,7 +46,7 @@ class ProductsService {
 	*
 	**/
 	public function retrieveProduct($cartProduct){
-		$product = Product::where('product_code', $cartProduct['product_code'])->first();
+		$product = Product::where('id', $cartProduct->product_id)->first();
 		return $product;
 	}
 
