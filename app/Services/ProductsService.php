@@ -9,6 +9,17 @@ use App\ProductUser;
 class ProductsService {
 	/**
 	*
+	*	Retrieve product's id based on their selected variance (size/color)
+	*	Request input: name, size, colour
+	*
+	**/
+	public function getProduct($request){
+		$product = Product::where('name', $request->name)->where('colour', $request->colour)->where('size', $request->size)->first();
+		return $product;
+	}
+
+	/**
+	*
 	*	Retrieve products
 	*	Request input: sort, order, filter, min, max
 	*   Default: sort by latest
@@ -73,17 +84,17 @@ class ProductsService {
 
 	public function transform($product){
     return [
-      'id' => $product->id,
-      'name' => $product->name,
-      'price' => $product->price,
-      'category' => $product->category,
-      'colour' => $product->colour,
-      'size' => $product->size,
-      'product_code' => $product->product_code,
-      'product_details' => $product->product_details,
-      'brand' => $product->brand,
-      'vendor' => $product->vendor,
-			'stock' => $product->stock,
+		'id' => $product->id,
+		'name' => $product->name,
+		'price' => $product->price,
+		'category' => $product->category,
+		'colour' => $product->colour,
+		'size' => $product->size,
+		'product_code' => $product->product_code,
+		'product_details' => $product->product_details,
+		'brand' => $product->brand,
+		'vendor' => $product->vendor,
+		'stock' => $product->stock,
     ];
   }
 }

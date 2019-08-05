@@ -12,7 +12,7 @@ class CartProduct extends Pivot{
 	 * @var array
 	 */
 	protected $fillable = [
-		'cart_id', 'product_code', 'quantity'
+		'cart_id', 'product_id', 'quantity'
 	];
 
 	public function cart(){
@@ -20,6 +20,6 @@ class CartProduct extends Pivot{
 	}
 
 	public function products(){
-		return $this->belongsTo('App\Product', 'product_code', 'product_code');
+		return $this->belongsTo('App\Product', 'product_id');
 	}
 }
