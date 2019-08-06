@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Operations;
-use App\Services\Admin\OperationsService;
+use App\Services\Api\OperationsService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class OperationsController extends Controller{
 		$this->operationsService = $operationsService;
 	}
 
-	public function calendar() {
-		return $this->operationsService->calendar();
+	public function operatingHours(){
+		return $this->operationsService->operatingHours();
 	}
 }

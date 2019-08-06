@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Events;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,8 +17,8 @@ class EventsController extends Controller{
 	 */
 	public function getEventByDate(Request $request){
 		$validator = Validator::make($request->all(), [
-            'userId' => 'integer',
-            'date' => 'date_format:Y-m-d'
+			'userId' => 'integer',
+			'date' => 'date_format:Y-m-d'
 		]);
 		
 		if ($validator->fails()) {

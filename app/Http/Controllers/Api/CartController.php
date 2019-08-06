@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Cart;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\CartService;
+use App\Services\Api\CartService;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller{

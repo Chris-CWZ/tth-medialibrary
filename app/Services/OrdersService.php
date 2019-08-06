@@ -28,6 +28,8 @@ class OrdersService extends TransformerService{
 		$sort = $request->sort ? $request->sort : 'created_at';
 		$order = $request->order ? $request->order : 'desc';
         $limit = $request->limit ? $request->limit : 10;
+        
+        //ASK THIS
 		$offset = $request->offset ? $request->offset : 0;
 		$query = $request->search ? $request->search : '';
 
@@ -88,7 +90,7 @@ class OrdersService extends TransformerService{
         foreach($cartProducts as $cartProduct) {
             $orderProduct = OrderProduct::create([
                 'order_id' => $order->id,
-                'product_id' => $cartProduct->product_id,
+                'product_code' => $cartProduct->product_code,
                 'quantity' => $cartProduct->quantity
             ]);
 

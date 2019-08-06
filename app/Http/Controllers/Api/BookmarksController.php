@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\Bookmarks;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\ProductUser;
-use App\Services\BookmarksService;
+use App\Services\Api\BookmarksService;
 use Validator;
 
 

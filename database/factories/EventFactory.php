@@ -12,6 +12,5 @@ $factory->define(App\Event::class, function (Faker $faker) {
         'description' => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
         'fee' => true,
         'fee_amount' => $faker->numberBetween($min = 1000, $max = 9000)
-        //
     ];
 });

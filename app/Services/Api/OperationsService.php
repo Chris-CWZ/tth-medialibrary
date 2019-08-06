@@ -1,34 +1,16 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Api;
 
+use Illuminate\Http\Request;
 use App\Operation;
 use App\Event;
+use App\Services\TransformerService;
 use Carbon\Carbon;
-use Session;
-use Illuminate\Http\Request;
 
 class OperationsService extends TransformerService{
 
   protected $path = 'admin.calendar.';
-
-  public function calendar() {
-		$allEvents = Event::get();
-
-		if(count($allEvents) > 0){
-			foreach($allEvents as $event){
-				$events[]=[
-					"id" => $event['id'],
-					"title" => $event['name'],
-					"start" =>$event['start_time'],
-					"end" =>$event['end_time'],
-				];
-			}
-		}else{
-			$events= null;
-		}
-		return view($this->path . 'calendar', ['events' => $events]);
-  }
 
   public function operatingHours() {
 		$nextDate = Carbon::tomorrow('Asia/Kuala_Lumpur')->toDateString();

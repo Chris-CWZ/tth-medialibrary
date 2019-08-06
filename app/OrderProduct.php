@@ -10,11 +10,11 @@ class OrderProduct extends Pivot
 		'order_id', 'product_id', 'quantity'
 	];
 
-    public function order(){
+	public function order(){
 		return $this->belongsTo('App\Order', 'order_id');
 	}
 
-    public function product(){
+	public function product(){
 		return $this->belongsTo('App\Product', 'product_id');
 	}
 }
