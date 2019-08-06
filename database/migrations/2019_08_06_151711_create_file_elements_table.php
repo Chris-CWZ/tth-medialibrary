@@ -15,6 +15,9 @@ class CreateFileElementsTable extends Migration
     {
         Schema::create('file_elements', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->integer('parent_id')->nullable();
+            $table->string('type')->default('d');
             $table->timestamps();
         });
     }
