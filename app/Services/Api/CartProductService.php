@@ -115,17 +115,10 @@ class CartProductService extends TransformerService{
 
 	public function reduceQuantity($request, $cart){
 		$cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_code', $request->productCode)->first();
-<<<<<<< HEAD:app/Services/Api/CartProductService.php
 
 		if($cartProduct->quantity != 1) {
 			$cartProduct::where('id', $cartProduct->id)->decrement('quantity', $request->quantity);
 
-=======
-
-		if($cartProduct->quantity != 1) {
-			$cartProduct::where('id', $cartProduct->id)->decrement('quantity', $request->quantity);
-
->>>>>>> cc50751a7fcfcfd07cd9287642129a2ae52d67bc:app/Services/CartProductService.php
 			return success("1 item has been removed from cart");
 		}else{
 			return $this->removeFromCart($request, $cart);
