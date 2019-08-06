@@ -20,8 +20,8 @@ class CartService extends TransformerService{
 	/**
 	*
 	*	Add item to cart for existing users
-	*	Request input for user/add-product: userId, productCode, quantity
-	*	Request input for guest/add-product: sessionId, productCode, quantity
+	*	Request input for user/add-product: userId, name, colour, size, quantity
+	*	Request input for guest/add-product: sessionId, name, colour, size, quantity
 	*
 	**/
 	public function addToCart($request){

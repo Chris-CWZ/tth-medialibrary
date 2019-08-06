@@ -18,22 +18,20 @@ class CartProductService extends TransformerService{
 	/**
 	*
 	*	Creates a new entry depending on whether an existing entry exists
-	*	Request input: user_id, product_id, quantity
 	*
 	**/
 	public function addProduct($cart, $request){
-		$productCode = $request->input('productCode');
-		$quantity = $request->input('quantity');
-		$duplicateCartProduct = CartProduct::where('cart_id', $cart->id)->where('product_code', $productCode)->first();
+		$product = $this->productsService->getProduct($request);
+		$duplicateCartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->first();
 
 		if ($duplicateCartProduct == null) {
 			CartProduct::create([
 				'cart_id' => $cart->id,
-				'product_code' => $productCode,
-				'quantity' => $quantity
+				'product_id' => $product->id,
+				'quantity' => $request->quantity
 			]);
 		} else {
-			CartProduct::where('cart_id', $cart->id)->where('product_code', $productCode)->increment('quantity', $quantity);
+			CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->increment('quantity', $request->quantity);
 		}
 
 		return success("Item added to cart");
