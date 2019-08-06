@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\Products;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Services\ProductsService;
+use App\Services\Api\ProductsService;
 
 class ProductsController extends Controller {
 	protected $productsService;

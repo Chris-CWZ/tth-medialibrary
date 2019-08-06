@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\UsersService;
-use App\Services\ImageOptimizationServices;
+use App\Services\Admin\UsersService;
+use App\Services\Admin\ImageOptimizationServices;
 
 class UsersController extends Controller{
 

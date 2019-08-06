@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Api;
 
-use App\CartProduct;
 use Illuminate\Http\Request;
+use App\CartProduct;
 use App\Services\TransformerService;
-use App\Services\ProductsService;
+use App\Services\Api\ProductsService;
 
 class CartProductService extends TransformerService{
 

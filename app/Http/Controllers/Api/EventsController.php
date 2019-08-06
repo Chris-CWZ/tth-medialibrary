@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\Events;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Event;
 use App\EventUser;
-use PhpParser\Node\Expr\Cast\Bool_;
 
 class EventsController extends Controller{
 
@@ -14,7 +13,7 @@ class EventsController extends Controller{
 		$events = Event::where('date', $request->date)->get();
 
 		foreach ($events as $event) {
-			$bookmarked = eventUser::where('event_id', $event->id)->where('user_id', $request->userId)->first();
+			$bookmarked = EventUser::where('event_id', $event->id)->where('user_id', $request->userId)->first();
 			
 			if($bookmarked){
 				$event['bookmarked'] = true;
