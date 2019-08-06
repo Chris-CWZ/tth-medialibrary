@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admin;
 
-use App\Event;
-use Session;
 use Illuminate\Http\Request;
+use App\Event;
+use App\Services\TransformerService;
+use Session;
 
 class EventsService extends TransformerService{
 

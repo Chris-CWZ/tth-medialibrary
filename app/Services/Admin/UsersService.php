@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\User;
+use App\Services\TransformerService;
 use Illuminate\Http\Request;
+
 
 class UsersService extends TransformerService{
 
