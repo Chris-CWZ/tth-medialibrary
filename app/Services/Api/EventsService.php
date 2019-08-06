@@ -3,189 +3,76 @@
 namespace App\Services\Api;
 
 use Illuminate\Http\Request;
-use App\Cart;
-use App\CartProduct;
-use App\Product;
+use App\Event;
+use App\EventUser;
+use Carbon\Carbon;
 use App\Services\TransformerService;
-use App\Services\Api\CartProductService;
 
-class CartService extends TransformerService{
-
-	protected $cartProductService;
-
-	public function __construct(CartProductService $cartProductService){
-		$this->cartProductService = $cartProductService;
-	}
+class EventsService extends TransformerService{
 
 	/**
-	*
-	*	Add item to cart for existing users
-	*	Request input for user/add-product: userId, name, colour, size, quantity
-	*	Request input for guest/add-product: sessionId, name, colour, size, quantity
-	*
-	**/
-	public function addToCart($request){
-		if ($request->has('userId')) {
-			$cart = $this->getCart("user", $request->input('userId'));
-		} else {
-			$cart = $this->getCart("session", $request->input('sessionId'));
-		}
+	* Request input: date(optional), userId 
+	*/
+	public function getEventByDate($request){
+		if ($request->has('date')) {
+            $events = Event::where('start_time', '<=', $request->date)->where('end_time', '>=', $request->date)->get();
+        } else {
+            $events = Event::where('date', '>=', Carbon::now()->toDateTimeString())->paginate(10);
+        }
 
-		if ($cart == null) {
-			$cart = $this->createCart($request);
-			$response = $this->cartProductService->addProduct($cart, $request);
+        foreach ($events as $event) {
+            $event = $this->isBookmarked($event, $request);
+        }
 
-			return $response;
-		} else {
-			$response = $this->cartProductService->addProduct($cart, $request);
+        return $events;
+    }
+    
+    public function isBookmarked($event, $request){
+        $bookmarkedEvent = EventUser::where('event_id', $event->id)->where('user_id', $request->userId)->first();
 
-			return $response;
-		}
-	}
+        if ($bookmarkedEvent == null) {
+            $event['bookmarked'] = false;
+        } else {
+            $event['bookmarked'] = true;
+        }
 
-	public function removeFromCart($request){
-		if ($request->has('userId')) {
-			$cart = $this->getCart("user", $request->input('userId'));
-		} else {
-			$cart = $this->getCart("session", $request->input('sessionId'));
-		}
+        return $event;
+    }
 
-		if ($request->has('quantity')) {
-			$response = $this->cartProductService->reduceQuantity($request, $cart);
-		}else{
-			$response = $this->cartProductService->removeFromCart($request, $cart);
-		}
+	public function nextEvent($request){
+        $event = Event::where('id', '!=', $request->id)->where('start_time', '>=', $request->startTime)->orderBy('date', 'asc')->first();
+		
+        if ($event != null) {
+            $event = $this->isBookmarked($event, $request);
+            return $event;
+        } else {
+            return respond("No more events.");
+        }
+    }
 
-		return $response;
-	}
-
-	public function getCart($idType, $id){
-		if ($idType == "user") {
-			$cart = Cart::where('user_id', $id)->first();
-			return $cart;
-		} else {
-			$cart = Cart::where('session_id', $id)->first();
-			return $cart;
-		}
-	}
-
-	public function createCart($request){
-		if ($request->has('userId')) {
-			$cart = Cart::create([
-				'user_id' => $request->input('userId')
-			]);
-
-			return $cart;
-		} else {
-			$cart = Cart::create([
-				'session_id' => $request->input('sessionId')
-			]);
-
-			return $cart;
-		}
-	}
-
-	/**
-	*
-	*	Retrieve products' details in cart
-	*	Request input for guest/cart: sessionId
-	*	Request input for user/cart: userId or userId and sessionId
-	*
-	**/
-	public function getCartProducts($request){
-		// If user has both user and session id, then combine both carts
-		if ($request->has('userId') && $request->has('sessionId')) {
-			$userCart = $this->mergeCarts($request);
-			$cartProductsArray = $this->cartProductService->getCartProducts($userCart);
-			return respond($cartProductsArray);
-		} else if ($request->has('userId') && !($request->has('sessionId'))) {
-			$cart = $this->getCart("user", $request->input('userId'));
-
-			if ($cart == null) {
-				$cart = $this->createCart($request);
-				return success("Cart is empty.");
-			} else {
-				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
-				return respond($cartProductsArray);
-			}
-		} else if ($request->has('sessionId') && !($request->has('userId'))){
-			$cart = $this->getCart("session", $request->input('sessionId'));
-
-			if ($cart == null) {
-				$cart = $this->createCart($request);
-				return success("Cart is empty.");
-			} else {
-				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
-				return respond($cartProductsArray);
-			}
-		}
-	}
-
-	/**
-	*
-	*	Combine guest cart with user's existing cart
-	*
-	**/
-	public function mergeCarts($request){
-		// Get cart id of session id
-		$sessionCart = $this->getCart("session", $request->input('sessionId'));
-
-		// Get cart id of user id
-		$userCart = $this->getCart("user", $request->input('userId'));
-
-		// If there is no cart associated with user id
-		if ($userCart == null) {
-			$userCart = $this->createCart($request);
-		}
-
-		// Change cart id of all session cart products
-		$this->cartProductService->updateCartId($userCart, $sessionCart);
-
-		// Delete cart of session id
-		$this->delete($sessionCart);
-
-		// Get all new cart products of user's cart
-		$newCartProducts = $this->cartProductService->retrieveCartProducts($userCart);
-
-		// Delete cart products that share the same product code and increment
-		foreach($newCartProducts as $newCartProduct) {
-			// Checking is the entry still exist (might be deleted from previous loop)
-			$cartProduct = $this->cartProductService->retrieveSingleProduct($newCartProduct);
-
-			if ($cartProduct == null) {
-				continue;
-			} else {
-				// Get duplicate entry
-				$duplicatedCartProduct = $this->cartProductService->getDuplicateCartProduct($newCartProduct);
-
-				if ($duplicatedCartProduct != null) {
-					// Increase quantity of original entry
-					$this->cartProductService->mergeQuantity($newCartProduct, $duplicatedCartProduct);
-
-					// Delete duplicated cart product entry
-					$this->cartProductService->delete($duplicatedCartProduct);
-				}
-			}
-		}
-
-		return $userCart;
-	}
-
-	/**
-	*
-	*	Delete cart
-	*
-	**/
-	public function delete($cart){
-		Cart::where('id', $cart['id'])->delete();
-	}
-
-	public function transform($cart){
+    public function previousEvent($request){
+        $event = Event::where('id', '!=', $request->id)->where('start_time', '<=', $request->startTime)->orderBy('date', 'desc')->first();
+		
+        if ($event != null) {
+            $event = $this->isBookmarked($event, $request);
+            return $event;
+        } else {
+            return respond("No more events.");
+        }
+    }
+    
+    public function transform($event){
 		return [
-			'id' => $cart->id,
-			'user_id' => $cart->user_id,
-			'session_id' => $cart->session_id,
-			'products' => $cart->product
+			'id' => $event->id,
+			'post_id' => $event->post_id,
+			'name' => $event->name,
+			'date' => $event->date,
+			'start_time' => $event->start_time,
+			'end_time' => $event->end_time,
+			'location' => $event->location,
+			'description' => $event->description,
+			'fee' => $event->fee,
+			'fee_amount' => $event->fee_amount,
 		];
 	}
 }

@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Event;
-use App\EventUser;
 use PhpParser\Node\Expr\Cast\Bool_;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use App\Services\Api\EventsService;
 
 class EventsController extends Controller{
+	protected $eventsService;
+
+	public function __construct(EventsService $eventsService){
+    	$this->eventsService = $eventsService;
+	}
 
 	/**
 	 * Request input: date(optional), userId 
@@ -24,51 +27,35 @@ class EventsController extends Controller{
 		if ($validator->fails()) {
 			return validationError();
 		} else {
-			if ($request->has('date')) {
-				$events = Event::where('start_time', '<=', $request->date)->where('end_time', '>=', $request->date)->get();
-			} else {
-				$events = Event::where('date', '>=', Carbon::now()->toDateTimeString())->paginate(10);
-			}
-	
-			foreach ($events as $event) {
-				$bookmarkedEvent = EventUser::where('event_id', $event->id)->where('user_id', $request->userId)->first();
-	
-				if ($bookmarkedEvent == null) {
-					$event['bookmarked'] = false;
-				} else {
-					$event['bookmarked'] = true;
-				}
-			}
-	
-			return $events;
+			return $this->eventsService->getEventByDate($request);
 		}
 	}
 
 	public function nextEvent(Request $request){
 		$validator = Validator::make($request->all(), [
             'userId' => 'integer',
-			'date' => 'required|date_format:Y-m-d',
+			'startTime' => 'required|date_format:Y-m-d H:i:s',
 			'id' => 'required|integer'
 		]);
 
 		if ($validator->fails()) {
 			return validationError();
 		} else {
-			$event = Event::where('id', '!=', $request->id)->where('date', '>=', $request->date)->orderBy('date', 'asc')->first();
-		
-			if ($event == null) {
-				
-			}
+			return $this->eventsService->nextEvent($request);
+		}
+	}
 
-			$bookmarkedEvent = EventUser::where('event_id', $event->id)->where('user_id', $request->userId)->first();
-	
-			if ($bookmarkedEvent == null) {
-				$event['bookmarked'] = false;
-			} else {
-				$event['bookmarked'] = true;				
-			}
+	public function previousEvent(Request $request){
+		$validator = Validator::make($request->all(), [
+            'userId' => 'integer',
+			'startTime' => 'required|date_format:Y-m-d H:i:s',
+			'id' => 'required|integer'
+		]);
 
-			return $event;
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->eventsService->previousEvent($request);
 		}
 	}
 }
