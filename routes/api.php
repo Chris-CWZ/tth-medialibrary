@@ -46,4 +46,4 @@ use Illuminate\Http\Request;
 	});
 
 	Route::get('credentials', 'Api\AuthController@credentials');
-	Route::post('event/next', 'Api\Events\EventsController@nextEvent');
+	Route::post('event/next', 'Api\EventsController@nextEvent');
