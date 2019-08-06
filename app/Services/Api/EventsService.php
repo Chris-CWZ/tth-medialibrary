@@ -17,7 +17,7 @@ class EventsService extends TransformerService{
 		if ($request->has('date')) {
             $events = Event::where('start_time', '<=', $request->date)->where('end_time', '>=', $request->date)->get();
         } else {
-            $events = Event::where('date', '>=', Carbon::now()->toDateTimeString())->paginate(10);
+            $events = Event::where('date', '>=', Carbon::now()->toDateTimeString())->orderBy('start_time', 'asc')->paginate(10);
         }
 
         foreach ($events as $event) {
