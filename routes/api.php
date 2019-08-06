@@ -23,6 +23,8 @@ use Illuminate\Http\Request;
 		Route::post('event/bookmark', 'Api\BookmarksController@eventBookmark');
 		Route::post('bookmarks-events', 'Api\BookmarksController@getBookmarkedEvents');
 		Route::post('operating-hours', 'Api\OperationsController@operatingHours');
+		Route::post('event/next', 'Api\EventsController@nextEvent');
+		Route::post('event/previous', 'Api\EventsController@previousEvent');
 
 		// Products
 		Route::post('product/add', 'Api\CartController@addToCart');
