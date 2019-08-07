@@ -103,6 +103,7 @@ class ProductsService {
 		'product_code' => $product->product_code,
 		'product_details' => $product->product_details,
 		'brand' => $product->brand,
+		'care' => $product->care,
 		'vendor' => $product->vendor,
 		'stock' => $product->stock,
     ];
