@@ -29,6 +29,16 @@ class OrdersController extends Controller {
 	}
 
 	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Order  $order
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Order $order){
+		return $this->ordersService->show($order);
+	}
+
+	/**
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  \App\Order  $order

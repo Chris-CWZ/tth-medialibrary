@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Operations;
+use App\Operation;
 use App\Services\Admin\OperationsService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

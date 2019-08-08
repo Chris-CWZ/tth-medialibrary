@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->nullable();
             $table->string('session_id')->nullable();
+            $table->enum('payment_method', ['paypal', 'fpx']);
             $table->string('transaction_id')->unique();
             $table->float('amount', 8, 2);
             $table->enum('status', ['processing', 'shipped', 'completed']);
