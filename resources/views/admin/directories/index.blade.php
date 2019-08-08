@@ -4,17 +4,15 @@
 	<div class="card bootstrap-table">
     <div class="card-body table-full-width pl-3 pr-3">
       <div class="toolbar d-flex flex-row">
-        <a href="{{ route('admin.orders.index') }}" class="ml-1"></a>
+        <a href="{{ route('admin.directories.index') }}" class="ml-1"></a>
       </div>
-      <table id="bootstrap-table" class="table" data-url="{{ route('admin.orders.index') }}">
+      <table id="bootstrap-table" class="table" data-url="{{ route('admin.directories.index') }}">
         <thead>
           <th data-field="id" class="text-center" data-sortable="true">ID</th>
-          <th data-field="user_id" data-sortable="true">User ID</th>
-          <th data-field="session_id" data-sortable="true">Session ID</th>
-          <th data-field="transaction_id">Transaction ID</th>
-          <th data-field="amount" data-sortable="true">Amount</th>
-          <th data-field="status" data-sortable="true">Status</th>
-          <th data-field="created_at" data-sortable="true">Date</th>
+          <th data-field="name" data-sortable="true">Directory Name</th>
+          <th data-field="category" data-sortable="true">Category</th>
+          <th data-field="phone_number">Phone Number</th>
+          <th data-field="level" data-sortable="true">Level</th>
           <th data-field="actions" class="td-actions text-right" data-events="operateEvents" data-formatter="operateFormatter">Actions</th>
         </thead>
       </table>

@@ -36,14 +36,20 @@
       </li>
       <li class="nav-item {{ is_active('calendars') }}">
 				<a class="nav-link" href="{{ route('admin.calendar') }}">
-					<i class="fa fa-users text-info"></i>
+					<i class="fa fa-calendar-o text-info"></i>
 					<p>Calendar</p>
 				</a>
 			</li>
       <li class="nav-item {{ is_active('orders') }}">
 				<a class="nav-link" href="{{ route('admin.orders.index') }}">
-					<i class="fa fa-users text-info"></i>
+					<i class="fa fa-file-text-o text-info"></i>
 					<p>Orders</p>
+				</a>
+      </li>
+      <li class="nav-item {{ is_active('directories') }}">
+				<a class="nav-link" href="{{ route('admin.directories.index') }}">
+					<i class="fa fa-sitemap text-info"></i>
+					<p>Directories</p>
 				</a>
 			</li>
     </ul>
