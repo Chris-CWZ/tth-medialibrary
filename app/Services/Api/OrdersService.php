@@ -62,7 +62,7 @@ class OrdersService extends TransformerService{
 		foreach($cartProducts as $cartProduct) {
 			$orderProduct = OrderProduct::create([
 				'order_id' => $order->id,
-				'product_code' => $cartProduct->product_code,
+				'product_id' => $cartProduct->product_id,
 				'quantity' => $cartProduct->quantity
 			]);
 
