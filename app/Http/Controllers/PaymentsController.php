@@ -13,11 +13,11 @@ class PaymentsController extends Controller
         $amount = $request->input('amount');
 
         $status = Braintree_Transaction::sale([
-        'amount' => $amount,
-        'paymentMethodNonce' => $nonce,
-        'options' => [
-            'submitForSettlement' => True
-        ]
+            'amount' => $amount,
+            'paymentMethodNonce' => $nonce,
+            'options' => [
+                'submitForSettlement' => True
+            ]
         ]);
 
         return response()->json($status);
