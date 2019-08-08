@@ -43,7 +43,7 @@ class CartController extends Controller{
 		$validator = Validator::make($request->all(), [
 			'userId' => 'required_without:sessionId|integer',
 			'sessionId' => 'required_without:userId',
-			'productCode' => 'required',
+			'productId' => 'required|integer',
 		]);
 
 		if ($validator->fails()) {
