@@ -5,11 +5,19 @@ namespace App\Services\Admin;
 use Illuminate\Http\Request;
 use App\Directory;
 use App\Services\TransformerService;
+use App\Services\Admin\DirectoryImagesService;
 use Session;
+use Validator;
+use Image;
+use Storage;
 
 class DirectoriesService extends TransformerService{
+	protected $path = 'admin.directories.';
+	protected $directoryImagesService;
 
-  protected $path = 'admin.directories.';
+	public function __construct(DirectoryImagesService $directoryImagesService){
+    	$this->directoryImagesService = $directoryImagesService;
+	}
 
 	public function index(Request $request){
         $sort = $request->sort ? $request->sort : 'created_at';
@@ -26,9 +34,63 @@ class DirectoriesService extends TransformerService{
 		return respond(['rows' => $directory, 'total' => $listCount]);
     }
 
-    public function show($directory){
+    public function create(Request $request) {
+		$directory = Directory::create([
+            'category' => $request->category,
+			'name' => $request->name,
+			'phone_number' => $request->phone_number,
+			'location' => $request->location,
+			'level' => $request->level,
+			'description' => $request->description,
+			'website' => $request->website
+		]);
+
+		if ($request->hasfile('icon') && $request->hasfile('location_image')) {
+			$iconImage = $request->file('icon');
+			$locationImage = $request->file('location_image');
+
+			$iconFileName = $this->storeImage($iconImage, $directory, 'icon');
+			$locationFileName = $this->storeImage($locationImage, $directory, 'location-map');
+
+			$directory->icon = $iconFileName;
+			$directory->location_image = $locationFileName;
+			$directory->save();
+		}
+
+		$this->directoryImagesService->create($request, $directory);
+
+		return true;
+	}
+
+	public function storeImage($imageFile, $directory, $type){
+		$fileName = $directory->id . '-' . $directory->name . '-' . $type . '.' . $imageFile->getClientOriginalExtension();
+		$image = Image::make($imageFile->getRealPath());
+		$image->stream();
+		$storagePath = directory_path('directories') ;
+		Storage::put($storagePath . $fileName, $image);
+		return $fileName;
+	}
+
+	public function show($directory){
 		$directory = $this->transform($directory);
-		return view($this->path . 'show', ['directory' => $directory]);
+		$directoryImages = $this->directoryImagesService->show($directory);
+		return view($this->path . 'show', ['directory' => $directory, 'directoryImages' => $directoryImages]);
+	}
+
+	public function update($request, $directory){
+		$directory->category = $request->category;
+		$directory->name = $request->name;
+		$directory->phone_number = $request->phone_number;
+		$directory->level = $request->level;
+		$directory->location = $request->location;
+		$directory->description = $request->description;
+		$directory->website = $request->website;
+		$directory->icon = $request->icon;
+		$directory->location_image = $request->location_image;
+		$directory->save();
+
+		Session::flash('success', 'The order was successfully saved!');
+		return redirect()->route($this->path . 'index');
 	}
     
     public function transform($directory){

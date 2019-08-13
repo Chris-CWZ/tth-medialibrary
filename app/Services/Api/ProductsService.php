@@ -63,7 +63,7 @@ class ProductsService {
 	/**
 	*
 	*	Retrieve a particular product's colour
-	*   Request: product_code
+	*   Request: name
 	*
 	**/
 	public function colours($request){
@@ -79,7 +79,7 @@ class ProductsService {
 	/**
 	*
 	*	Retrieve a particular product's size
-	*   Request: product_code
+	*   Request: name
 	*
 	**/
 	public function sizes($request){

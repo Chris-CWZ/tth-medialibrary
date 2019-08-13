@@ -17,15 +17,12 @@ class CreateDirectoriesTable extends Migration
         Schema::create('directories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('icon')->nullable();
-            $table->string('category');
+            $table->enum('category', ['food', 'souvenir', 'historical']);
             $table->string('name');
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->string('location');
             $table->string('level');
             $table->longtext('description');
-            $table->string('image_one')->nullable();
-            $table->string('image_two')->nullable();
-            $table->string('image_three')->nullable();
             $table->string('location_image')->nullable();
             $table->string('website');
             $table->timestamps();

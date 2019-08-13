@@ -59,12 +59,11 @@ class EventsController extends Controller{
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  \App\Event  $event
+	 * @param  \App\Directory  $directory
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Event $event){
-		$event->delete();
-
-    return success();
+	public function destroy(Directory $directory){
+		$directory->delete();
+		return success();
 	}
 }

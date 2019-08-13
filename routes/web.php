@@ -31,7 +31,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/calendar', 'Admin\OperationsController@calendar')->name('calendar');
             Route::resource('orders', 'Admin\OrdersController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
             Route::resource('articles', 'Admin\ArticlesController', ['only' => ['index', 'edit', 'update', 'destroy']]);
-            Route::resource('directories', 'Admin\DirectoriesController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
+            Route::resource('directories', 'Admin\DirectoriesController');
         });
 
         Route::get('/', 'Admin\DashboardController@dashboard');
