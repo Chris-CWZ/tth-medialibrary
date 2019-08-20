@@ -50,7 +50,8 @@ class ProductsController extends Controller {
 
 	public function sizes(Request $request){
 		$validator = Validator::make($request->all(), [
-			'name' => 'required|string'
+			'name' => 'required|string',
+			'colour' => 'required|string'
 		]);
 
 		if ($validator->fails()) {
