@@ -60,6 +60,11 @@ class EventsService extends TransformerService{
             return respond("No more events.");
         }
     }
+
+    public function getEventsByMonth($request){
+        $events = Event::select('date')->whereMonth('date', '08')->get();
+        return $events;
+    }
     
     public function transform($event){
 		return [
