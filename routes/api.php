@@ -30,12 +30,19 @@ use Illuminate\Http\Request;
 		Route::post('product/add', 'Api\CartController@addToCart');
 		Route::post('product/remove', 'Api\CartController@removeFromCart');
 		Route::post('purchases', 'Api\PurchasesController@purchases');
-		Route::get('cart', 'Api\CartController@getCartProducts');
 		Route::post('shop', 'Api\ProductsController@retrieveProductsList');
 		Route::get('product/colours', 'Api\ProductsController@colours');
 		Route::get('product/sizes', 'Api\ProductsController@sizes');
 		Route::post('bookmarks-products', 'Api\BookmarksController@getBookmarkedProducts');
 		Route::post('product/bookmark', 'Api\BookmarksController@productBookmark');
+
+		// Cart
+		Route::get('cart', 'Api\CartController@getCartProducts');
+		Route::post('cart/change', 'Api\CartController@changeCartProduct');
+
+		// Promotions
+		Route::post('promotion/apply', 'Api\PromotionsController@applyPromoCode');
+		Route::post('promotion/remove', 'Api\PromotionsController@removePromoCode');
 
 		// Payment
 		Route::post('payment/process', 'PaymentsController@process');

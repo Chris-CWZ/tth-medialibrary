@@ -19,8 +19,10 @@ class CreateOrdersTable extends Migration
             $table->string('session_id')->nullable();
             $table->enum('payment_method', ['paypal', 'fpx']);
             $table->string('transaction_id')->unique();
-            $table->float('amount', 8, 2);
+            $table->float('sub_total', 8, 2);
+            $table->float('grand_total', 8, 2);
             $table->enum('status', ['processing', 'shipped', 'completed']);
+            $table->string('promo_code')->nullable();
             $table->timestamps();
         });
     }

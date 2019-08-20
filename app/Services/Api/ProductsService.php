@@ -14,7 +14,8 @@ class ProductsService {
 	*
 	**/
 	public function getProduct($request){
-		$product = Product::where('name', $request->name)->where('colour', $request->colour)->where('size', $request->size)->where('vendor', 'trp')->first();
+		// Checks if product still in stock
+		$product = Product::where('name', $request->name)->where('colour', $request->colour)->where('size', $request->size)->where('vendor', 'trp')->where('stock', '!=', 0)->first();
 		return $product;
 	}
 
@@ -29,7 +30,7 @@ class ProductsService {
 		$sort = $request->sort ? $request->sort : 'created_at';
 		$order = $request->order ? $request->order : 'desc';
 
-		$query = Product::where('vendor', 'trp')->orderBy($sort, $order);
+		$query = Product::where('vendor', 'trp')->where('stock', '!=', 0)->orderBy($sort, $order);
 
 		if ($request->has('filter')) {
 			$products = $query->whereBetween($request->filter, [$request['min'], $request['max']])->paginate(10);
@@ -55,15 +56,15 @@ class ProductsService {
 	*	Retrieve products based on product_id
 	*
 	**/
-	public function retrieveProduct($cartProduct){
-		$product = Product::where('id', $cartProduct->product_id)->first();
+	public function retrieveProduct($id){
+		$product = Product::where('id', $id)->first();
 		return $product;
 	}
 
 	/**
 	*
 	*	Retrieve a particular product's colour
-	*   Request: product_code
+	*   Request: name
 	*
 	**/
 	public function colours($request){
@@ -79,7 +80,7 @@ class ProductsService {
 	/**
 	*
 	*	Retrieve a particular product's size
-	*   Request: product_code
+	*   Request: name
 	*
 	**/
 	public function sizes($request){

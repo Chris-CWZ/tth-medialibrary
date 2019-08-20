@@ -18,7 +18,7 @@ $().ready(function(){
         confirmButtonClass: "btn btn-danger btn-fill",
         confirmButtonText: "Yes, delete it!",
         cancelButtonClass: "btn btn-primary btn-fill",
-        closeOnConfirm: false,
+        closeOnConfirm: true,
 	    }, function() {
 				$table.bootstrapTable('remove', {
 	        field: 'id',

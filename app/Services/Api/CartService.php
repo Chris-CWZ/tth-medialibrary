@@ -4,17 +4,22 @@ namespace App\Services\Api;
 
 use Illuminate\Http\Request;
 use App\Cart;
+use App\Promotion;
 use App\CartProduct;
-use App\Product;
 use App\Services\TransformerService;
 use App\Services\Api\CartProductService;
+use App\Services\Api\PromotionsService;
+use App\Services\Api\ProductsService;
 
 class CartService extends TransformerService{
 
 	protected $cartProductService;
+	protected $promotionsService;
 
-	public function __construct(CartProductService $cartProductService){
+	public function __construct(CartProductService $cartProductService, PromotionsService $promotionsService, ProductsService $productsService){
 		$this->cartProductService = $cartProductService;
+		$this->promotionsService = $promotionsService;
+		$this->productsService = $productsService;
 	}
 
 	/**
@@ -33,13 +38,25 @@ class CartService extends TransformerService{
 
 		if ($cart == null) {
 			$cart = $this->createCart($request);
-			$response = $this->cartProductService->addProduct($cart, $request);
+		}
 
-			return $response;
+		$product = $this->cartProductService->addProduct($cart, $request);
+
+		if($product == null) {
+			return errorResponse('Item is out of stock');
 		} else {
-			$response = $this->cartProductService->addProduct($cart, $request);
+			$cart->sub_total += $product->price * $request->quantity;
 
-			return $response;
+			if($cart->promo_code == null) {
+				$cart->grand_total = $cart->sub_total;
+			} else {
+				$promotion = Promotion::where('code', $cart->promo_code)->first();
+				$cartTotal = $this->promotionsService->calculateDiscount($cart, $promotion);
+				$cart->grand_total = $cartTotal;
+			}
+
+			$cart->save();
+			return success('Item added to cart');
 		}
 	}
 
@@ -50,11 +67,31 @@ class CartService extends TransformerService{
 			$cart = $this->getCart("session", $request->input('sessionId'));
 		}
 
+		$product = $this->productsService->retrieveProduct($request->productId);
+
 		if ($request->has('quantity')) {
-			$response = $this->cartProductService->reduceQuantity($request, $cart);
+			$response = $this->cartProductService->reduceQuantity($request, $cart, $product);
 		}else{
-			$response = $this->cartProductService->removeFromCart($request, $cart);
+			$response = $this->cartProductService->removeFromCart($request, $cart, $product);
 		}
+
+		// Check if promo code still applicable after removal
+		if($cart->promo_code != null) {
+			$promotion = Promotion::where('code', $cart->promo_code)->first();
+			$result = $this->promotionsService->checkCartRequirement($promotion, $cart);
+
+			if($result->status() == 200) {
+				$cart->grand_total = $this->promotionsService->calculateDiscount($cart, $promotion);
+			} else {
+				// Remove promo code from cart
+				$cart->promo_code = null;
+				$cart->grand_total = $cart->sub_total;
+			}
+		} else {
+			$cart->grand_total = $cart->sub_total;
+		}
+
+		$cart->save();
 
 		return $response;
 	}
@@ -95,9 +132,8 @@ class CartService extends TransformerService{
 	public function getCartProducts($request){
 		// If user has both user and session id, then combine both carts
 		if ($request->has('userId') && $request->has('sessionId')) {
-			$userCart = $this->mergeCarts($request);
-			$cartProductsArray = $this->cartProductService->getCartProducts($userCart);
-			return respond($cartProductsArray);
+			$cart = $this->mergeCarts($request);
+			$cartProductsArray = $this->cartProductService->getCartProducts($cart);
 		} else if ($request->has('userId') && !($request->has('sessionId'))) {
 			$cart = $this->getCart("user", $request->input('userId'));
 
@@ -106,7 +142,6 @@ class CartService extends TransformerService{
 				return success("Cart is empty.");
 			} else {
 				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
-				return respond($cartProductsArray);
 			}
 		} else if ($request->has('sessionId') && !($request->has('userId'))){
 			$cart = $this->getCart("session", $request->input('sessionId'));
@@ -116,9 +151,19 @@ class CartService extends TransformerService{
 				return success("Cart is empty.");
 			} else {
 				$cartProductsArray = $this->cartProductService->getCartProducts($cart);
-				return respond($cartProductsArray);
 			}
 		}
+
+		// Checks if promo code is still valid
+		$promotion = $this->promotionsService->checkValidity($cart->promo_code);
+
+		if($promotion == null) {
+			$cart->promo_code = null;
+			$cart->grand_total = $cart->sub_total;
+			$cart->save();
+		}
+
+		return ['sub_total' => $cart->sub_total, 'promo_code' => $cart->promo_code, 'grand_total' => $cart->grand_total, 'cart' => $cartProductsArray];
 	}
 
 	/**
@@ -171,13 +216,24 @@ class CartService extends TransformerService{
 		return $userCart;
 	}
 
-	/**
-	*
-	*	Delete cart
-	*
-	**/
-	public function delete($cart){
-		Cart::where('id', $cart['id'])->delete();
+	public function changeCartProduct($request){
+		if($request->has('userId')) {
+			$cart = $this->getCart("user", $request->input('userId'));
+		} else {
+			$cart = $this->getCart("session", $request->input('sessionId'));
+		}
+
+		// Get product ID of new item
+		$product = $this->productsService->getProduct($request);
+
+		if($product == null) {
+			return errorResponse("Product is out of stock");
+		}
+
+		// Change product ID in cart products table
+		$cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $request->productId)->update(['product_id' => $product->id]);
+		
+		return success("Successfully changed item");
 	}
 
 	public function transform($cart){

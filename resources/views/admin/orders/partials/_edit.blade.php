@@ -28,7 +28,7 @@
                 <label>Amount
                   <span class="star">*</span>
                 </label>
-                {{ Form::text('amount', $order->amount, ['class' => 'form-control', 'readonly']) }}
+                {{ Form::text('amount', $order->grand_total, ['class' => 'form-control', 'readonly']) }}
               </div>
             </div>
           </div>

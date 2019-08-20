@@ -3,8 +3,10 @@
 @section('content')
 	<div class="card bootstrap-table">
     <div class="card-body table-full-width pl-3 pr-3">
-      <div class="toolbar d-flex flex-row">
-        <a href="{{ route('admin.directories.index') }}" class="ml-1"></a>
+      <div class="toolbar mt-2">
+        <a href="{{ route('admin.directories.create') }}">
+          <button class="btn"><i class="fa fa-plus"></i></button>
+        </a>
       </div>
       <table id="bootstrap-table" class="table" data-url="{{ route('admin.directories.index') }}">
         <thead>
@@ -30,7 +32,7 @@
         '<a rel="tooltip" title="Edit" class="btn btn-link btn-warning table-action edit" href="javascript:void(0)">',
         '<i class="fa fa-edit"></i>',
         '</a>',
-		'<a rel="tooltip" title="Remove" class="btn btn-link btn-danger table-action remove" href="javascript:void(0)">',
+		    '<a rel="tooltip" title="Remove" class="btn btn-link btn-danger table-action remove" href="javascript:void(0)">',
         '<i class="fa fa-remove"></i>',
         '</a>'
       ].join('');
