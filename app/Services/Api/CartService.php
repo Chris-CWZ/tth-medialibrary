@@ -5,6 +5,7 @@ namespace App\Services\Api;
 use Illuminate\Http\Request;
 use App\Cart;
 use App\Promotion;
+use App\CartProduct;
 use App\Services\TransformerService;
 use App\Services\Api\CartProductService;
 use App\Services\Api\PromotionsService;
@@ -215,13 +216,24 @@ class CartService extends TransformerService{
 		return $userCart;
 	}
 
-	/**
-	*
-	*	Delete cart
-	*
-	**/
-	public function delete($cart){
-		Cart::where('id', $cart['id'])->delete();
+	public function changeCartProduct($request){
+		if($request->has('userId')) {
+			$cart = $this->getCart("user", $request->input('userId'));
+		} else {
+			$cart = $this->getCart("session", $request->input('sessionId'));
+		}
+
+		// Get product ID of new item
+		$product = $this->productsService->getProduct($request);
+
+		if($product == null) {
+			return errorResponse("Product is out of stock");
+		}
+
+		// Change product ID in cart products table
+		$cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $request->productId)->update(['product_id' => $product->id]);
+		
+		return success("Successfully changed item");
 	}
 
 	public function transform($cart){

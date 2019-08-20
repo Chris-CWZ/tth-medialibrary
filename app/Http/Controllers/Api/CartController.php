@@ -56,4 +56,21 @@ class CartController extends Controller{
 	public function getCartProducts(Request $request){
 		return $this->cartService->getCartProducts($request);
 	}
+
+	public function changeCartProduct(Request $request){
+		$validator = Validator::make($request->all(), [
+			'userId' => 'required_without:sessionId|integer',
+			'sessionId' => 'required_without:userId',
+			'productId' => 'required|integer',
+			'name' => 'required|string',
+			'colour' => 'required|string',
+			'size' => 'required|string'
+		]);
+
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->cartService->changeCartProduct($request);
+		}
+	}
 }
