@@ -18,8 +18,7 @@ class OrdersController extends Controller {
 		$validator = Validator::make($request->all(), [
 			'userId' => 'required_without:sessionId|integer',
 			'sessionId' => 'required_without:userId|string',
-			'transactionId' => 'required|string|unique:orders,transaction_id',
-			'amount' => 'required|numeric'
+			'transactionId' => 'required|string|unique:orders,transaction_id'
 		]);
 		
 		if ($validator->fails()) {

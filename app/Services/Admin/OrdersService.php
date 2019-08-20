@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\OrderProduct;
 use App\Product;
+use App\Promotion;
 use App\Services\TransformerService;
 use Session;
 
@@ -41,14 +42,12 @@ class OrdersService extends TransformerService{
 			$totals[] = $products[$i]['price'] * $orderProducts[$i]['quantity'];
 		}
 
-		return view($this->path . 'show', ['order' => $order, 'orderProducts' => $orderProducts, 'products' => $products, 'totals' => $totals]);
+		$promotion = Promotion::where('code', $order['promo_code'])->first();
+
+		return view($this->path . 'show', ['order' => $order, 'orderProducts' => $orderProducts, 'products' => $products, 'totals' => $totals, 'promotion' => $promotion]);
 	}
 	
 	public function update($request, $order){
-		$order->user_id = $request->user_id;
-		$order->session_id = $request->session_id;
-		$order->transaction_id = $request->transaction_id;
-		$order->amount = $request->amount;
 		$order->status = $request->status;
 		$order->save();
 
@@ -60,9 +59,13 @@ class OrdersService extends TransformerService{
 		return [
 			'id' => $order->id,
 			'user_id' => $order->user_id,
+			'session_id' => $order->session_id,
+			'payment_method' => $order->payment_method,
 			'transaction_id' => $order->transaction_id,
-			'amount' => $order->amount,
-			'status' => $order->status
+			'sub_total' => $order->sub_total,
+			'grand_total' => $order->grand_total,
+			'status' => $order->status,
+			'promo_code' => $order->promo_code
 		];
 	}
 }

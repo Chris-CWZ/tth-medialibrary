@@ -89,7 +89,7 @@
 								<div class="stats px-4 mx-2">
 									Amount:
 									<h4 class="card-title">
-										RM {{ $order['amount']}}
+										RM {{ $order['grand_total']}}
 									</h4>
 								</div>
 							</div>
@@ -228,11 +228,33 @@
 												@endforeach
 											@endif
 											<tr>
-												<td class="px-4"><strong>Total</strong></td>
+												<td class="px-4">Sub total</td>
 												<td></td>
 												<td></td>
 												<td class="td-number">
-													<small>RM</small>{{ $order['amount'] }}
+													<small>RM</small>{{ $order['sub_total'] }}
+												</td>
+											</tr>
+											@if($order['promo_code'] != null)
+											<tr>
+												<td class="px-4"><strong>Promo code:</strong> {{ $order['promo_code'] }}</td>
+												<td></td>
+												<td></td>
+												<td class="td-number">
+													@if($promotion['discount_amount'] == null)
+														- <small>RM</small>{{ $order['sub_total'] * $promotion['discount_percentage'] }}
+													@else
+														- <small>RM</small>{{ $promotion['discount_amount'] }}
+													@endif
+												</td>
+											</tr>
+											@endif
+											<tr>
+												<td><strong>Total</strong></td>
+												<td></td>
+												<td></td>
+												<td class="td-number">
+													<small>RM</small>{{ $order['grand_total'] }}
 												</td>
 											</tr>
 										</tbody>

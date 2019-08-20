@@ -11,7 +11,6 @@
 |
 */
 
-
 //Admin Routes
 Route::prefix('admin')->group(function () {
     Route::middleware('register.access')->group(function () {
@@ -32,6 +31,8 @@ Route::prefix('admin')->group(function () {
             Route::resource('orders', 'Admin\OrdersController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
             Route::resource('articles', 'Admin\ArticlesController', ['only' => ['index', 'edit', 'update', 'destroy']]);
             Route::resource('directories', 'Admin\DirectoriesController');
+            Route::resource('promotions', 'Admin\PromotionsController');
+            Route::get('promotions/get/products', 'Admin\PromotionsController@getProducts');
         });
 
         Route::get('/', 'Admin\DashboardController@dashboard');

@@ -52,6 +52,12 @@
 					<p>Directories</p>
 				</a>
 			</li>
+      <li class="nav-item {{ is_active('promotions') }}">
+				<a class="nav-link" href="{{ route('admin.promotions.index') }}">
+					<i class="fa fa-usd text-info"></i>
+					<p>Promotions</p>
+				</a>
+			</li>
     </ul>
   </div>
 </div>

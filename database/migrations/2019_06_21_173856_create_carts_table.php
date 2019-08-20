@@ -17,6 +17,9 @@ class CreateCartsTable extends Migration
             $table->increments('id');
             $table->string('user_id')->nullable();
             $table->string('session_id')->nullable();
+            $table->string('promo_code')->nullable();
+            $table->float('sub_total', 8, 2)->default('0.00');
+            $table->float('grand_total', 8, 2)->default('0.00');
             $table->timestamps();
         });
     }

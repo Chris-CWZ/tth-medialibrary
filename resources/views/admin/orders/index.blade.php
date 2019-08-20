@@ -12,7 +12,7 @@
           <th data-field="user_id" data-sortable="true">User ID</th>
           <th data-field="session_id" data-sortable="true">Session ID</th>
           <th data-field="transaction_id">Transaction ID</th>
-          <th data-field="amount" data-sortable="true">Amount</th>
+          <th data-field="grand_total" data-sortable="true">Amount</th>
           <th data-field="status" data-sortable="true">Status</th>
           <th data-field="created_at" data-sortable="true">Date</th>
           <th data-field="actions" class="td-actions text-right" data-events="operateEvents" data-formatter="operateFormatter">Actions</th>

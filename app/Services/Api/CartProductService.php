@@ -22,19 +22,22 @@ class CartProductService extends TransformerService{
 	**/
 	public function addProduct($cart, $request){
 		$product = $this->productsService->getProduct($request);
-		$duplicateCartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->first();
 
-		if ($duplicateCartProduct == null) {
-			CartProduct::create([
-				'cart_id' => $cart->id,
-				'product_id' => $product->id,
-				'quantity' => $request->quantity
-			]);
-		} else {
-			CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->increment('quantity', $request->quantity);
+		if($product != null) {
+			$duplicateCartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->first();
+
+			if ($duplicateCartProduct == null) {
+				CartProduct::create([
+					'cart_id' => $cart->id,
+					'product_id' => $product->id,
+					'quantity' => $request->quantity
+				]);
+			} else {
+				CartProduct::where('cart_id', $cart->id)->where('product_id', $product->id)->increment('quantity', $request->quantity);
+			}
 		}
 
-		return success("Item added to cart");
+		return $product;
 	}
 
 	/**
@@ -53,8 +56,9 @@ class CartProductService extends TransformerService{
 			return success("Cart is empty");
 		} else {
 			foreach($cartProducts as $cartProduct){
-				$product = $this->productsService->retrieveProduct($cartProduct);
+				$product = $this->productsService->retrieveProduct($cartProduct->product_id);
 				$productDetails['quantity'] = $cartProduct['quantity'];
+				$productDetails['product_total'] = $product['price'] * $cartProduct['quantity'];
 				$productDetails['product'] = $product;
 				$cartProductsArray[] = $productDetails;
 			}
@@ -113,15 +117,17 @@ class CartProductService extends TransformerService{
 	}
 
 
-	public function reduceQuantity($request, $cart){
+	public function reduceQuantity($request, $cart, $product){
 		$cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $request->productId)->first();
 
 		if($cartProduct->quantity != 1) {
 			$cartProduct::where('id', $cartProduct->id)->decrement('quantity', $request->quantity);
+			$cart->sub_total -= $product->price * $request->quantity;
+			$cart->save();
 
 			return success("1 item has been removed from cart");
 		}else{
-			return $this->removeFromCart($request, $cart);
+			return $this->removeFromCart($request, $cart, $product);
 		}
 	}
 	/**
@@ -133,8 +139,11 @@ class CartProductService extends TransformerService{
 		CartProduct::where('id', $cartProduct->id)->delete();
 	}
 
-	public function removeFromCart($request, $cart){
-		CartProduct::where('cart_id', $cart->id)->where('product_id', $request->productId)->delete();
+	public function removeFromCart($request, $cart, $product){
+		$cartProduct = CartProduct::where('cart_id', $cart->id)->where('product_id', $request->productId)->first();
+		$cart->sub_total -= $product->price * $cartProduct->quantity;
+		$cart->save();
+		$cartProduct->delete();
 
 		return success("Item removed from cart!");
 	}
