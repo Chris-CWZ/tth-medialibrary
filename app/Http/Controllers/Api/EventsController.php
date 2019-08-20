@@ -58,4 +58,16 @@ class EventsController extends Controller{
 			return $this->eventsService->previousEvent($request);
 		}
 	}
+
+	public function getEventsByMonth(Request $request){
+        $validator = Validator::make($request->all(), [
+            'month' => 'integer'
+		]);
+
+		if ($validator->fails()) {
+			return validationError();
+		} else {
+			return $this->eventsService->getEventsByMonth($request);
+		}
+    }
 }
