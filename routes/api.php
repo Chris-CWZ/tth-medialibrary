@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 		Route::post('operating-hours', 'Api\OperationsController@operatingHours');
 		Route::post('event/next', 'Api\EventsController@nextEvent');
 		Route::post('event/previous', 'Api\EventsController@previousEvent');
-		// Route::post('event/month', 'Api\EventsController@getEventsByMonth');
+		Route::post('event/month', 'Api\EventsController@getEventsByMonth');
 
 		// Products
 		Route::post('product/add', 'Api\CartController@addToCart');
@@ -56,4 +56,3 @@ use Illuminate\Http\Request;
 	});
 
 	Route::get('credentials', 'Api\AuthController@credentials');
-	Route::post('event/month', 'Api\EventsController@getEventsByMonth');
