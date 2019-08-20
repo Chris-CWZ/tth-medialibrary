@@ -62,7 +62,7 @@ class EventsService extends TransformerService{
     }
 
     public function getEventsByMonth($request){
-        $events = Event::select('date')->whereMonth('date', '08')->get();
+        $events = Event::select('date')->whereMonth('date', $request->month)->get();
         return $events;
     }
     
