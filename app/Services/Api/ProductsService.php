@@ -79,12 +79,12 @@ class ProductsService {
 
 	/**
 	*
-	*	Retrieve a particular product's size
-	*   Request: name
+	*	Retrieve a particular product's size based on their name and colour selected
+	*   Request: name, colour
 	*
 	**/
 	public function sizes($request){
-		$sizes = Product::select('size')->where('name', $request['name'])->where('vendor', 'trp')->distinct()->get();
+		$sizes = Product::select('size')->where('name', $request->name)->where('colour', $request->colour)->where('vendor', 'trp')->distinct()->get();
 		
 		foreach($sizes as $size) {
 			$sizesArray[] = $size['size'];
