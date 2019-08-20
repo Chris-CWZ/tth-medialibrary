@@ -61,7 +61,7 @@ class EventsController extends Controller{
 
 	public function getEventsByMonth(Request $request){
         $validator = Validator::make($request->all(), [
-            'month' => 'integer'
+            'month' => 'integer|required'
 		]);
 
 		if ($validator->fails()) {
