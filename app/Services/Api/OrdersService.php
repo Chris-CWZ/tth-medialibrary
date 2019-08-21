@@ -4,35 +4,26 @@ namespace App\Services\Api;
 
 use Illuminate\Http\Request;
 use App\Order;
-use App\OrderProduct;
+use App\OrderStock;
 use App\User;
 use App\UserPromotion;
-use App\Product;
+use App\Stock;
+use App\CartStock;
 use App\Services\TransformerService;
 use App\Services\Api\CartService;
-use App\Services\Api\CartProductService;
-use App\Services\Api\ProductsService;
+use App\Services\Api\CartStockService;
 use Session;
 
 
 class OrdersService extends TransformerService{
-	protected $path = 'admin.orders.';
 	protected $cartService;
-	protected $cartProductService;
-	protected $productsService;
+	protected $cartStockService;
 
-	public function __construct(CartService $cartService, CartProductService $cartProductService, ProductsService $productsService){
+	public function __construct(CartService $cartService, CartStockService $cartStockService){
 		$this->cartService = $cartService;
-		$this->cartProductService = $cartProductService;
-		$this->productsService = $productsService;
+		$this->cartStockService = $cartStockService;
 	}
 
-	/**
-	*
-	*	Create order after user pays
-	*	Request input: userId, transactionId, amount
-	*
-	**/
 	public function createOrder($request){
 		if ($request->has('userId')) {
 			// Gets cart ID of user
@@ -67,21 +58,21 @@ class OrdersService extends TransformerService{
 		$cart->grand_total = 0.00;
 		$cart->save();
 
-		// Get cart products using user's/guest's cart ID
-		$cartProducts = $this->cartProductService->retrieveCartProducts($cart);
+		// Get cart stocks using user's/guest's cart ID
+		$cartStocks = CartStock::where('cart_id', $cart->id)->get();
 
 		// Add each product to order product table and remove from cart product table
-		foreach($cartProducts as $cartProduct) {
-			$orderProduct = OrderProduct::create([
+		foreach($cartStocks as $cartStock) {
+			$orderStock = OrderStock::create([
 				'order_id' => $order->id,
-				'product_id' => $cartProduct->product_id,
-				'quantity' => $cartProduct->quantity
+				'stock_id' => $cartStock->stock_id,
+				'quantity' => $cartStock->quantity
 			]);
 
-			$this->cartProductService->delete($cartProduct);
-
 			// Minus stock
-			Product::where('id', $cartProduct->product_id)->decrement('stock', $cartProduct->quantity);
+			Stock::where('id', $cartStock->stock_id)->decrement('stock', $cartStock->quantity);
+
+			$cartStock->delete();
 		}
 
 		return success("Order created");

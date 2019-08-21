@@ -4,8 +4,8 @@ namespace App\Services\Admin;
 
 use Illuminate\Http\Request;
 use App\Order;
-use App\OrderProduct;
-use App\Product;
+use App\OrderStock;
+use App\Stock;
 use App\Promotion;
 use App\Services\TransformerService;
 use Session;
@@ -32,19 +32,20 @@ class OrdersService extends TransformerService{
 	public function show($order){
 		$order = $this->transform($order);
 		
-		$orderProducts = OrderProduct::where('order_id', $order['id'])->get();
+		$orderStocks = OrderStock::where('order_id', $order['id'])->get();
 
-		foreach($orderProducts as $orderProduct) {
-			$products[] = Product::find($orderProduct->product_id);
+		foreach($orderStocks as $orderStock) {
+			$stocks[] = Stock::find($orderStock->stock_id);
+			$products[] = Stock::find($orderStock->stock_id)->product;
 		}
 
-		for ($i = 0; $i < count($orderProducts); $i++) {
-			$totals[] = $products[$i]['price'] * $orderProducts[$i]['quantity'];
+		for ($i = 0; $i < count($orderStocks); $i++) {
+			$totals[] = $products[$i]['price'] * $orderStocks[$i]['quantity'];
 		}
 
 		$promotion = Promotion::where('code', $order['promo_code'])->first();
 
-		return view($this->path . 'show', ['order' => $order, 'orderProducts' => $orderProducts, 'products' => $products, 'totals' => $totals, 'promotion' => $promotion]);
+		return view($this->path . 'show', ['order' => $order, 'orderStocks' => $orderStocks, 'stocks' => $stocks, 'products' => $products, 'totals' => $totals, 'promotion' => $promotion]);
 	}
 	
 	public function update($request, $order){

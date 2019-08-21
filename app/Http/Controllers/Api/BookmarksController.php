@@ -30,7 +30,7 @@ class BookmarksController extends Controller{
 
 	public function productBookmark(Request $request){
 		$validator = Validator::make($request->all(), [
-			'productCode' => 'required|integer',
+			'productId' => 'required|integer',
 			'userId' => 'required|integer'
 		]);
 

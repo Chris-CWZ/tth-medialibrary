@@ -36,12 +36,11 @@ class BookmarksService {
 	}
 
 	public function productBookmark(Request $request){
-		$product = Product::where('product_code', $request->productCode)->first();
-		$existingProductUser = ProductUser::where('product_id', $product->id)->where('user_id', $request->userId)->first();
+		$existingProductUser = ProductUser::where('product_id', $request->productId)->where('user_id', $request->userId)->first();
 
 		if(!$existingProductUser){
 			$productUser = new ProductUser;
-			$productUser->product_id = $product->id;
+			$productUser->product_id = $request->productId;
 			$productUser->user_id = $request->userId;
 			$productUser->save();
 

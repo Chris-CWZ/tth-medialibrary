@@ -30,10 +30,9 @@ use Illuminate\Http\Request;
 		// Products
 		Route::post('product/add', 'Api\CartController@addToCart');
 		Route::post('product/remove', 'Api\CartController@removeFromCart');
-		Route::post('purchases', 'Api\PurchasesController@purchases');
 		Route::post('shop', 'Api\ProductsController@retrieveProductsList');
-		Route::get('product/colours', 'Api\ProductsController@colours');
-		Route::get('product/sizes', 'Api\ProductsController@sizes');
+		Route::get('product/colours', 'Api\StocksController@colours');
+		Route::get('product/sizes', 'Api\StocksController@sizes');
 		Route::post('bookmarks-products', 'Api\BookmarksController@getBookmarkedProducts');
 		Route::post('product/bookmark', 'Api\BookmarksController@productBookmark');
 
@@ -56,3 +55,4 @@ use Illuminate\Http\Request;
 	});
 
 	Route::get('credentials', 'Api\AuthController@credentials');
+

@@ -74,6 +74,7 @@
             <div class="card-footer ">
                 <hr>
                 <div class="stats">
+                @if($orders != null)
                     <div class="progress-container progress-success">
                         <span class="progress-badge">Processing</span>
                         <div class="progress">
@@ -101,13 +102,38 @@
                             </div>
                         </div>
                     </div>
+                @else
+                    <div class="progress-container progress-success">
+                        <span class="progress-badge">Processing</span>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="46"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="processing-orders">
+                                <span class="progress-value">{{ $processingOrders }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-container progress-primary">
+                        <span class="progress-badge">Shipped</span>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="46"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="shipped-orders">
+                                <span class="progress-value">{{ $shippedOrders }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-container progress-info">
+                        <span class="progress-badge">Completed</span>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="46"
+                                aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="completed-orders">
+                                <span class="progress-value">{{ $completedOrders }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
-
-<!-- <script type="text/javascript">
-    $("#processing-orders").css("width", "{{ $processingOrders / $orders * 100 }}%");
-</script> -->
