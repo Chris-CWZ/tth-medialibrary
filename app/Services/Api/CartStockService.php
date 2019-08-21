@@ -39,12 +39,15 @@ class CartStockService extends TransformerService{
 
 	public function getCartStocks($cart){
 		$cartStocks = CartStock::where('cart_id', $cart->id)->get();
+		$products = [];
 
 		foreach($cartStocks as $cartStock){
 			$product = Stock::find($cartStock->stock_id)->product;
-			$product['stock_id'] = $cartStock->stock_id;
 			$product['quantity'] = $cartStock->quantity;
 			$product['product_total'] = $product->price * $cartStock->quantity;
+
+			$stock = Stock::find($cartStock->stock_id);
+			$product['selected_stock'] = $stock;
 			$products[] = $product;
 		}
 
