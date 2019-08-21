@@ -14,12 +14,6 @@ class ProductsController extends Controller {
 		$this->productsService = $productsService;
 	}
 	
-	/**
-	*
-	*	Retrieve products
-	*	Optional request input: sort, order, filter, min, max
-	*
-	**/
 	public function retrieveProductsList(Request $request){
 		$validator = Validator::make($request->all(), [
 			'sort' => 'required_with:order|string',
@@ -38,7 +32,7 @@ class ProductsController extends Controller {
 
 	public function colours(Request $request){
 		$validator = Validator::make($request->all(), [
-			'name' => 'required|string'
+			'productId' => 'required|integer'
 		]);
 
 		if ($validator->fails()) {

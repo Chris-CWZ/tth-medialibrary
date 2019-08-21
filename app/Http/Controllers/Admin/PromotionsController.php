@@ -64,7 +64,7 @@ class PromotionsController extends Controller {
     }
 
     public function getProducts(Request $request){
-        $products = Product::select('name')->where('vendor', 'trp')->distinct()->get();
+        $products = Product::select('name')->where('vendor', 'trp')->get();
         return $products;
     }
 

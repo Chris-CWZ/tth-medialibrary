@@ -4,20 +4,20 @@ namespace App\Services\Api;
 
 use Illuminate\Http\Request;
 use App\Promotion;
+use App\CartStock;
+use App\Stock;
 use App\Cart;
 use App\BundledProductPromotion;
 use App\UserPromotion;
 use Carbon\Carbon;
-use App\Services\Api\CartProductService;
 use App\Services\Api\ProductsService;
+use App\Services\Api\CartStockService;
 
 class PromotionsService{
-    protected $cartProductService;
-	protected $productsService;
+    protected $productsService;
 
-	public function __construct(CartProductService $cartProductService, ProductsService $productsService){
-		$this->cartProductService = $cartProductService;
-		$this->productsService = $productsService;
+	public function __construct(ProductsService $productsService){
+        $this->productsService = $productsService;
 	}
 
 	public function applyPromoCode($request){
@@ -55,37 +55,49 @@ class PromotionsService{
     }
 
     public function checkCartRequirement($promotion, $cart) {
-        // Checking the type of promo
         if($promotion->type == 'bundled') {
-            $cartProductsArray = $this->cartProductService->getCartProducts($cart);
+            $cartStocks = CartStock::where('cart_id', $cart->id)->get();
             
-            foreach($cartProductsArray as $cartProduct) {
-                $names[] = $cartProduct['product']['name'];
+            foreach($cartStocks as $cartStock) {
+                $stocks[]= Stock::find($cartStock->stock_id);
             }
 
             $bundledProducts = BundledProductPromotion::where('promotion_id', $promotion->id)->get();
 
-            foreach($bundledProducts as $bundledProduct) {
-                $product = $this->productsService->retrieveProduct($bundledProduct->product_id);
-                $productNames[] = $product->name;
+            $result = $this->isProductMatchBundle($bundledProducts, $stocks);
+
+            if(!$result) {
+                return errorResponse('Products in cart do not meet promotion requirements');
             }
 
-            $cartBundle = array_values(array_unique($names, SORT_STRING));
-            $productBundle = array_values(array_unique($productNames, SORT_STRING));
-
-            if($this->consistsOfTheSameValues($productBundle, $cartBundle)) {
-                return success('Successfully applied promo code');
-            }
-
-            return errorResponse('Products in cart do not meet promotion requirements');
+            return success('Successfully applied promo code');
         } else {
-            // Checking if cart amount meets promotion minimum spending amount
+            // Checking if cart amount does not meet promotion minimum spending amount
             if($cart->sub_total < $promotion->min_spending) {
                 return errorResponse('Cart does not meet minimum spending requirement');
             } else {
                 return success('Successfully applied promo code');
             }
         }
+    }
+
+    public function isProductMatchBundle($bundledProducts, $stocks) {
+        foreach($bundledProducts as $bundledProduct) {
+            foreach($stocks as $stock) {
+                if($bundledProduct['product_id'] == $stock['product_id']) {
+                    $isMatched = true;
+                    break;
+                } else {
+                    $isMatched = false;
+                }
+            }
+
+            if(!$isMatched) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function calculateDiscount($cart, $promotion) {
@@ -121,27 +133,6 @@ class PromotionsService{
         $currentDate = Carbon::now()->toDateTimeString();
         $promotion = Promotion::where('code', $promoCode)->where('start_date', '<=', $currentDate)->where('expiry_date', '>=', $currentDate)->first();
         return $promotion;
-    }
-
-    public function consistsOfTheSameValues(array $a, array $b) {
-        // check size of both arrays
-        if (count($a) !== count($b)) {
-            return false;
-        }
-
-        foreach ($b as $key => $bValue) {
-            // check that expected value exists in the array
-            if (!in_array($bValue, $a, true)) {
-                return false;
-            }
-
-            // check that expected value occurs the same amount of times in both arrays
-            if (count(array_keys($a, $bValue, true)) !== count(array_keys($b, $bValue, true))) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public function getCart($request) {

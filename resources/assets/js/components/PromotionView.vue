@@ -292,21 +292,15 @@
                                     <tr>
                                         <th class="col-6"></th>
                                         <th class="text-right">Price</th>
-                                        <th class="text-right">Stock</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(product, index) in products" :key="index">
                                         <td class="td-product px-4">
                                             <strong>{{ product.name }}</strong>
-                                            <br>Colour: {{ product.colour }}
-                                            <br>Size: {{ product.size }}
                                         </td>
                                         <td class="td-number">
                                             <small>RM</small>{{ product.price }}
-                                        </td>
-                                        <td class="td-number">
-                                            {{ product.stock }}
                                         </td>
                                     </tr>
                                 </tbody>

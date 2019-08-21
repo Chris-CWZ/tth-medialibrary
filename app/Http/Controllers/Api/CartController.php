@@ -15,18 +15,11 @@ class CartController extends Controller{
 		$this->cartService = $cartService;
 	}
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-
 	public function addToCart(Request $request){
 		$validator = Validator::make($request->all(), [
 			'userId' => 'required_without:sessionId|integer',
 			'sessionId' => 'required_without:userId',
-			'name' => 'required|string',
+			'productId' => 'required|integer',
 			'colour' => 'required|string',
 			'size' => 'required|string',
 			'quantity' => 'required|integer',
@@ -43,7 +36,7 @@ class CartController extends Controller{
 		$validator = Validator::make($request->all(), [
 			'userId' => 'required_without:sessionId|integer',
 			'sessionId' => 'required_without:userId',
-			'productId' => 'required|integer',
+			'stockId' => 'required|integer',
 		]);
 
 		if ($validator->fails()) {
@@ -62,7 +55,7 @@ class CartController extends Controller{
 			'userId' => 'required_without:sessionId|integer',
 			'sessionId' => 'required_without:userId',
 			'productId' => 'required|integer',
-			'name' => 'required|string',
+			'stockId' => 'required|integer',
 			'colour' => 'required|string',
 			'size' => 'required|string'
 		]);

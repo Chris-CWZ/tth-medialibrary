@@ -212,14 +212,14 @@
 													<tr>
 														<td class="td-product px-4">
 															<strong>{{ $product['name']}}</strong>
-															<br>Colour: {{ $product['colour']}}
-															<br>Size: {{ $product['size']}}
+															<br>Colour: {{ $stocks[$index]['colour']}}
+															<br>Size: {{ $stocks[$index]['size']}}
 														</td>
 														<td class="td-number">
 															<small>RM</small>{{ $product['price']}}
 														</td>
 														<td class="td-number">
-															{{ $orderProducts[$index]['quantity']}}
+															{{ $orderStocks[$index]['quantity']}}
 														</td>
 														<td class="td-number">
 															<small>RM</small>{{ $totals[$index] }}
@@ -241,11 +241,7 @@
 												<td></td>
 												<td></td>
 												<td class="td-number">
-													@if($promotion['discount_amount'] == null)
-														- <small>RM</small>{{ $order['sub_total'] * $promotion['discount_percentage'] }}
-													@else
-														- <small>RM</small>{{ $promotion['discount_amount'] }}
-													@endif
+													<small>RM</small>{{ $order['grand_total'] - $order['sub_total'] }}
 												</td>
 											</tr>
 											@endif
