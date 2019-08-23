@@ -129,15 +129,21 @@ class CartService extends TransformerService{
 			$cart = $this->getCart("session", $request->sessionId);
 		}
 
+		if(!$cart) {
+			$cart = $this->createCart($request);
+		}
+
 		$cartProductsArray = $this->cartStockService->getCartStocks($cart);
 
 		// Checks if promo code is still valid
-		$promotion = $this->promotionsService->checkValidity($cart->promo_code);
+		if($cart->promo_code) {
+			$promotion = $this->promotionsService->checkValidity($cart->promo_code);
 
-		if($promotion == null) {
-			$cart->promo_code = null;
-			$cart->grand_total = $cart->sub_total;
-			$cart->save();
+			if(!$promotion) {
+				$cart->promo_code = null;
+				$cart->grand_total = $cart->sub_total;
+				$cart->save();
+			}
 		}
 
 		return ['sub_total' => $cart->sub_total, 'promo_code' => $cart->promo_code, 'grand_total' => $cart->grand_total, 'cart' => $cartProductsArray];
