@@ -13,9 +13,12 @@ class StocksService {
 
     public function colours($request){
 		$colours = Stock::select('colour')->where('product_id', $request->productId)->distinct()->get();
-		
-		foreach($colours as $colour) {
-			$coloursArray[] = $colour['colour'];
+		$coloursArray = [];		
+
+		if($colours) {
+			foreach($colours as $colour) {
+				$coloursArray[] = $colour['colour'];
+			}
 		}
 
 		return respond($coloursArray);
@@ -23,9 +26,12 @@ class StocksService {
     
     public function sizes($request){
 		$sizes = Stock::select('size')->where('product_id', $request->productId)->where('colour', $request->colour)->distinct()->get();
-		
-		foreach($sizes as $size) {
-			$sizesArray[] = $size['size'];
+		$sizesArray = [];
+
+		if($sizes) {
+			foreach($sizes as $size) {
+				$sizesArray[] = $size['size'];
+			}
 		}
 
 		return respond($sizesArray);
