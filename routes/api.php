@@ -52,7 +52,10 @@ use Illuminate\Http\Request;
 		Route::post('user/orders', 'Api\OrdersController@getOrders');
 		Route::get('user/addresses', 'Api\OrdersController@getAddresses');
 		Route::get('user/addresses/create', 'Api\OrdersController@createAddress');
+
+		// Directory
+		Route::get('directory', 'Api\DirectoryController@directory');
 	});
 
-	Route::get('credentials', 'Api\AuthController@credentials');
+
 

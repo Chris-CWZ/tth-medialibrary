@@ -46,10 +46,10 @@
 					<p>Orders</p>
 				</a>
       </li>
-      <li class="nav-item {{ is_active('directories') }}">
-				<a class="nav-link" href="{{ route('admin.directories.index') }}">
+      <li class="nav-item {{ is_active('directory') }}">
+				<a class="nav-link" href="{{ route('admin.directory.index') }}">
 					<i class="fa fa-sitemap text-info"></i>
-					<p>Directories</p>
+					<p>Directory</p>
 				</a>
 			</li>
       <li class="nav-item {{ is_active('promotions') }}">
