@@ -45,8 +45,17 @@ class DirectoryService extends TransformerService{
 			'website' => $request->website
 		]);
 
-		if($request->hasfile('icon') && $request->hasfile('location_image')) {
-			$this->storeImageInTable($request, $directory);			
+		if ($request->hasfile('icon')) {
+			$iconImage = $request->file('icon');
+			$iconFileName = $this->storeImage($iconImage, $directory, 'icon');
+			$directory->icon = $iconFileName;
+			$directory->save();
+		}
+
+		if ($request->hasfile('location_image')) {
+			$locationImage = $request->file('location_image');
+			$locationFileName = $this->storeImage($locationImage, $directory, 'location-map');
+			$directory->location_image = $locationFileName;
 			$directory->save();
 		}
 
@@ -58,8 +67,8 @@ class DirectoryService extends TransformerService{
 	}
 
 	public function storeImage($imageFile, $directory, $type){
-		$diretoryName = str_replace(" ", "-", $directory->name);
-		$fileName = $directory->id . '-' . $directoryName. '-' . $type . '.' . $imageFile->getClientOriginalExtension();
+		$directoryName = str_replace(" ", "-", $directory->name);
+		$fileName = $directory->id . '-' . $directoryName . '-' . $type . '.' . $imageFile->getClientOriginalExtension();
 		$image = Image::make($imageFile->getRealPath());
 		$image->stream();
 		$storagePath = directory_path('directory') ;
@@ -81,26 +90,31 @@ class DirectoryService extends TransformerService{
 		$directory->location = $request->location;
 		$directory->description = $request->description;
 		$directory->website = $request->website;
+		$directory->save();
 
-		if ($request->hasfile('icon') && $request->hasfile('location_image')) {
-			$this->storeImageInTable($request, $directory);
+		if ($request->hasfile('icon')) {
+		    $storagePath = directory_path('directory') ;
+            Storage::delete($storagePath . $directory->icon);
+
+			$iconImage = $request->file('icon');
+			$iconFileName = $this->storeImage($iconImage, $directory, 'icon');
+			$directory->icon = $iconFileName;
+			$directory->save();
 		}
 
-		$directory->save();
+		if ($request->hasfile('location_image')) {
+			$storagePath = directory_path('directory') ;
+			Storage::delete($storagePath . $directory->location_image);
+			
+			$locationImage = $request->file('location_image');
+			$locationFileName = $this->storeImage($locationImage, $directory, 'location-map');
+			$directory->location_image = $locationFileName;
+			$directory->save();
+		}
+
 		$this->directoryImagesService->update($request, $directory);
 		Session::flash('success', 'The order was successfully saved!');
 		return route($this->path . 'index');
-	}
-
-	public function storeImageInTable($request, $directory) {
-		$iconImage = $request->file('icon');
-		$locationImage = $request->file('location_image');
-
-		$iconFileName = $this->storeImage($iconImage, $directory, 'icon');
-		$locationFileName = $this->storeImage($locationImage, $directory, 'location-map');
-
-		$directory->icon = $iconFileName;
-		$directory->location_image = $locationFileName;
 	}
     
     public function transform($directory){
