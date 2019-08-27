@@ -55,7 +55,11 @@ use Illuminate\Http\Request;
 
 		// Directory
 		Route::get('directory', 'Api\DirectoryController@directory');
+
+		// Addresses
+		Route::get('addresses', 'Api\AddressesController@addresses');
+		Route::post('address/create', 'Api\AddressesController@create');
+		Route::post('address/edit', 'Api\AddressesController@edit');
+		Route::post('address/remove', 'Api\AddressesController@remove');
+		Route::post('address/set-default-address', 'Api\AddressesController@setDefaultAddress');
 	});
-
-
-
