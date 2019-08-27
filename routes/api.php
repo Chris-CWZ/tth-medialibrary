@@ -61,5 +61,4 @@ use Illuminate\Http\Request;
 		Route::post('address/create', 'Api\AddressesController@create');
 		Route::post('address/edit', 'Api\AddressesController@edit');
 		Route::post('address/remove', 'Api\AddressesController@remove');
-		Route::post('address/set-default-address', 'Api\AddressesController@setDefaultAddress');
 	});

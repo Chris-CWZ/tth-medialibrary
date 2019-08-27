@@ -51,38 +51,23 @@ class AddressesController extends Controller {
     public function edit(Request $request) {
         $validator = Validator::make($request->all(), [
             'id' => 'required|integer',
-			'name' => 'required',
-            'phone_number' => 'required',
-            'line_one' => 'required',
-            'line_two' => 'nullable',
-            'state' => 'required',
-            'city' => 'required',
-            'postcode' => 'required',
-            'country' => 'required',
+			'name' => 'string',
+            'phone_number' => 'string',
+            'line_one' => 'string',
+            'line_two' => 'string',
+            'state' => 'string',
+            'city' => 'string',
+            'postcode' => 'string',
+            'country' => 'string',
             'user_id' => 'required|integer',
-            'default_delivery_address' => 'boolean|nullable',
-            'default_billing_address' => 'boolean|nullable',
+            'default_delivery_address' => 'boolean',
+            'default_billing_address' => 'boolean',
         ]);
 
         if($validator->fails()) {
 			return validationError();
         } else {
             return $this->addressesService->edit($request);
-        }
-    }
-
-    public function setDefaultAddress(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|integer',
-            'user_id' => 'required|integer',
-            'default_delivery_address' => 'boolean|nullable',
-            'default_billing_address' => 'boolean|nullable'
-        ]);
-
-        if($validator->fails()) {
-			return validationError();
-        } else {
-            return $this->addressesService->setDefaultAddress($request);
         }
     }
 
