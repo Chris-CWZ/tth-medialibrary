@@ -105,14 +105,6 @@ class OrdersService extends TransformerService{
 		return $ordersList;
 	}
 
-	public function getAddresses(Request $request){
-		$user = new User;
-
-		$user = User::on('mysql3')->find(62);
-
-		return $user;
-	}
-
 	public function transform($order){
 		return [
 			'id' => $order->id,

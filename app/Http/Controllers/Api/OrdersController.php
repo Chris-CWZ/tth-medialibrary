@@ -39,12 +39,4 @@ class OrdersController extends Controller {
 			return $this->ordersService->getUserOrders($request);
 		}
 	}
-
-	public function getAddresses(Request $request){
-		return $this->ordersService->getAddresses($request);
-	}
-
-	public function createAddress(Request $request){
-		
-	}
 }

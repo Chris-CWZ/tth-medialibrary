@@ -156,6 +156,10 @@ class CartService extends TransformerService{
 		// Get cart id of user id
 		$userCart = $this->getCart("user", $request->input('userId'));
 
+		if(!$sessionCart) {
+			return $userCart;
+		}
+
 		// If there is no cart associated with user id
 		if ($userCart == null) {
 			$userCart = $this->createCart($request);
