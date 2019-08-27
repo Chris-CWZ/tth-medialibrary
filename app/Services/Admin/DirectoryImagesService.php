@@ -22,7 +22,7 @@ class DirectoryImagesService extends TransformerService{
 	}
 
 	public function storeImage($imageFile, $directory){
-        $diretoryName = str_replace(" ", "-", $directory->name);
+        $directoryName = str_replace(" ", "-", $directory->name);
         $imageFileOriginalName = $imageFile->getClientOriginalName();
         $imageFileNewName = str_replace(" ", "-", $imageFileOriginalName);
 		$fileName = $directory->id . '-' . $directoryName . '-' . $imageFileNewName;
