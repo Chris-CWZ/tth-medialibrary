@@ -22,8 +22,10 @@ class DirectoryImagesService extends TransformerService{
 	}
 
 	public function storeImage($imageFile, $directory){
-		$diretoryName = str_replace(" ", "-", $directory->name);
-		$fileName = $directory->id . '-' . $directoryName . '-' . $imageFile->getClientOriginalName();
+        $diretoryName = str_replace(" ", "-", $directory->name);
+        $imageFileOriginalName = $imageFile->getClientOriginalName();
+        $imageFileNewName = str_replace(" ", "-", $imageFileOriginalName);
+		$fileName = $directory->id . '-' . $directoryName . '-' . $imageFileNewName;
 		$image = Image::make($imageFile->getRealPath());
 		$image->stream();
 		$storagePath = directory_path('directory/banners') ;
