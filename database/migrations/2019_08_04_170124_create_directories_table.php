@@ -17,7 +17,7 @@ class CreateDirectoriesTable extends Migration
         Schema::create('directories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('icon')->nullable();
-            $table->enum('category', ['food', 'souvenir', 'historical']);
+            $table->enum('category', ['museum', 'dining']);
             $table->string('name');
             $table->string('phone_number')->nullable();
             $table->string('location');

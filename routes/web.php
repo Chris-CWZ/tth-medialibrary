@@ -30,7 +30,8 @@ Route::prefix('admin')->group(function () {
             Route::get('/calendar', 'Admin\OperationsController@calendar')->name('calendar');
             Route::resource('orders', 'Admin\OrdersController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
             Route::resource('articles', 'Admin\ArticlesController', ['only' => ['index', 'edit', 'update', 'destroy']]);
-            Route::resource('directories', 'Admin\DirectoriesController');
+            Route::resource('directory', 'Admin\DirectoryController');
+            Route::post('/directory/{directory}', 'Admin\DirectoryController@update');
             Route::resource('promotions', 'Admin\PromotionsController');
             Route::get('promotions/get/products', 'Admin\PromotionsController@getProducts');
         });

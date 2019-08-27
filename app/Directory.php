@@ -13,4 +13,8 @@ class Directory extends Model
     public function getImageAttribute(){
         return $this->icon;
     }
+
+    public function banners(){
+        return $this->hasMany('App\DirectoryImage');
+    }
 }
