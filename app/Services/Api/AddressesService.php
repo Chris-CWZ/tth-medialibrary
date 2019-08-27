@@ -51,17 +51,6 @@ class AddressesService {
         return respond("Successfully edited address.");        
     }
 
-    public function setDefaultAddress(Request $request) {
-        $this->changeDefaultAddress($request);
-
-        $address = Address::find($request->id);
-        $address->default_delivery_address = $request->default_delivery_address;
-        $address->default_billing_address = $request->default_billing_address;
-        $address->save();
-
-        return respond("Successfully changed default address.");
-    }
-
     public function remove(Request $request) {
         $address = Address::find($request->id);
         $address->delete();
