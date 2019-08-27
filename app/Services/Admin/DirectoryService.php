@@ -58,7 +58,8 @@ class DirectoryService extends TransformerService{
 	}
 
 	public function storeImage($imageFile, $directory, $type){
-		$fileName = $directory->id . '-' . $directory->name . '-' . $type . '.' . $imageFile->getClientOriginalExtension();
+		$diretoryName = str_replace(" ", "-", $directory->name);
+		$fileName = $directory->id . '-' . $directoryName. '-' . $type . '.' . $imageFile->getClientOriginalExtension();
 		$image = Image::make($imageFile->getRealPath());
 		$image->stream();
 		$storagePath = directory_path('directory') ;
