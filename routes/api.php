@@ -50,8 +50,6 @@ use Illuminate\Http\Request;
 		// Orders
 		Route::post('order/create', 'Api\OrdersController@createOrder');
 		Route::post('user/orders', 'Api\OrdersController@getOrders');
-		Route::get('user/addresses', 'Api\OrdersController@getAddresses');
-		Route::get('user/addresses/create', 'Api\OrdersController@createAddress');
 
 		// Directory
 		Route::get('directory', 'Api\DirectoryController@directory');
@@ -61,4 +59,7 @@ use Illuminate\Http\Request;
 		Route::post('address/create', 'Api\AddressesController@create');
 		Route::post('address/edit', 'Api\AddressesController@edit');
 		Route::post('address/remove', 'Api\AddressesController@remove');
+
+		// Credentials
+		Route::get('credentials', 'Api\AuthController@credentials');
 	});
