@@ -9,7 +9,8 @@ class Address extends Model
     protected $connection = 'mysql3';
 
     protected $fillable = [
-        'name', 
+        'first_name',
+        'last_name', 
         'phone_number', 
         'line_one', 
         'line_two', 
