@@ -28,7 +28,8 @@ class AddressesController extends Controller {
 
 	public function create(Request $request) {
         $validator = Validator::make($request->all(), [
-			'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'nullable',
             'phone_number' => 'required',
             'line_one' => 'required',
             'line_two' => 'nullable',
@@ -51,7 +52,8 @@ class AddressesController extends Controller {
     public function edit(Request $request) {
         $validator = Validator::make($request->all(), [
             'id' => 'required|integer',
-			'name' => 'string',
+            'first_name' => 'string',
+            'last_name' => 'string', 
             'phone_number' => 'string',
             'line_one' => 'string',
             'line_two' => 'string',

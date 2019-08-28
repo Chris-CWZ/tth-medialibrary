@@ -16,7 +16,8 @@ class AddressesService {
         $this->changeDefaultAddress($request);
 
         Address::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'phone_number' => $request->phone_number,
             'line_one' => $request->line_one,
             'line_two' => $request->line_two,
@@ -36,7 +37,8 @@ class AddressesService {
         $this->changeDefaultAddress($request);
 
         $address = Address::find($request->id);
-        $address->name = $request->name;
+        $address->first_name = $request->first_name;
+        $address->last_name = $request->last_name;
         $address->phone_number = $request->phone_number;
         $address->line_one = $request->line_one;
         $address->line_two = $request->line_two;
