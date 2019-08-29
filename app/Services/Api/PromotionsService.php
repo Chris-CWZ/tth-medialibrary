@@ -21,7 +21,7 @@ class PromotionsService{
 	}
 
 	public function applyPromoCode($request){
-        $promotion = $this->checkValidity($request->promoCode);
+        $promotion = $this->checkValidity($request->promo_code);
 
         if($promotion == null) {
             return errorResponse('Promo code does not exist or has expired');
@@ -29,8 +29,8 @@ class PromotionsService{
 
         // Checking if user has reached promo usage limit
         if($promotion->usage_limit != null) {
-            if($request->has('userId')) {
-                $userPromotions = UserPromotion::where('user_id', $request->userId)->where('promo_code', $promotion->code)->get();
+            if($request->has('user_id')) {
+                $userPromotions = UserPromotion::where('user_id', $request->user_id)->where('promo_code', $promotion->code)->get();
 
                 if(count($userPromotions) == $promotion->usage_limit) {
                     return errorResponse('You have reached the limit for using this promo code');
@@ -136,10 +136,10 @@ class PromotionsService{
     }
 
     public function getCart($request) {
-        if($request->has('userId')) {
-            $cart = Cart::where('user_id', $request->userId)->first();
+        if($request->has('user_id')) {
+            $cart = Cart::where('user_id', $request->user_id)->first();
         } else {
-            $cart = Cart::where('session_id', $request->sessionId)->first();
+            $cart = Cart::where('session_id', $request->session_id)->first();
         }
 
         return $cart;
