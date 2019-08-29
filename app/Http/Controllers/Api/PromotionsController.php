@@ -16,9 +16,9 @@ class PromotionsController extends Controller {
     
     public function applyPromoCode(Request $request){
         $validator = Validator::make($request->all(), [
-            'userId' => 'integer|required_without:sessionId',
-            'sessionId' => 'string|required_without:userId',
-            'promoCode' => 'string|required'
+            'user_id' => 'integer|required_without:sessionId',
+            'session_id' => 'string|required_without:userId',
+            'promo_code' => 'string|required'
         ]);
         
         if ($validator->fails()) {
@@ -30,8 +30,8 @@ class PromotionsController extends Controller {
 
     public function removePromoCode(Request $request){
         $validator = Validator::make($request->all(), [
-            'userId' => 'integer|required_without:sessionId',
-            'sessionId' => 'string|required_without:userId'
+            'user_id' => 'integer|required_without:sessionId',
+            'session_id' => 'string|required_without:userId'
         ]);
         
         if ($validator->fails()) {
