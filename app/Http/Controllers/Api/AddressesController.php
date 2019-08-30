@@ -84,4 +84,16 @@ class AddressesController extends Controller {
             return $this->addressesService->remove($request);
         }
     }
+
+    public function getDefaultAddresses(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'userId' => 'required|integer'
+        ]);
+
+        if($validator->fails()) {
+			return validationError();
+        } else {
+            return $this->addressesService->getDefaultAddresses($request);
+        }
+    }
 }

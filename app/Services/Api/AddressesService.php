@@ -82,4 +82,10 @@ class AddressesService {
             }
         }
     }
+
+    public function getDefaultAddresses($request) {
+        $deliveryAdd = Address::where('user_id', $request->userId)->where('default_delivery_address', 1)->first();
+        $billingAdd = Address::where('user_id', $request->userId)->where('default_billing_address', 1)->first();
+        return ['delivery_address' => $deliveryAdd, 'billing_add' => $billingAdd];
+    }
 }
