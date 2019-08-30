@@ -228,9 +228,11 @@ class CartService extends TransformerService{
 			$oldCartStock->stock_id = $stock->id;
 			$oldCartStock->save();
 		} else {
-			$newCartStock->quantity += $oldCartStock->quantity;
-			$newCartStock->save();
-			$oldCartStock->delete();
+			if($newCartStock->id != $oldCartStock->id) {
+				$newCartStock->quantity += $oldCartStock->quantity;
+				$newCartStock->save();
+				$oldCartStock->delete();
+			}
 		}
 		
 		return success("Successfully changed item");
