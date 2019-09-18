@@ -15,7 +15,7 @@ class EventsService extends TransformerService{
 	*/
 	public function getEventByDate($request){
 		if ($request->has('date')) {
-            $events = Event::where('start_time', 'like', $request->date)->where('end_time', 'like', $request->date)->get();
+            $events = Event::where('start_time', 'like', "%{$request->date}%")->where('end_time', 'like', "%{$request->date}%")->get();
         } else {
             $events = Event::where('date', '>=', Carbon::now()->toDateTimeString())->orderBy('start_time', 'asc')->paginate(10);
         }

@@ -33,7 +33,7 @@ class EventsController extends Controller{
 
 	public function nextEvent(Request $request){
 		$validator = Validator::make($request->all(), [
-            'userId' => 'integer',
+			'userId' => 'integer',
 			'startTime' => 'required|date_format:Y-m-d H:i:s',
 			'id' => 'required|integer'
 		]);
