@@ -53,10 +53,17 @@ require('../scripts/bootstrap-datetime-setup');
 
 require('../scripts/live-file-review');
 
-
-
 // Vue Setup
-window.Vue = require('vue');
+window.Vue = require('vue')
+window.Lightbox = require('vue-pure-lightbox').default
+window.VueContext = require('vue-context');
+console.log(Vue);
+console.log(Lightbox);
+console.log(VueContext);
+Vue.use(Lightbox);
+Vue.use(VueContext);
+
+global.VueEventBus = new Vue();
 
 const files = require.context('../', true, /\.vue$/i)
 files.keys().map(key => {Vue.component(key.split('/').pop().split('.')[0], files(key).default)});

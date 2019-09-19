@@ -23,7 +23,13 @@ Route::prefix('admin')->group(function () {
         Route::post('login', 'Admin\AuthController@login')->name('admin.login');
     });
 
+    
+    
     Route::middleware('admin.auth')->group(function () {
+        Route::patch('explorers/{explorer}/rename', 'Admin\MediaLibraryController@rename')->name('explorers.rename');
+        Route::patch('explorers/{explorer}/move', 'Admin\MediaLibraryController@move')->name('explorers.move');
+        Route::resource('explorers', 'Admin\MediaLibraryController');
+        
         Route::name('admin.')->group(function () {
             Route::resource('users', 'Admin\UsersController', ['only' => ['index', 'edit', 'update', 'destroy']]);
             Route::resource('events', 'Admin\EventsController', ['only' => ['index', 'show', 'edit', 'update', 'destroy']]);
@@ -46,6 +52,8 @@ Route::prefix('admin')->group(function () {
         Route::put('settings/password', "Admin\AccountSettingsController@updatePassword")->name("admin.password.change");
     });
 });
+
+
 
 Route::get('/', 'Client\HomeController@home')->name('root');
 Route::get('/home', 'Client\HomeController@home')->name('home');

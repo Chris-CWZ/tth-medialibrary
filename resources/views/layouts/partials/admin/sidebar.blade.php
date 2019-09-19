@@ -57,7 +57,14 @@
 					<i class="fa fa-usd text-info"></i>
 					<p>Promotions</p>
 				</a>
-			</li>
+      </li>
+      
+      <li class="nav-item {{ is_active('explorer') }}">
+        <a class="nav-link" href="{{ route('explorers.index') }}">
+          <i class="fa fa-image text-info"></i>
+          <p>Media Library</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
