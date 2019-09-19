@@ -1,0 +1,154 @@
+#media-picker{
+	.create-modal{
+		.modal-header{
+			border: none;
+			padding: 0;
+			padding-bottom: 1rem;
+			.modal-title{
+				font-weight: bold;
+			}
+		} // .modal-header
+		.modal-content{
+			border: none;
+			border-radius: 30px;
+			padding: 1.5rem;
+			.nav-pills{
+				.nav-link{
+					border-radius: 40px;
+					background: rgba(234, 234, 243, 0.3);
+					color: $color-black;
+					margin-right: 1rem;
+					border: none;
+					padding: 0.3rem 1rem;
+					&.active{
+						background: rgb(234, 234, 243);
+					}
+				}
+			} // .modal-content
+			.modal-footer{
+				border: none;
+				padding: 0;
+				padding: 1rem;
+				.btn{
+					background: transparent;
+					border: none;
+
+					font-weight: bold;
+				}
+				.btn-secondary{
+					color: $color-black;
+				}
+				.btn-primary{
+					color: #3490dc;
+				}
+			}
+		}
+		.custom-select{
+			color: $color-black;
+			opacity: 0.5;
+			border-color: $menu-hover;
+			background-color: $menu-hover;
+			border-radius: 5px;
+			option{
+
+			}
+		}
+	}
+}
+
+
+.modal-open{
+	.wrapper{
+		// height: auto;
+	}
+	#file-picker-modal{
+		&.modal {
+	    overflow-y: hidden;
+			.modal-body{
+				height: 350px;
+				overflow-y: scroll;
+			}
+		}
+	}
+}
+
+
+#media-picker{
+	.file-element{
+		.hover-select{
+			content: '';
+			position: absolute;
+			display: flex;
+			z-index: 999;
+			background: rgba(255, 255, 255, 0.5);
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			.material-icons{
+				font-size: 5em;
+				text-align: center;
+				border: 3px solid;
+				margin: auto;
+				border-radius: 45px;
+				color: #eee;
+			}
+		}
+	}
+}
+
+
+#media-picker-select{
+	.btn-add-media{
+		font-size: 1.2rem;
+	}
+	.upload-title{
+		cursor: pointer;
+		.title-icon{
+			text-align: center;
+			font-size: 4.5em;
+		}
+		.title-text{
+			text-align: center;
+		}
+	}
+	.file-component{
+		height: 200px;
+		width: 250px;
+		position: relative;
+		img{
+			width: 100%;
+			height: 100%;
+		}
+		.file-component-actions{
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: rgba(0, 0, 0, 0.8);
+			width: 100%;
+			height: 100%;
+			display: flex;
+			opacity: 0;
+			transition: opacity 0.5s ease;
+			&:hover{
+				opacity: 1;
+			}
+			.material-icons{
+				color: #fff;
+				cursor: pointer;
+			}
+			.icon-delete{
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				opacity: 0.5;
+				font-size: 1.5em;
+			}
+			.icon-preview{
+				font-size: 3.5em;
+				margin: auto;
+				opacity: 0.5;
+			}
+		}
+	}
+}

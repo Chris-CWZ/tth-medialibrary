@@ -49259,9 +49259,9 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/madeleine/Sites/Laravel/D2701-TRP-LaravelDashboard/resources/assets/js/app/client.js */"./resources/assets/js/app/client.js");
-__webpack_require__(/*! /Users/madeleine/Sites/Laravel/D2701-TRP-LaravelDashboard/resources/assets/sass/app/client.scss */"./resources/assets/sass/app/client.scss");
-module.exports = __webpack_require__(/*! /Users/madeleine/Sites/Laravel/D2701-TRP-LaravelDashboard/resources/assets/sass/app/admin.scss */"./resources/assets/sass/app/admin.scss");
+__webpack_require__(/*! /Users/chris/Sites/Laravel/trp/resources/assets/js/app/client.js */"./resources/assets/js/app/client.js");
+__webpack_require__(/*! /Users/chris/Sites/Laravel/trp/resources/assets/sass/app/client.scss */"./resources/assets/sass/app/client.scss");
+module.exports = __webpack_require__(/*! /Users/chris/Sites/Laravel/trp/resources/assets/sass/app/admin.scss */"./resources/assets/sass/app/admin.scss");
 
 
 /***/ })
