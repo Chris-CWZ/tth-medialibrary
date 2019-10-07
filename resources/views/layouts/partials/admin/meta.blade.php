@@ -9,7 +9,14 @@
 	  <title>{{ config('app.name') }}</title>
 
 
-	  <!-- Styles -->
+		<!-- Styles -->
+		
+		<!------------------------------>
+		<!-- ADD THIS LINE UNDERNEATH -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<!-- ADD THIS LINE ABOVE -->
+		<!------------------------------>
+
 	  <link href="{{ mix('css/admin.css') }}" rel="stylesheet">
 	</head>
 	<body>
@@ -19,7 +26,7 @@
 			@yield('master')
 		</div>
 		
-	  <!-- Scripts -->
+		<!-- Scripts -->
 	  <script src="{{ mix('js/admin.js') }}"></script>
 	  @yield('scripts')
 

@@ -55,18 +55,27 @@ require('../scripts/live-file-review');
 
 // Vue Setup
 window.Vue = require('vue')
+
+//===============================================================================//
+//==================ADD THE LINES UNDERNEATH=====================================//
 window.Lightbox = require('vue-pure-lightbox').default
 window.VueContext = require('vue-context');
-console.log(Vue);
-console.log(Lightbox);
-console.log(VueContext);
 Vue.use(Lightbox);
 Vue.use(VueContext);
 
 global.VueEventBus = new Vue();
+window.UUID = require('../components/admin/utils/UUID').default;
+
+//===================ADD THE LINES ABOVE=========================================//
+//===============================================================================//
+
+// require('../../vendor/MediaManager/js/manager.js')
 
 const files = require.context('../', true, /\.vue$/i)
 files.keys().map(key => {Vue.component(key.split('/').pop().split('.')[0], files(key).default)});
+
+// const vendorVueFiles = require.context('../../', true, /\.vue$/i)
+// vendorVueFiles.keys().map(key => {Vue.component(key.split('/').pop().split('.')[0], files(key).default)});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

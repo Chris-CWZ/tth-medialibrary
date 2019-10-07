@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use Storage;
+use Carbon\Carbon;
 use App\FileElement;
 use Illuminate\Http\Request;
 use App\Services\TransformerService;
@@ -273,9 +274,9 @@ class MediaLibraryServices extends TransformerService {
     $file_name = $file->getClientOriginalName();
     $file_ext = $file->getClientOriginalExtension();
 
-    $file_name = str_replace('.' . $file_ext, '', $file_name);
+		$file_name = str_replace('.' . $file_ext, '', $file_name);
     // Hash a unique name for the file
-    $file_unique_name = md5($file_name . time()) . '.' . $file_ext;
+    $file_unique_name = $file_name . '_' . Carbon::now()->format('Y-m-d_H:i:s') . '.' . $file_ext;
 
     return $file_unique_name;
   }
@@ -316,10 +317,11 @@ class MediaLibraryServices extends TransformerService {
 	// format file name
 	private function formatName($fileElement){
 		if ($this->isDirectory($fileElement)) {
-			return substr($fileElement->name, 0, 10);
+			return $fileElement->name;
+			// return substr($fileElement->name, 0, 10);
 		}
 		list($name, $ext) = explode('.', $fileElement->name);
-		return substr($name, 0, 10) . '.' . $ext;
+		return $name . '.' . $ext;
 	}
 
 	// prepare the FileElement for a the json response

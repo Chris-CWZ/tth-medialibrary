@@ -1,6 +1,6 @@
 <template>
-	<div class="row wrapper" id="media">
-		<div class="container" >
+	<div class="row wrapper" id="media" style="height:auto">
+		<div class="container">
 			<explorer-header-component @explorer:explore="onExplorerClick" @explorer:exploreAll="fetchFileElements"></explorer-header-component>
 			<div class="row file-elements">
 				<div class="col-md-3 mt-4" v-for="fileElement in fileElements" :key="fileElement.id" >
@@ -53,9 +53,9 @@
 						canGoUp: data.canGoUp,
 						parent: null
 					};
-						this.fileElements = data.children;
-						console.log(this.currentDir);
-						console.log(this.fileElements);
+					this.fileElements = data.children;
+					console.log(this.currentDir);
+					console.log(this.fileElements);
 				}, (response) => {
 					console.error(response);
 				});

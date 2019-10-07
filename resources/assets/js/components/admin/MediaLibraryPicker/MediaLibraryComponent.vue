@@ -1,5 +1,5 @@
 <template>
-	<div class="row wrapper" id="media">
+	<div class="row wrapper" id="media" style="height:auto !important">
 		<div class="container" >
 			<media-library-breadcrumb-component @mediaLibrary:explore="onExplorerClick" @mediaLibrary:exploreAll="fetchFileElements"></media-library-breadcrumb-component>
 			<div class="row file-elements">
@@ -67,6 +67,10 @@
 					VueEventBus.$emit('mediaLibrary:fileExplored', fileElement)
 					return ;
 				}
+				if(fileElement.deleted){
+					delete(fileElement.deleted)
+				}
+				
 				this.$emit('mediaLibrary:fileSelected', fileElement);
 			},
 			onFileElementRemoved: function(fileElement){

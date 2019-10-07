@@ -26,9 +26,15 @@ Route::prefix('admin')->group(function () {
     
     
     Route::middleware('admin.auth')->group(function () {
+        //=========================================================================================================//
+        //==============================ADD THE LINES UNDERNEATH===================================================//
         Route::patch('explorers/{explorer}/rename', 'Admin\MediaLibraryController@rename')->name('explorers.rename');
         Route::patch('explorers/{explorer}/move', 'Admin\MediaLibraryController@move')->name('explorers.move');
         Route::resource('explorers', 'Admin\MediaLibraryController');
+        //==============================ADD THE LINES ABOVE========================================================//
+        //=========================================================================================================//
+        // MediaManager
+        
         
         Route::name('admin.')->group(function () {
             Route::resource('users', 'Admin\UsersController', ['only' => ['index', 'edit', 'update', 'destroy']]);
@@ -40,6 +46,7 @@ Route::prefix('admin')->group(function () {
             Route::post('/directory/{directory}', 'Admin\DirectoryController@update');
             Route::resource('promotions', 'Admin\PromotionsController');
             Route::get('promotions/get/products', 'Admin\PromotionsController@getProducts');
+            Route::resource('discoverables','Admin\DiscoverablesController');
         });
 
         Route::get('/', 'Admin\DashboardController@dashboard');
@@ -57,3 +64,4 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/', 'Client\HomeController@home')->name('root');
 Route::get('/home', 'Client\HomeController@home')->name('home');
+ctf0\MediaManager\MediaRoutes::routes();

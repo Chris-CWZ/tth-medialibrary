@@ -1,7 +1,7 @@
 <template>
-	<nav aria-label="breadcrumb" class="explorer-nav d-flex flex-row">
-	  <ol class="breadcrumb pb-2">
-			<li class="breadcrumb-item active" aria-current="page" v-for="directory in directories" v-on:click="onLinkClicked(directory)">{{ directory.name }}</li>
+	<nav aria-label="breadcrumb" class="explorer-nav d-flex flex-row" style="">
+	  <ol class="breadcrumb p-0 mb-0">
+			<li class="breadcrumb-item active" style="font-weight:bold" aria-current="page" v-for="directory in directories" v-on:click="onLinkClicked(directory)">{{ directory.name }}</li>
 	  </ol>
 	</nav>
 </template>
